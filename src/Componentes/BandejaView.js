@@ -35,10 +35,12 @@ import {
 } from "@heroicons/react/outline";
 import MainCorrespondencia from "./MainCorrespondencia";
 import Modal from "./Modal";
+import DragAndDrop from "./DragAndDrop";
 
 function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   const [validated, setValidated] = useState(false);
   const [estadoModal, setEstadoModal] = useState(false);
+  const [digitalizarModal, setDigitalizarModal] = useState(false);
   const [gestionModal, setGestionModal] = useState(false);
   const [selecTabView, setSelecTabView] = useState(1);
   const handleSubmit = event => {
@@ -82,12 +84,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                 icon={FolderOpenIcon}
                 onClick={() => setEstadoModal(!estadoModal)}
               />
-              <Modal
-                estado={estadoModal}
-                cambiarEstado={setEstadoModal}
-                titulo="Prueba">
-                <p>hola mundo</p>
-              </Modal>
+
               <Icon
                 className="bandejaIcons"
                 size="sm"
@@ -188,6 +185,14 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                   </TableRow>
                 ))}
               </TableBody>
+
+              {/* Aqui estan todas las Modales */}
+              <Modal
+                estado={estadoModal}
+                cambiarEstado={setEstadoModal}
+                titulo="Prueba">
+                <p>hola mundo</p>
+              </Modal>
               <Modal estado={gestionModal} cambiarEstado={setGestionModal}>
                 <TabList defaultValue="1">
                   <Tab
@@ -235,8 +240,11 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 variant="solid"
                                 tooltip="Global"
                                 icon={GlobeIcon}
-                                onClick={() => setEstadoModal(!estadoModal)}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
                               />
+
                               <Icon
                                 className="bandejaIcons"
                                 size="lg"
@@ -321,6 +329,12 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                   </Form>
                 )}
                 {selecTabView === 2 && <h1>numero 2</h1>}
+              </Modal>
+              <Modal
+                estado={digitalizarModal}
+                cambiarEstado={setDigitalizarModal}
+                titulo="Digitalizar Archivo">
+                <DragAndDrop />
               </Modal>
             </>
           )}

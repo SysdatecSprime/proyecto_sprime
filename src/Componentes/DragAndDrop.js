@@ -51,8 +51,8 @@ const StyleDragArea = styled.div`
     position: absolute;
     margin: 0;
     padding: 0;
-    width: 95%;
-    height: 10%;
+    width: 48%;
+    height: 36%;
     outline: none;
     opacity: 0;
     cursor: pointer;
@@ -61,7 +61,7 @@ const StyleDragArea = styled.div`
   .image-upload-wrap {
     display: flex;
     justify-content: center;
-    height: 100%;
+    height: 200px;
     width: 100%;
     top: 50%;
     bottom: 50%%;
@@ -71,6 +71,7 @@ const StyleDragArea = styled.div`
   }
   .text-information {
     text-align: center;
+    width: 95%;
   }
 
   img {

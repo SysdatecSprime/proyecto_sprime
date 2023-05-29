@@ -5,9 +5,8 @@ import Bandeja from "./BandejaView";
 import { Icon } from "@tremor/react";
 import {
   FolderOpenIcon,
-  BarsIcon,
-  BarIcon,
   ArrowRightIcon,
+  PresentationChartBarIcon,
 } from "@heroicons/react/outline";
 import SelectView from "./SelectView";
 import { dataBandeja } from "../Utils/UrlBase";
@@ -55,7 +54,15 @@ function Sidebar() {
               <Icon
                 className="ml-4"
                 size="sm"
-                variant="solid"
+                tooltip="Dashboard"
+                icon={PresentationChartBarIcon}
+                aria-label="hola"
+              />
+            </div>
+            <div className="">
+              <Icon
+                className="ml-4"
+                size="sm"
                 tooltip="Carpeta"
                 icon={FolderOpenIcon}
                 aria-label="hola"
@@ -64,9 +71,8 @@ function Sidebar() {
           </div>
           <Link to="" className="sb-nav-link">
             <Icon
-              className="ml-4"
+              className=""
               size="sm"
-              variant="outlined"
               tooltip="Carpeta"
               icon={ArrowRightIcon}
               aria-label="hola"

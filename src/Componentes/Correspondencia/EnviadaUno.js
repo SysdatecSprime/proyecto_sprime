@@ -16,7 +16,6 @@ import {
 import { dataBandeja } from "../../Utils/UrlBase";
 
 function EnviadaUno(props) {
-  const [validated, setValidated] = useState(false);
   const [prioridad, setPrioridad] = useState([]);
   const [usuarioDp, setUsuarioDp] = useState([]);
   const [empresa, setEmpresa] = useState([]);
@@ -26,7 +25,7 @@ function EnviadaUno(props) {
   const [grupo, setGrupo] = useState([]);
   const [contacto, setContacto] = useState([]);
   const [medioRecepcion, setMedioRecepcion] = useState([]);
-
+  const [validated, setValidated] = useState(false);
   useEffect(() => {
     obtenerPrioridad();
   }, []);
@@ -55,15 +54,6 @@ function EnviadaUno(props) {
     obtenerMedioRecepcion();
   }, []);
 
-  const handleSubmit = event => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
   //llamado a prioridad
   const obtenerPrioridad = async () => {
     const prioridadProm = await fetch(
@@ -189,6 +179,16 @@ function EnviadaUno(props) {
       setMedioRecepcion(respMedioRecepcion);
     }
   };
+  const handleSubmit = event => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
+
   return (
     <>
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
@@ -200,19 +200,31 @@ function EnviadaUno(props) {
         <Col numColSpan={1} numColSpanLg={1} className="mt-2">
           <Flex className="gap-2">
             <Title>Fecha:</Title>
-            <TextInput className="my-1 ms-5" />
+            <TextInput className="my-1 ms-5" placeholder="" />
           </Flex>
           <Flex className="gap-2">
             <Title>Remision:</Title>
-            <TextInput className="my-1 ms-3" />
+            <TextInput className="my-1 ms-3" placeholder="" />
           </Flex>
           <Flex className="gap-2">
             <Title>Prioridad:</Title>
-            <TextInput className="my-1 ms-3" />
+            <SelectBox
+              className="my-1 ms-3"
+              name="idPriority"
+              onChange={e => props.handleChange(e)}
+              /* value={props.formFields.IdPriority} */
+            >
+              {prioridad.map((element, index) => {
+                return (
+                  <SelectBoxItem key={index} value={element.priorityDesc}>
+                    {element.idPriority}
+                  </SelectBoxItem>
+                );
+              })}
+            </SelectBox>
           </Flex>
         </Col>
       </Grid>
-
       <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
         <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
           <Col numColSpan={1} numColSpanLg={4}>
@@ -368,7 +380,7 @@ function EnviadaUno(props) {
               className="my-1"
               name="Subject"
               onChange={e => props.handleChange(e)}
-              value={props.formFields.Subject}
+              /* value={props.formFields.Subject} */
               placeholder=""
             />
           </Col>
@@ -457,7 +469,7 @@ function EnviadaUno(props) {
               variant="primary"
               to="/Corresp"
               onClick={() => {
-                props.setRecibidoPasoUno(2);
+                props.setEnviadaPasoUno(2);
               }}>
               Siguiente
             </Button>

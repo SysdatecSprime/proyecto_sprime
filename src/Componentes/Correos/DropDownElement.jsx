@@ -1,13 +1,30 @@
 import { Dropdown, DropdownItem, Text } from "@tremor/react";
 
-export const DropDownElement = ({ title, placeholder, options }) => {
+export const DropDownElement = ({
+  title,
+  placeholder,
+  options,
+  name,
+  handleChange,
+}) => {
+  const changeValue = (value) => {
+    const e = {
+      target: {
+        name: name,
+        value: value,
+      },
+    };
+
+    handleChange(e);
+  };
   return (
-    <div className="w-40">
+    <div className="min-w-[10rem] w-1/5">
       <Text>{title}</Text>
       <Dropdown
         className="mt-2"
-        onValueChange={(value) => console.log("The selected value is", value)}
+        onValueChange={changeValue}
         placeholder={placeholder}
+        id={`dropdown_${title}`}
       >
         {options?.map((option, idx) => (
           <DropdownItem

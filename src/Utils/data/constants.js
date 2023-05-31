@@ -16,6 +16,46 @@ export const columnsCorreosRepresados = [
   { key: "notificados", name: "Notificados" },
   { key: "fechaRadicacion", name: "Fecha de radicación" },
 ];
+//{
+//   "BusinessDesc": "Contraloria",
+//   "CompanyDesc": "Contraloria",
+//   "TypificDesc": "Inicial",
+//   "ReqAnswer": "SI",
+//   "CodeInterMail": "2023000017",
+//   "TipoCorreo": "RECIBIDO",
+//   "ResponsablePasoFlujo": "SYSADMINISTRADOR",
+//   "DependenciaPasoFlujo": "SubContralor",
+//   "UsuarioRemite": "SYSADMINISTRADOR",
+//   "FlowDesc": "INICIAL",
+//   "DependenciaInicial": "SubContralor",
+//   "StatusDesc": "Activo",
+//   "Notified": "Sin Notificados",
+//   "FechaRadicado": "2023-05-12 00:00:00",
+//   "ClaseCorrespondencia": "inicial",
+//   "Asunto": "prueba interno",
+//   "CreationDate": "2023-05-12 00:00:00",
+//   "IdDocSendCopy": 1
+// }
+export const columnas = [
+  { key: "BusinessDesc", name: "Empresa" },
+  { key: "CompanyDesc", name: "Tipo de negocio" },
+  { key: "TypificDesc", name: "Tipificación" },
+  { key: "ReqAnswer", name: "Requiere respuesta" },
+  { key: "CodeInterMail", name: "Número de radicado" },
+  { key: "TipoCorreo", name: "Tipo de correo" },
+  { key: "ResponsablePasoFlujo", name: "Responsable paso flujo" },
+  { key: "DependenciaPasoFlujo", name: "Dependencia paso flujo" },
+  { key: "UsuarioRemite", name: "Usuario remite" },
+  { key: "FlowDesc", name: "Flujo" },
+  { key: "DependenciaInicial", name: "Dependencia inicial" },
+  { key: "StatusDesc", name: "Estado" },
+  { key: "Notified", name: "Notificados" },
+  { key: "FechaRadicado", name: "Fecha de radicación" },
+  { key: "ClaseCorrespondencia", name: "Clase de correspondencia" },
+  { key: "Asunto", name: "Asunto" },
+  { key: "CreationDate", name: "Fecha de ingreso" },
+  { key: "IdDocSendCopy", name: "Número de documento" },
+];
 
 export const rowsCorreosRepresados = [
   {

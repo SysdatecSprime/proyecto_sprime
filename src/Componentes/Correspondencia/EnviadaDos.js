@@ -110,7 +110,7 @@ function EnviadaDos(props) {
               icon={MailIcon}
               onClick={() => setModalCrearDocumento(!modalCrearDocumento)}
             />
-            <Title>Crear documento</Title>
+            <Title>Asociar Radicado</Title>
             <Icon
               className="bandejaIcons m-3"
               size="sm"

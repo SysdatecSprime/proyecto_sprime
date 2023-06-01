@@ -20,3 +20,15 @@ code {
   width: 20px;
   height: 20px;
 }
+.bg {
+  background-image: url(../src/Componentes/Registro/images/LogoSprime.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.bg1 {
+  background-image: url(../src/Componentes/Registro/images/prueba.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+}

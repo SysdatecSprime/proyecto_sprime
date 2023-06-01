@@ -20,6 +20,10 @@ import {
   TextInput,
   Button,
   Flex,
+  MultiSelectBox,
+  MultiSelectBoxItem,
+  Badge,
+  Divider,
 } from "@tremor/react";
 import {
   FolderOpenIcon,
@@ -37,20 +41,68 @@ import MainCorrespondencia from "./MainCorrespondencia";
 import Modal from "./Modal";
 import DragAndDrop from "./DragAndDrop";
 
+const data = [
+  {
+    name: "30/05/2023",
+    Role: "Federal Councillor",
+    departement:
+      "The Federal Department of Defence, Civil Protection and Sport (DDPS)",
+    status: "active",
+  },
+  {
+    name: "30/05/2023",
+    Role: "Federal Councillor",
+    departement:
+      "The Federal Department of the Environment, Transport, Energy and Communications (DETEC)",
+    status: "active",
+  },
+  {
+    name: "30/05/2023",
+    Role: "Federal Councillor",
+    departement: "The Federal Department of Home Affairs (FDHA)",
+    status: "active",
+  },
+];
+
 function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   const [validated, setValidated] = useState(false);
   const [estadoModal, setEstadoModal] = useState(false);
   const [digitalizarModal, setDigitalizarModal] = useState(false);
+  const [firmaModal, setFirmaModal] = useState(false);
+  const [asociarExpModal, setAsociarExpModal] = useState(false);
+  const [trdModal, setTrdModal] = useState(false);
   const [gestionModal, setGestionModal] = useState(false);
   const [selecTabView, setSelecTabView] = useState(1);
+  const [checkboxes, setCheckboxes] = useState({});
+
+  const handleCheckboxChange = event => {
+    const { checked } = event.target;
+    const updatedCheckboxes = { ...checkboxes };
+
+    Object.keys(updatedCheckboxes).forEach(key => {
+      updatedCheckboxes[key] = checked;
+    });
+
+    setCheckboxes(updatedCheckboxes);
+  };
+
   const handleSubmit = event => {
+    event.preventDefault();
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     setValidated(true);
+
+    // Obtener los checkboxes seleccionados
+    const selectedCheckboxes = Object.keys(checkboxes).filter(
+      key => checkboxes[key]
+    );
+
+    // Realizar alguna acción con los checkboxes seleccionados
+    console.log("Checkboxes seleccionados:", selectedCheckboxes);
   };
 
   const handleTabClick = value => {
@@ -152,7 +204,11 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
               <TableHead>
                 <TableRow>
                   <TableHeaderCell>
-                    <input type="checkbox"></input>
+                    <input
+                      type="checkbox"
+                      checked={Object.values(checkboxes).every(value => value)}
+                      onChange={handleCheckboxChange}
+                    />
                   </TableHeaderCell>
                   <TableHeaderCell>N° de radicado</TableHeaderCell>
                   <TableHeaderCell>Estado de correo</TableHeaderCell>
@@ -171,10 +227,21 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                     key={item.IdMailReceived}
                     onClick={() => setGestionModal(!gestionModal)}>
                     <TableCell>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={checkboxes[item.IdMailReceived]}
+                        onChange={() => {
+                          const updatedCheckboxes = { ...checkboxes };
+                          updatedCheckboxes[item.IdMailReceived] =
+                            !updatedCheckboxes[item.IdMailReceived];
+                          setCheckboxes(updatedCheckboxes);
+                        }}
+                      />
                     </TableCell>
                     <TableCell>{item.CodeReceivMail}</TableCell>
-                    <TableCell>{item.IdMailStatus}</TableCell>
+                    <TableCell>
+                      <Badge color="emerald">{item.IdMailClass}</Badge>
+                    </TableCell>
                     <TableCell>{item.SenderName}</TableCell>
                     <TableCell>{item.Subject}</TableCell>
                     <TableCell>{item.IdUserName}</TableCell>
@@ -251,7 +318,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 variant="solid"
                                 tooltip="Correo"
                                 icon={MailIcon}
-                                onClick={() => setEstadoModal(!estadoModal)}
+                                onClick={() => setTrdModal(!trdModal)}
                               />
                               <Icon
                                 className="bandejaIcons"
@@ -259,7 +326,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 variant="solid"
                                 tooltip="Descarga"
                                 icon={InboxInIcon}
-                                onClick={() => setEstadoModal(!estadoModal)}
+                                onClick={() => setFirmaModal(!firmaModal)}
                               />
                               <Icon
                                 className="bandejaIcons"
@@ -267,7 +334,9 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 variant="solid"
                                 tooltip="Global"
                                 icon={GlobeIcon}
-                                onClick={() => setEstadoModal(!estadoModal)}
+                                onClick={() =>
+                                  setAsociarExpModal(!asociarExpModal)
+                                }
                               />
                               <Icon
                                 className="bandejaIcons"
@@ -328,12 +397,77 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                     </Grid>
                   </Form>
                 )}
-                {selecTabView === 2 && <h1>numero 2</h1>}
+                {selecTabView === 2 && (
+                  <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={e => handleSubmit(e)}>
+                    <Title className="mt-5">Radicado N°:</Title>
+                    <Table className="mt-2">
+                      <TableBody>
+                        {data.map(item => (
+                          <TableRow key={item.name}>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>
+                              <Text>{item.departement}</Text>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                    <Grid
+                      numCols={1}
+                      numColsSm={2}
+                      numColsLg={1}
+                      className="gap-2 mt-3">
+                      <Flex justifyContent="end" className="space-x-2">
+                        <Button
+                          size="lg"
+                          variant="secondary"
+                          onClick={() => console.log("clicked")}>
+                          Cerrar
+                        </Button>
+
+                        <Button
+                          size="lg"
+                          variant="primary"
+                          to="/Corresp"
+                          onClick={() => {
+                            console.log("clicked");
+                          }}>
+                          Siguiente
+                        </Button>
+                      </Flex>
+                    </Grid>
+                  </Form>
+                )}
               </Modal>
               <Modal
                 estado={digitalizarModal}
                 cambiarEstado={setDigitalizarModal}
                 titulo="Digitalizar Archivo">
+                <DragAndDrop />
+              </Modal>
+              <Modal
+                estado={trdModal}
+                cambiarEstado={setTrdModal}
+                titulo="Asociar TRD">
+                <MultiSelectBox>
+                  <MultiSelectBoxItem value="1" text="Option 1" />
+                  <MultiSelectBoxItem value="2" text="Option 2" />
+                  <MultiSelectBoxItem value="3" text="Option 3" />
+                </MultiSelectBox>
+              </Modal>
+              <Modal
+                estado={firmaModal}
+                cambiarEstado={setFirmaModal}
+                titulo="Firma Documento">
+                <DragAndDrop />
+              </Modal>
+              <Modal
+                estado={asociarExpModal}
+                cambiarEstado={setAsociarExpModal}
+                titulo="Asociar Expediente">
                 <DragAndDrop />
               </Modal>
             </>

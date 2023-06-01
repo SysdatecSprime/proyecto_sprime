@@ -5,8 +5,6 @@ import Bandeja from "./BandejaView";
 import { Icon } from "@tremor/react";
 import {
   FolderOpenIcon,
-  BarsIcon,
-  BarIcon,
   ArrowRightIcon,
   ChartPieIcon,
   MailIcon,
@@ -48,8 +46,7 @@ function Sidebar(props) {
   return (
     <main className={show ? "sb-space-toggle" : null}>
       <header
-        className={`sb-header ${show ? "sb-space-toggle" : null}`}
-      ></header>
+        className={`sb-header ${show ? "sb-space-toggle" : null}`}></header>
       <aside className="sb-sidebar">
         <nav className={`sb-nav ${show ? "sb-show" : null}`}>
           <div className="sb-nav-list">
@@ -92,9 +89,8 @@ function Sidebar(props) {
           </div>
           <Link to="" className="sb-nav-link">
             <Icon
-              className="ml-4"
+              className=""
               size="sm"
-              variant="outlined"
               tooltip="Carpeta"
               icon={ArrowRightIcon}
               aria-label="hola"

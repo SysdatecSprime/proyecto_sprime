@@ -54,15 +54,6 @@ function RecibidaUno(props) {
     obtenerMedioRecepcion();
   }, []);
 
-  const handleSubmit = event => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
   //llamado a prioridad
   const obtenerPrioridad = async () => {
     const prioridadProm = await fetch(
@@ -187,6 +178,15 @@ function RecibidaUno(props) {
     if (medioRecepcionProm.ok) {
       setMedioRecepcion(respMedioRecepcion);
     }
+  };
+  const handleSubmit = event => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
   };
 
   return (

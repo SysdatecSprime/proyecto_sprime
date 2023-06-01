@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import DragAndDrop from "../DragAndDrop";
 import Position from "../Position";
 import {
   Grid,
@@ -10,10 +10,13 @@ import {
   Title,
   Subtitle,
   Button,
+  Icon,
 } from "@tremor/react";
+import { MailIcon, GlobeIcon, InboxInIcon } from "@heroicons/react/outline";
 
 function EnviadaDos(props) {
   const [validated, setValidated] = useState(false);
+  const [modalCrearDocumento, setModalCrearDocumento] = useState(false);
 
   const handleSubmit = event => {
     const form = event.currentTarget;
@@ -47,97 +50,100 @@ function EnviadaDos(props) {
           </Flex>
         </Col>
       </Grid>
+      <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+        <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
+          <Col numColSpan={1} numColSpanLg={3}>
+            <Title>Caracteristicas</Title>
+          </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Anexos:</Subtitle>
+            <TextInput className="my-1" placeholder="" />
+          </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Fecha de Entrega/Devolución:</Subtitle>
+            <TextInput className="my-1" placeholder="" />
+          </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Numero de Guia:</Subtitle>
+            <TextInput className="my-1" placeholder="" />
+          </Col>
+        </Grid>
 
-      <Row>
-        <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
-          <Row className="mb-3">
-            <Form.Label className="fs-4 fw-bolder">Caracteristicas</Form.Label>
+        <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Observaciones Devolución/Entrega:</Subtitle>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              type="text"
+              placeholder=""
+              required
+            />
+          </Col>
+        </Grid>
+        <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Observaciones:</Subtitle>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              type="text"
+              placeholder=""
+              required
+            />
+          </Col>
+        </Grid>
 
-            <Form.Group as={Col} md="4" controlId="validationCustom03">
-              <Form.Label>Anexos:</Form.Label>
-              <Form.Control type="text" placeholder="" required />
-              <Form.Control.Feedback type="invalid">
-                Ingresa el destinatario.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="4" controlId="validationCustom03">
-              <Form.Label>Fecha de Entrega/Devolución:</Form.Label>
-              <Form.Control type="text" placeholder="" required />
-              <Form.Control.Feedback type="invalid">
-                Ingresa el destinatario.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="4" controlId="validationCustom03">
-              <Form.Label>Numero de Guia:</Form.Label>
-              <Form.Control type="text" placeholder="" required />
-              <Form.Control.Feedback type="invalid">
-                Ingresa el destinatario.
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="validationCustom03">
-              <Form.Label>Observaciones:</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={1}
-                type="text"
-                placeholder=""
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Ingresa la dependencia.
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Row>
+        <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 my-3 ">
+          <Col numColSpan={1} numColSpanLg={1}>
+            <DragAndDrop />
+          </Col>
+        </Grid>
+        <Grid>
+          <Flex justifyContent="start">
+            <Title>Crear documento</Title>
+            <Icon
+              className="bandejaIcons m-3"
+              size="sm"
+              variant="solid"
+              tooltip="Correo"
+              icon={MailIcon}
+              onClick={() => setModalCrearDocumento(!modalCrearDocumento)}
+            />
+            <Title>Asociar Radicado</Title>
+            <Icon
+              className="bandejaIcons m-3"
+              size="sm"
+              variant="solid"
+              tooltip="Correo"
+              icon={MailIcon}
+              onClick={() => setModalCrearDocumento(!modalCrearDocumento)}
+            />
+          </Flex>
+        </Grid>
+        <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 mt-3">
+          <Flex justifyContent="end" className="space-x-2">
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => {
+                props.setEnviadaPasoUno(1);
+              }}>
+              Atrás
+            </Button>
 
-          <Row className="mb-3 d-flex justify-content-center"></Row>
-
-          <Row className="mb-3">
-            <Form.Label className="fs-4 fw-bolder">
-              Relacion de Correo
-            </Form.Label>
-            <Form.Group as={Col} md="6" controlId="validationCustom03">
-              <Form.Label>Correspondencia Recibida:</Form.Label>
-              <Form.Control type="text" placeholder="" required />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid city.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} md="6" controlId="validationCustom04">
-              <Form.Label>Correspondencia Enviada:</Form.Label>
-              <Form.Control type="text" placeholder="" required />
-              <Form.Control.Feedback type="invalid">
-                Please provide a valid state.
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3 mx-2"></Row>
-
-          <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 mt-3">
-            <Flex justifyContent="end" className="space-x-2">
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => {
-                  props.setEnviadaPasoUno(1);
-                }}>
-                Atrás
-              </Button>
-
-              <Button
-                size="lg"
-                variant="primary"
-                to="/Corresp"
-                onClick={() => {
-                  props.setEnviadaPasoUno(3);
-                }}>
-                Siguiente
-              </Button>
-            </Flex>
-          </Grid>
-        </Form>
-      </Row>
+            <Button
+              size="lg"
+              variant="primary"
+              to="/Corresp"
+              onClick={() => {
+                props.setEnviadaPasoUno(3);
+              }}>
+              Siguiente
+            </Button>
+          </Flex>
+        </Grid>
+      </Form>
     </>
   );
 }

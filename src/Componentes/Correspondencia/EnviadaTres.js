@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container";
 import Position from "../Position";
 import {
   Grid,
@@ -10,8 +7,12 @@ import {
   Flex,
   Title,
   Subtitle,
+  Text,
   Button,
+  Icon,
+  Card,
 } from "@tremor/react";
+import { FolderDownloadIcon } from "@heroicons/react/outline";
 
 function EnviadaTres(props) {
   const [validated, setValidated] = useState(false);
@@ -26,7 +27,7 @@ function EnviadaTres(props) {
     setValidated(true);
   };
   return (
-    <Container>
+    <>
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
@@ -48,51 +49,87 @@ function EnviadaTres(props) {
           </Flex>
         </Col>
       </Grid>
+      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={1}>
+          <Title>Detalle de la correspondencia</Title>
+        </Col>{" "}
+        <Flex className="justify-content-start">
+          <Subtitle>Destinatario:</Subtitle>
+          <Text className="mx-3"></Text>
+        </Flex>
+        <Flex className="justify-content-start">
+          <Subtitle>Clase de correspondencia:</Subtitle>
+          <Text className="mx-3 "></Text>
+        </Flex>
+        <Flex className="justify-content-start">
+          <Subtitle>Remitente:</Subtitle>
+          <Text className="mx-3"></Text>
+        </Flex>
+        <Flex className="justify-content-start">
+          <Subtitle>Observaciones:</Subtitle>
+          <Text className="mx-3"></Text>
+        </Flex>
+      </Grid>
+      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={1}>
+          <Title>Archivos cargados</Title>
+        </Col>{" "}
+        <TextInput
+          placeholder="Disabled"
+          disabled={true}
+          decoration="bottom"
+          decorationColor="indigo"
+        />
+        <TextInput placeholder="Disabled" disabled={true} />
+        <TextInput placeholder="Disabled" disabled={true} />
+      </Grid>
+      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={1}>
+          <Title>Relacion de expediente</Title>
+        </Col>{" "}
+        <Flex className="justify-content-start">
+          <Icon
+            className="bandejaIcons"
+            size="sm"
+            variant="solid"
+            tooltip="Carpeta"
+            icon={FolderDownloadIcon}
+          />
+          <Text>N° de expediente</Text>
+        </Flex>
+      </Grid>
+      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={1}>
+          <Title>Flujo</Title>
+        </Col>{" "}
+        <TextInput placeholder="Disabled" disabled={true} />
+      </Grid>
 
-      <Row>
-        <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
-          <Row className="">
-            <Form.Label className="fs-4 fw-bolder">
-              Detalles de la Correspondencia
-            </Form.Label>
-          </Row>
-          <Row className=""></Row>
+      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 mt-3">
+        <Flex justifyContent="end" className="space-x-2">
+          <Button
+            size="lg"
+            variant="secondary"
+            onClick={() => {
+              props.setEnviadaPasoUno(2);
+            }}>
+            Atrás
+          </Button>
 
-          <Row className="mb-3">
-            <Form.Label className="fs-4 fw-bolder">
-              Correos Relacionados
-            </Form.Label>
-          </Row>
+          <Button
+            size="lg"
+            variant="primary"
+            to="/Corresp"
+            onClick={() => {
+              console.log("acaba de entrar aqui..");
 
-          <Row className="mb-3"></Row>
-
-          <Row className="mb-3"></Row>
-
-          <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 mt-3">
-            <Flex justifyContent="end" className="space-x-2">
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => {
-                  props.setEnviadaPasoUno(2);
-                }}>
-                Atrás
-              </Button>
-
-              <Button
-                size="lg"
-                variant="primary"
-                to="/Corresp"
-                onClick={() => {
-                  props.setEnviadaPasoUno(1);
-                }}>
-                Siguiente
-              </Button>
-            </Flex>
-          </Grid>
-        </Form>
-      </Row>
-    </Container>
+              props.CrearRecibida(1);
+            }}>
+            Guardar
+          </Button>
+        </Flex>
+      </Grid>
+    </>
   );
 }
 

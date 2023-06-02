@@ -55,7 +55,7 @@ function Sidebar(props) {
               <i className="fa-solid fa-bars"></i>
             </div>
             <div className="py-4 flex flex-col gap-4">
-              <Link to="" className="">
+              <Link to="Sidebar" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
@@ -65,7 +65,7 @@ function Sidebar(props) {
                   aria-label="hola"
                 />
               </Link>
-              <Link to="/dashboard" className="">
+              <Link to="dashboard" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
@@ -75,7 +75,7 @@ function Sidebar(props) {
                   aria-label="dashboard"
                 />
               </Link>
-              <Link to="/correos-represados" className="">
+              <Link to="correos-represados" className="">
                 <Icon
                   className="ml-4"
                   size="sm"

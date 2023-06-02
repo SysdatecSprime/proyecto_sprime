@@ -9,6 +9,7 @@ import {
   Flex,
 } from "@tremor/react";
 import Sade from "../images/LogoSprime.png";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -32,13 +33,12 @@ function Login() {
             <TextInput placeholder="" />
             <Title className="my-2">Ingresa Contraseña:</Title>
             <TextInput placeholder="" />
+            <Link to="/Sidebar">
+              <Button className="my-3 w-100" size="xl">
+                Iniciar Sesión
+              </Button>
+            </Link>
 
-            <Button
-              className="my-3 w-100"
-              size="xl"
-              onClick={() => console.log("clicked")}>
-              Iniciar Sesión
-            </Button>
             <Flex justifyContent="center" className="space-x-2 ">
               <Button
                 size="lg"

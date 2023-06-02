@@ -9,7 +9,7 @@ export default function Pqrs() {
   return (
     <div>
       <div className="">
-        <Title>Peticiones, quejas, reclamos y solicitudes</Title>
+        <Title>Dashboard General</Title>
       </div>
       <div className="p-2 rounded">
         <InformeGeneral />

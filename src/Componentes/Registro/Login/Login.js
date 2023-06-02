@@ -13,6 +13,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 const SelectBox = ({ url, valueKey, labelKey }) => {
   const [options, setOptions] = useState([]);
@@ -41,28 +43,37 @@ const SelectBox = ({ url, valueKey, labelKey }) => {
 };
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [Username, setUsername] = useState("");
+  const [Password, setPassword] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [isLoginSuccessful, setIsLoginSuccessful] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     axios
       .post("https://sadecv.sysdatec.com/Security/Users/Login", {
-        username,
-        password,
+        Username,
+        Password,
       })
       .then((response) => {
-        // Maneja la respuesta exitosa del inicio de sesión
         setModalMessage("Inicio de sesión exitoso");
+        setIsLoginSuccessful(true);
         setShowModal(true);
       })
       .catch((error) => {
-        // Maneja cualquier error que ocurra durante el inicio de sesión
         setModalMessage("Error en el inicio de sesión");
+        setIsLoginSuccessful(false);
         setShowModal(true);
       });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    if (isLoginSuccessful) {
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -90,7 +101,7 @@ function Login() {
             <Title className="my-2">Usuario:</Title>
             <TextInput
               placeholder=""
-              value={username}
+              value={Username}
               onChange={(e) => setUsername(e.target.value)}
             />
 
@@ -98,7 +109,7 @@ function Login() {
             <TextInput
               placeholder=""
               type="password"
-              value={password}
+              value={Password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -115,13 +126,13 @@ function Login() {
                 Recordar Contraseña
               </Button>
 
-              <Modal show={showModal} onHide={() => setShowModal(false)}>
+              <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                   <Modal.Title>Resultado del inicio de sesión</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{modalMessage}</Modal.Body>
                 <Modal.Footer>
-                  <Button onClick={() => setShowModal(false)}>Cerrar</Button>
+                  <Button onClick={handleCloseModal}>Cerrar</Button>
                 </Modal.Footer>
               </Modal>
             </Flex>

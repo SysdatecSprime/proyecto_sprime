@@ -67,7 +67,7 @@ export default function RequerimientosPorDependencia() {
                 href={url}
                 download={`RequerimientosPorDependencia_${year}`}
               >
-                Descargar CSV{">"}
+                Descargar xls{">"}
               </a>
             )}
           </div>
@@ -133,13 +133,13 @@ const useFetchData = (top = 4, year = 2023) => {
         "https://sadecv.sysdatec.com/Dashboard/Dependence/PostDataDependence",
         options
       );
-      const resCsv = await fetch(
-        "https://sadecv.sysdatec.com/Dashboard/Dependence/PostDataDependence_CSV",
+      const resxls = await fetch(
+        "https://sadecv.sysdatec.com/Dashboard/Dependence/PostDataDependence_xls",
         options
       );
 
       const dataDependencias = await res.json();
-      const urlDependencias = await resCsv.json();
+      const urlDependencias = await resxls.json();
 
       if (dataDependencias.error) {
         setError(dataDependencias.error);
@@ -153,9 +153,9 @@ const useFetchData = (top = 4, year = 2023) => {
         return;
       }
 
-      const csvData = urlDependencias?.Archivo?.Base64;
-      const csvBlob = new Blob([atob(csvData)], { type: "text/csv" });
-      const url = window.URL.createObjectURL(csvBlob);
+      const xlsData = urlDependencias?.Archivo?.Base64;
+      const xlsBlob = new Blob([atob(xlsData)], { type: "c" });
+      const url = window.URL.createObjectURL(xlsBlob);
 
       setUrl(url);
 

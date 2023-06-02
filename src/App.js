@@ -8,9 +8,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/Login" exact={true} element={<Login />} />
-          <Route path="/" exact={true} element={<Sidebar />}>
-            <Route path="dashboard" element={<Pqrs />} />
+          <Route path="/" exact={true} element={<Login />} />
+          <Route path="/dashboard" exact={true} element={<Sidebar />}>
+            <Route path="pqrs" element={<Pqrs />} />
             <Route path="correos-represados" element={<CorreosRepresados />} />
           </Route>
         </Routes>

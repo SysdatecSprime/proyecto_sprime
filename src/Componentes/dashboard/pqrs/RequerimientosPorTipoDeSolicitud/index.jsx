@@ -181,7 +181,7 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
         options
       );
       const resCsv = await fetch(
-        "https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass_CSV",
+        "https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass_xls",
         options
       );
 
@@ -193,7 +193,7 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
       }
 
       const csvData = urlTipoSolicitud?.Archivo?.Base64;
-      const csvBlob = new Blob([atob(csvData)], { type: "text/csv" });
+      const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
       const url = window.URL.createObjectURL(csvBlob);
 
       setUrl(url);

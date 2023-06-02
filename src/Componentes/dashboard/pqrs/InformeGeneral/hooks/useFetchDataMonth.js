@@ -52,7 +52,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
   const getUrl = useCallback(async () => {
     try {
       const response = await fetch(
-        "https://sadecv.sysdatec.com/Dashboard/Month/PostDataMonth_CSV",
+        "https://sadecv.sysdatec.com/Dashboard/Month/PostDataMonth_xls",
         {
           method: "POST",
           headers: {
@@ -72,7 +72,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
 
       const csvData = data?.Archivo?.Base64;
 
-      const csvBlob = new Blob([atob(csvData)], { type: "text/csv" });
+      const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
       const url = window.URL.createObjectURL(csvBlob);
 
       setUrl(url);

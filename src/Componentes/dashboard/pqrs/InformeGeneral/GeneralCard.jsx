@@ -52,7 +52,7 @@ export default function GeneralCard() {
           }
         );
         const responseCsv = await fetch(
-          "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_CSV",
+          "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
           {
             method: "POST",
             headers: {
@@ -69,7 +69,7 @@ export default function GeneralCard() {
         const jsonCsv = await responseCsv.json();
 
         const csvData = jsonCsv?.Archivo?.Base64;
-        const csvBlob = new Blob([atob(csvData)], { type: "text/csv" });
+        const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
         const url = window.URL.createObjectURL(csvBlob);
 
         setUrl(url);

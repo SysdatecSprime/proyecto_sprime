@@ -9,6 +9,35 @@ import {
   Flex,
 } from "@tremor/react";
 import Sade from "../images/LogoSprime.png";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Select from "react-select";
+
+const SelectBox = ({ url, valueKey, labelKey }) => {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey],
+        }));
+
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  return <Select options={options} placeholder="Seleccione una Opcion" />;
+};
 
 function Login() {
   return (
@@ -25,25 +54,31 @@ function Login() {
               Bienvenidos
             </Metric>
             <Title className="my-2">Seleccione la Empresa:</Title>
+            <SelectBox
+              url="https://sadecv.sysdatec.com/Configs/Bussiness/GetBussiness"
+              valueKey="IdBusiness"
+              labelKey="BusinessDesc"
+            />
+            <Title className="my-2">Metodo de Autenticacion:</Title>
+            <TextInput value="TRADICIONAL" placeholder="" readOnly />
+            <Title className="my-2">Usuario:</Title>
             <TextInput placeholder="" />
-            <Title className="my-2">Tipo de Autenticacion:</Title>
-            <TextInput placeholder="" />
-            <Title className="my-2">Ingresa Correo Electrónico:</Title>
-            <TextInput placeholder="" />
-            <Title className="my-2">Ingresa Contraseña:</Title>
-            <TextInput placeholder="" />
+            <Title className="my-2">Contraseña:</Title>
+            <TextInput placeholder="" type="password" />
 
             <Button
               className="my-3 w-100"
               size="xl"
-              onClick={() => console.log("clicked")}>
+              onClick={() => console.log("clicked")}
+            >
               Iniciar Sesión
             </Button>
             <Flex justifyContent="center" className="space-x-2 ">
               <Button
                 size="lg"
                 variant="light"
-                onClick={() => console.log("clicked")}>
+                onClick={() => console.log("clicked")}
+              >
                 Recordar Contraseña
               </Button>
             </Flex>

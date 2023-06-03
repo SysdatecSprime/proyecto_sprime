@@ -1,0 +1,10 @@
+.sidebar {
+    width: 200px; /* Ancho del Sidebar */
+    position: fixed; /* Posición fija para que no se mueva al hacer scroll */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #f2f2f2; /* Color de fondo del Sidebar */
+    /* Agrega otros estilos según tus necesidades */
+  }
+  

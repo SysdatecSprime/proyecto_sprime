@@ -104,7 +104,7 @@ export default function RequerimientosPorTipoDeSolicitud() {
             href={url}
             download={`RequerimientosPorTipoDeSolicitud_${year}`}
           >
-            Descargar CSV{">"}
+            Descargar xls{">"}
           </a>
         )}
       </div>
@@ -180,21 +180,21 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
         "​https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass",
         options
       );
-      const resCsv = await fetch(
+      const resxls = await fetch(
         "https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass_xls",
         options
       );
 
-      const urlTipoSolicitud = await resCsv.json();
+      const urlTipoSolicitud = await resxls.json();
       if (urlTipoSolicitud.error) {
         setError(urlTipoSolicitud.error);
         setUrl(null);
         return;
       }
 
-      const csvData = urlTipoSolicitud?.Archivo?.Base64;
-      const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
-      const url = window.URL.createObjectURL(csvBlob);
+      const xlsData = urlTipoSolicitud.Archivo;
+      const xlsBlob = new Blob([atob(xlsData)], { type: "application/vnd.ms-excel" });
+      const url = window.URL.createObjectURL(xlsBlob);
 
       setUrl(url);
 

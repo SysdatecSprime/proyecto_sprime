@@ -4,10 +4,11 @@ import RequerimientosPorDependencia from "./RequerimientosPorDependencia";
 import RequerimientosPorTipoDeSolicitud from "./RequerimientosPorTipoDeSolicitud";
 import TiempoPorTipoDeSolicitud from "./TiempoPorTipoDeSolicitud";
 import EstadoDeRequerimientos from "./EstadoDeRequerimientos";
+import "./Dashboard.css"; // Archivo CSS para estilos del Dashboard
 
 export default function Pqrs() {
   return (
-    <div>
+    <div className="dashboard">
       <div className="">
         <Title>Dashboard General</Title>
       </div>

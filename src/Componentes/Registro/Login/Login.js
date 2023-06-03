@@ -16,7 +16,8 @@ import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 
-const SelectBox = ({ url, valueKey, labelKey }) => {
+const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -39,34 +40,71 @@ const SelectBox = ({ url, valueKey, labelKey }) => {
     fetchData();
   }, [url, valueKey, labelKey]);
 
-  return <Select options={options} placeholder="Seleccione una Opcion" />;
+  return (
+    <Select
+      options={options}
+      placeholder="Seleccione una Opcion"
+      value={selectedOption}
+      onChange={(option) => {
+        setSelectedOption(option);
+        onChange(option);
+      }}
+    />
+  );
 };
 
 function Login() {
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isLoginSuccessful, setIsLoginSuccessful] = useState(false);
   const navigate = useNavigate();
 
+  // const handleLogin = () => {
+  //   axios
+  //     .post("https://sadecv.sysdatec.com/Security/Users/Login", {
+  //       Username,
+  //       Password,
+  //     })
+  //     .then((response) => {
+  //       setModalMessage("Inicio de sesión exitoso");
+  //       setIsLoginSuccessful(true);
+  //       setShowModal(true);
+  //     })
+  //     .catch((error) => {
+  //       setModalMessage("Error en el inicio de sesión");
+  //       setIsLoginSuccessful(false);
+  //       setShowModal(true);
+  //     });
+  // };
+
   const handleLogin = () => {
-    axios
-      .post("https://sadecv.sysdatec.com/Security/Users/Login", {
-        Username,
-        Password,
-      })
-      .then((response) => {
-        setModalMessage("Inicio de sesión exitoso");
-        setIsLoginSuccessful(true);
-        setShowModal(true);
-      })
-      .catch((error) => {
-        setModalMessage("Error en el inicio de sesión");
-        setIsLoginSuccessful(false);
-        setShowModal(true);
-      });
+    if (selectedOption) {
+      // Realizar el inicio de sesión
+      axios
+        .post("https://sadecv.sysdatec.com/Security/Users/Login", {
+          Username,
+          Password,
+        })
+        .then((response) => {
+          setModalMessage("Inicio de sesión exitoso");
+          setIsLoginSuccessful(true);
+          setShowModal(true);
+        })
+        .catch((error) => {
+          setModalMessage("Error en el inicio de sesión");
+          setIsLoginSuccessful(false);
+          setShowModal(true);
+        });
+    } else {
+      // Mostrar mensaje de error o realizar alguna acción
+      setModalMessage("Por favor, seleccione una opción de empresa");
+      setIsLoginSuccessful(false);
+      setShowModal(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -94,7 +132,9 @@ function Login() {
               url="https://sadecv.sysdatec.com/Configs/Bussiness/GetBussiness"
               valueKey="IdBusiness"
               labelKey="BusinessDesc"
+              onChange={setSelectedOption}
             />
+
             <Title className="my-2">Metodo de Autenticacion:</Title>
             <TextInput value="TRADICIONAL" placeholder="" readOnly />
 

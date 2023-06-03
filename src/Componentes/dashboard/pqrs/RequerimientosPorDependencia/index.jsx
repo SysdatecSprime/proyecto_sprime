@@ -153,7 +153,7 @@ const useFetchData = (top = 4, year = 2023) => {
         return;
       }
 
-      const xlsData = urlDependencias?.Archivo?.Base64;
+      const xlsData = urlDependencias.Archivo;
       const xlsBlob = new Blob([atob(xlsData)], { type: "c" });
       const url = window.URL.createObjectURL(xlsBlob);
 

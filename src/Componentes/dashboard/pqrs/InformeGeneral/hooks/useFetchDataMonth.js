@@ -70,10 +70,12 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
         return;
       }
 
-      const csvData = data?.Archivo?.Base64;
+      const xlsData = data.Archivo;
 
-      const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
-      const url = window.URL.createObjectURL(csvBlob);
+      const xlsBlob = new Blob([atob(xlsData)], {
+        type: "application/vnd.ms-excel",
+      });
+      const url = window.URL.createObjectURL(xlsBlob);
 
       setUrl(url);
       setError(null);

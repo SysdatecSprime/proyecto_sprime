@@ -77,7 +77,7 @@ export default function InformeGeneral() {
                         : `InformeGeneral_${year}`
                     }
                   >
-                    Descargar CSV{">"}
+                    Descargar Formato Excel{">"}
                   </a>
                 )}
             </div>

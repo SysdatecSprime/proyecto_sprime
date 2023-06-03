@@ -1,0 +1,6 @@
+.dashboard {
+    margin-left: 100px; /* Margen izquierdo para dejar espacio al Sidebar */
+    width: calc(100% - 100px); /* Ancho del contenido principal */
+    /* Agrega otros estilos según tus necesidades */
+  }
+  

@@ -37,40 +37,42 @@ export default function GeneralCard() {
         setData([null, null]);
         return;
       }
+
       try {
-        const response = await fetch(
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            startDate: formatStartDate,
+            endDate: formatEndDate,
+          }),
+        };
+
+        const request1 = fetch(
           "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              startDate: formatStartDate,
-              endDate: formatEndDate,
-            }),
-          }
+          requestOptions
         );
-        const responseCsv = await fetch(
-          "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              startDate: formatStartDate,
-              endDate: formatEndDate,
-            }),
-          }
+        const request2 = new Promise((resolve) =>
+          setTimeout(resolve, 1000)
+        ).then(() =>
+          fetch(
+            "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
+            requestOptions
+          )
         );
 
-        const json = await response.json();
-        const jsonCsv = await responseCsv.json();
+        const [response1, response2] = await Promise.all([request1, request2]);
+        const json = await response1.json();
+        const jsonxls = await response2.json();
 
-        const csvData = jsonCsv?.Archivo?.Base64;
-        const csvBlob = new Blob([atob(csvData)], { type: "application/vnd.ms-excel" });
-        const url = window.URL.createObjectURL(csvBlob);
+        const xlsData = jsonxls.Archivo;
+
+        const xlsBlob = new Blob([atob(xlsData)], {
+          type: "application/vnd.ms-excel",
+        });
+        const url = window.URL.createObjectURL(xlsBlob);
 
         setUrl(url);
         let transformedJson = Object.keys(json[0])
@@ -127,7 +129,7 @@ export default function GeneralCard() {
               value[1]
             )}`}
           >
-            Descargar CSV{">"}
+            Descargar Formato Excel{">"}
           </a>
         )}
     </Card>

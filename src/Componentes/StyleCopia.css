@@ -27,6 +27,12 @@ main {
   font-size: 1rem;
 }
 
+.sidebar {
+  position: fixed;
+  z-index: 9999;
+  /* Agrega aquí otros estilos que desees aplicar al Sidebar */
+}
+
 .sb-header {
   position: fixed;
   top: 0;

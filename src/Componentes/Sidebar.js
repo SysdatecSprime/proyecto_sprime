@@ -80,7 +80,7 @@ function Sidebar(props) {
                   className="ml-4"
                   size="sm"
                   variant="solid"
-                  tooltip="correos represados"
+                  tooltip="Reportes"
                   icon={MailIcon}
                   aria-label="correos represados"
                 />

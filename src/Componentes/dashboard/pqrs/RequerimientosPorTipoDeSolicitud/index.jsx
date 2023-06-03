@@ -177,7 +177,7 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
         }),
       };
       const res = await fetch(
-        "​https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass",
+        "https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass",
         options
       );
       const resxls = await fetch(

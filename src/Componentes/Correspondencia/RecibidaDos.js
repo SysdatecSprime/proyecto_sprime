@@ -16,12 +16,16 @@ import {
   Card,
   Icon,
   Text,
+  SelectBox,
+  SelectBoxItem,
 } from "@tremor/react";
 import { MailIcon, GlobeIcon, InboxInIcon } from "@heroicons/react/outline";
 
 function RecibidaDos(props) {
   const [validated, setValidated] = useState(false);
   const [modalCrearDocumento, setModalCrearDocumento] = useState(false);
+  const [digitalizarRecibidoModal, setDigitalizarRecibidoModal] =
+    useState(false);
 
   const handleSubmit = event => {
     const form = event.currentTarget;
@@ -77,8 +81,18 @@ function RecibidaDos(props) {
             <Col numColSpan={1} numColSpanLg={4}>
               <Title>Anexos</Title>
               <DragAndDrop />
+              <Flex justifyContent="end" className="space-x-2 textDigitaliza">
+                <Title
+                  size="sm"
+                  variant="light"
+                  color="blue"
+                  onClick={() =>
+                    setDigitalizarRecibidoModal(!digitalizarRecibidoModal)
+                  }>
+                  Digitalizar
+                </Title>
+              </Flex>
             </Col>
-            <Col numColSpan={1} numColSpanLg={4}></Col>
           </Grid>
 
           <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2 mt-4">
@@ -111,6 +125,73 @@ function RecibidaDos(props) {
                   onClick={() => setModalCrearDocumento(!modalCrearDocumento)}
                 />
               </Flex>
+
+              {/*  Aqui estan colocados todos lo modales */}
+              <Modal
+                estado={digitalizarRecibidoModal}
+                cambiarEstado={setDigitalizarRecibidoModal}
+                titulo="Digitalizacion de archivo">
+                <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
+                  <Col numColSpan={1} numColSpanLg={1}>
+                    <Flex alignitems="center">
+                      <Title className="mr-2">Numero:</Title>
+                      <TextInput error={false} placeholder="" />
+                    </Flex>
+                  </Col>
+                  <Flex alignitems="center">
+                    <Title className="mr-2">Tipo: </Title>
+                    <TextInput error={false} placeholder="" />
+                  </Flex>
+                  <Col>
+                    <Flex alignitems="center">
+                      <Title className="mr-2">Folio: </Title>
+                      <TextInput error={false} placeholder="" />
+                    </Flex>
+                  </Col>
+                  <Col numColSpan={1} numColSpanLg={2}>
+                    <Flex alignitems="center">
+                      <Title className="w-80">Seleccione el scanner:</Title>
+                      <SelectBox
+                        onValueChange={value =>
+                          console.log("the new value is", value)
+                        }
+                        defaultValue="1">
+                        <SelectBoxItem value="1" text="" />
+                        <SelectBoxItem value="2" text="" />
+                        <SelectBoxItem value="3" text="" />
+                        <SelectBoxItem value="4" text="" />
+                      </SelectBox>
+                    </Flex>
+                  </Col>{" "}
+                  <Col>
+                    <Flex justifyContent="center" className="space-x-2">
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        onClick={() => console.log("clicked")}>
+                        Digitalizar
+                      </Button>
+
+                      <Button
+                        size="lg"
+                        variant="primary"
+                        to="/Corresp"
+                        onClick={() => console.log("clicked")}>
+                        Guardar
+                      </Button>
+                    </Flex>
+                  </Col>
+                  <Col numColSpan={1} numColSpanLg={3}>
+                    <div className="image-upload-wrap"></div>
+                  </Col>
+                  <Col numColSpan={1} numColSpanLg={3}>
+                    <Card>
+                      <Title>Lectura de OCR</Title>
+                      <Text>Informacion de la lectura del OCR</Text>
+                    </Card>
+                  </Col>
+                </Grid>
+              </Modal>
               <Modal
                 estado={modalCrearDocumento}
                 cambiarEstado={setModalCrearDocumento}

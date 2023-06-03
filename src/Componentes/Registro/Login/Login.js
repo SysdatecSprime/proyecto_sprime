@@ -33,7 +33,7 @@ function Login() {
             <TextInput placeholder="" />
             <Title className="my-2">Ingresa Contraseña:</Title>
             <TextInput placeholder="" />
-            <Link to="/Sidebar">
+            <Link to="Sidebar">
               <Button className="my-3 w-100" size="xl">
                 Iniciar Sesión
               </Button>

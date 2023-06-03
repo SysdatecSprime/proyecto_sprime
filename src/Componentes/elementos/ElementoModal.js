@@ -19,7 +19,7 @@ const Overlay = styled.div`
 `;
 
 const Container = styled.div`
-  width: 50vw;
+  width: 60vw;
   background: #fff;
   padding: 1rem;
   border-radius: 5px;

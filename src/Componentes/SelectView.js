@@ -1,4 +1,4 @@
-import { Grid, Col, Button } from "@tremor/react";
+import { Grid, Col, Button, Card } from "@tremor/react";
 import { useState, useEffect } from "react";
 import { PlusIcon, ClockIcon, CogIcon } from "@heroicons/react/outline";
 

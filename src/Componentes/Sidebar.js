@@ -55,7 +55,7 @@ function Sidebar(props) {
               <i className="fa-solid fa-bars"></i>
             </div>
             <div className="py-4 flex flex-col gap-4">
-              <Link to="Sidebar" className="">
+              <Link to="/" className="">
                 <Icon
                   className="ml-4"
                   size="sm"

@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import {
   Card,
@@ -24,6 +26,7 @@ import {
   MultiSelectBoxItem,
   Badge,
   Divider,
+  DateRangePicker,
 } from "@tremor/react";
 import {
   FolderOpenIcon,
@@ -75,6 +78,9 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   const [gestionModal, setGestionModal] = useState(false);
   const [selecTabView, setSelecTabView] = useState(1);
   const [checkboxes, setCheckboxes] = useState({});
+  const [NumRadicado, setNumRadicado] = useState({});
+  const [Asunto, SetAsunto] = useState({});
+  const [Observaciones, setObservaciones] = useState({});
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -85,6 +91,114 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     });
 
     setCheckboxes(updatedCheckboxes);
+  };
+
+  const MyDatePicker = () => {
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const handleDateChange = (date) => {
+      setSelectedDate(date);
+    };
+
+    return (
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleDateChange}
+        dateFormat="dd/MM/yyyy"
+        placeholderText="Selecciona una fecha"
+        className="my-1 datepickerss"
+      />
+    );
+  };
+
+  function SelectBox() {
+    const [selectedOption, setSelectedOption] = useState("");
+
+    const handleChange = (event) => {
+      setSelectedOption(event.target.value);
+    };
+
+    const renderInputField = () => {
+      if (selectedOption === "Comentario") {
+        return (
+          <div>
+            <Title>Comentario:</Title>
+            <TextInput
+              className="my-1"
+              placeholder="Ingrese un comentario al paso actual"
+            />
+          </div>
+        );
+      } else if (selectedOption === "Gestion") {
+        return (
+          <div>
+            <Title>Observacion:</Title>
+            <TextInput
+              className="my-1"
+              placeholder="Ingrese una observacion a la gestion actual"
+            />
+          </div>
+        );
+      } else if (selectedOption === "Respuesta") {
+        return (
+          <div>
+            <Title>Comentario:</Title>
+            <TextInput
+              className="my-1"
+              placeholder="Ingrese un comentario para responder al ciudadano"
+            />
+          </div>
+        );
+      } else if (selectedOption === "Email") {
+        return (
+          <div>
+            <Title>Email:</Title>
+            <TextInput
+              className="my-1"
+              type="email"
+              placeholder="Ingrese un correo electrónico"
+            />
+            <Title>Comentario:</Title>
+            <TextInput
+              className="my-1"
+              placeholder="Ingrese un comentario para el correo a enviar"
+            />
+          </div>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    return (
+      <div>
+        <select
+          value={selectedOption}
+          onChange={handleChange}
+          className="seleccion"
+        >
+          <option value="">Selecciona una opción</option>
+          <option value="Comentario" className="my-1">
+            Añadir Comentario
+          </option>
+          <option value="Gestion" className="my-1">
+            Gestionar Radicado
+          </option>
+          <option value="Respuesta" className="my-1">
+            Responder al Ciudadano
+          </option>
+          <option value="Email" className="my-1">
+            Responder por Correo Electronico
+          </option>
+        </select>
+        {renderInputField()}
+      </div>
+    );
+  }
+
+  const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    // Realiza las acciones necesarias con el valor seleccionado
   };
 
   function Medalla({ status }) {
@@ -163,8 +277,12 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   };
 
   const handleTabClick = (value) => {
+    // setNumRadicado("");
+    // SetAsunto("");
+    // setObservaciones("");
     setSelecTabView(value);
   };
+
   if (crearNuevo === true) {
     return (
       <Card>
@@ -289,7 +407,12 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                 {radicados?.map((item) => (
                   <TableRow
                     key={item.IdMailReceived}
-                    onClick={() => setGestionModal(!gestionModal)}
+                    onClick={() => {
+                      setGestionModal(!gestionModal);
+                      setNumRadicado(item.CodeReceivMail);
+                      SetAsunto(item.Subject);
+                      setObservaciones(item.Observations);
+                    }}
                   >
                     <TableCell>
                       <input
@@ -331,7 +454,16 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
               >
                 <p>hola mundo</p>
               </Modal>
-              <Modal estado={gestionModal} cambiarEstado={setGestionModal}>
+              <Modal
+                estado={gestionModal}
+                cambiarEstado={setGestionModal}
+                // titulo={"Asunto: " + (Asunto && Asunto + " ")}
+                titulo={
+                  <span style={{ fontSize: 20 }}>
+                    {"Asunto: " + (Asunto && Asunto + " ")}
+                  </span>
+                }
+              >
                 <TabList defaultValue="1">
                   <Tab
                     value="1"
@@ -354,7 +486,9 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                       {/* Main section */}
                       <Col numColSpanLg={2}>
                         <Card className="h-full">
-                          <Title>N° Radicado:</Title>
+                          <Title>
+                            N° Radicado: {NumRadicado && NumRadicado + " "}
+                          </Title>
                         </Card>
                       </Col>
 
@@ -363,13 +497,23 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                         <div className="space-y-2">
                           <Card>
                             <Title>Detalles del radicado:</Title>
-                            <TextInput className="my-1" placeholder="" />
-                            <Title>Tipo de respuesta:</Title>
-                            <TextInput className="my-1" placeholder="" />
-                            <Title>Tramite:</Title>
-                            <TextInput className="my-1" placeholder="" />
-                            <Title>Observaciones:</Title>
-                            <TextInput className="my-1" placeholder="" />
+                            <textarea
+                              className="my-1 textarea-expandido"
+                              placeholder=""
+                              value={Observaciones && Observaciones + " "}
+                            ></textarea>
+                            {/* <Editor className="my-1"placeholder="Detalles"/> */}
+                            {/* <TextInput className="my-1" placeholder="" /> */}
+                            <Title>Acciones:</Title>
+                            <SelectBox
+                              className="my-1 seleccion"
+                              onChange={handleSelectChange}
+                            ></SelectBox>
+                            <Title>Fecha de Vencimiento del Paso Actual:</Title>
+                            <MyDatePicker
+                              className="my-1 seleccion"
+                              placeholder=""
+                            />
                           </Card>
                           <Card>
                             <Flex justifyContent="between">

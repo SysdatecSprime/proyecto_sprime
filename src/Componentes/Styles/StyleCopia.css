@@ -28,7 +28,30 @@
   border: 1px solid lightgreen;
 }
 
+.textarea-expandido {
+  width: 100%; /* Establece el ancho inicial al 100% */
+  min-width: 200px; /* Establece el ancho mínimo */
+  max-width: 600px; /* Establece el ancho máximo */
+  resize: vertical; /* Permite la redimensión vertical del textarea */
+  border: 1px solid lightgray; /* Establece un borde sólido de 1px de ancho en color gris */
+  border-radius: 5px;
+}
 
+.seleccion {
+  width: 100%;
+  border: 1px solid lightgray; /* Establece un borde sólido de 1px de ancho en color gris */
+  border-radius: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.datepickerss {
+  width: 50%;
+  border: 1px solid lightgray; /* Establece un borde sólido de 1px de ancho en color gris */
+  border-radius: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
 
 a {
   text-decoration: none;

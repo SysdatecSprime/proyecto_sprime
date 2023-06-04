@@ -179,7 +179,7 @@ function RecibidaUno(props) {
       setMedioRecepcion(respMedioRecepcion);
     }
   };
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -211,7 +211,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1 ms-3"
               name="idPriority"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {prioridad.map((element, index) => {
@@ -225,7 +225,7 @@ function RecibidaUno(props) {
           </Flex>
         </Col>
       </Grid>
-      <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+      <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
         <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
           <Col numColSpan={1} numColSpanLg={4}>
             <Title>Destinatario</Title>
@@ -235,7 +235,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdUser"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {usuarioDp.map((element, index) => {
@@ -275,7 +275,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdBusiness"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {empresa.map((element, index) => {
@@ -293,7 +293,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="idTypification"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {tipificacion.map((element, index) => {
@@ -311,7 +311,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="idMailClass"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {classCorrespondencia.map((element, index) => {
@@ -328,7 +328,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdCompany"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {negocio.map((element, index) => {
@@ -345,7 +345,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdGroups"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {grupo.map((element, index) => {
@@ -362,7 +362,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="idRecMed"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {medioRecepcion.map((element, index) => {
@@ -379,7 +379,7 @@ function RecibidaUno(props) {
             <TextInput
               className="my-1"
               name="Subject"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               value={props.formFields.Subject}
               placeholder=""
             />
@@ -406,7 +406,7 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="idContact"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {contacto.map((element, index) => {
@@ -460,7 +460,8 @@ function RecibidaUno(props) {
             <Button
               size="lg"
               variant="secondary"
-              onClick={() => console.log("clicked")}>
+              onClick={() => console.log("clicked")}
+            >
               Cerrar
             </Button>
 
@@ -470,7 +471,8 @@ function RecibidaUno(props) {
               to="/Corresp"
               onClick={() => {
                 props.setRecibidoPasoUno(2);
-              }}>
+              }}
+            >
               Siguiente
             </Button>
           </Flex>

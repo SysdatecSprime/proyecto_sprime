@@ -13,7 +13,7 @@ import {
   SelectBox,
 } from "@tremor/react";
 
-import Position from "../Position";
+import Position from "./Position";
 
 function InternaUno(props) {
   const [validated, setValidated] = useState(false);

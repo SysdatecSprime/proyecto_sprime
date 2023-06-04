@@ -11,6 +11,25 @@
   --nav-width: 68px;
 }
 
+.custom-tooltip {
+  position: relative;
+  z-index: 9999;
+}
+
+.borde-rojo {
+  border: 1px solid red;
+}
+
+.borde-amarillo {
+  border: 1px solid yellow;
+}
+
+.borde-verde {
+  border: 1px solid lightgreen;
+}
+
+
+
 a {
   text-decoration: none;
   align-items: center;

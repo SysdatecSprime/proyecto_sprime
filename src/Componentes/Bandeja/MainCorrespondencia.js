@@ -1,16 +1,16 @@
 import { Tab, TabList } from "@tremor/react";
 import React, { useState } from "react";
 import { MailIcon } from "@heroicons/react/outline";
-import RecibidaUno from "./Correspondencia/RecibidaUno";
-import RecibidaDos from "./Correspondencia/RecibidaDos";
-import RecibidaTres from "./Correspondencia/RecibidaTres";
-import EnviadaUno from "./Correspondencia/EnviadaUno";
-import EnviadaDos from "./Correspondencia/EnviadaDos";
-import EnviadaTres from "./Correspondencia/EnviadaTres";
-import InternaUno from "./Correspondencia/InternaUno";
-import InternaDos from "./Correspondencia/InternaDos";
-import InternaTres from "./Correspondencia/InternaTres";
-import { dataBandeja } from "../Utils/UrlBase";
+import RecibidaUno from "../Bandeja/Correspondencia/RecibidaUno";
+import RecibidaDos from "../Bandeja/Correspondencia/RecibidaDos";
+import RecibidaTres from "../Bandeja/Correspondencia/RecibidaTres";
+import EnviadaUno from "../Bandeja/Correspondencia/EnviadaUno";
+import EnviadaDos from "../Bandeja/Correspondencia/EnviadaDos";
+import EnviadaTres from "../Bandeja/Correspondencia/EnviadaTres";
+import InternaUno from "../Bandeja/Correspondencia/InternaUno";
+import InternaDos from "../Bandeja/Correspondencia/InternaDos";
+import InternaTres from "../Bandeja/Correspondencia/InternaTres";
+import { dataBandeja } from "./UrlBase";
 
 function MainCorrespondencia() {
   const [selecTabView, setSelecTabView] = useState(1);

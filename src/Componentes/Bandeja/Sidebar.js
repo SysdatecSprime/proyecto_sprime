@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./StyleCopia.css";
+import "../Styles/StyleCopia.css";
 import { Link } from "react-router-dom";
 import Bandeja from "./BandejaView";
 import { Icon } from "@tremor/react";
@@ -10,7 +10,7 @@ import {
   MailIcon,
 } from "@heroicons/react/outline";
 import SelectView from "./SelectView";
-import { dataBandeja } from "../Utils/UrlBase";
+import { dataBandeja } from "./UrlBase";
 import { Outlet } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import * as BsIcons from "react-icons/bs";
@@ -22,7 +22,7 @@ function Sidebar(props) {
   const [tipoCorrespondencia, setTipoCorrespondencia] = useState(1);
   const [crearNuevo, setCrearNuevo] = useState(false);
   const { pathname } = useLocation();
-  console.log(tipoCorrespondencia);
+  console.log("Tipo: " + tipoCorrespondencia);
 
   async function consultaRadicado(TipoCorreo) {
     const bandejaProm = await fetch(`${dataBandeja}/MailBox/PostBox`, {
@@ -46,7 +46,8 @@ function Sidebar(props) {
   return (
     <main className={show ? "sb-space-toggle" : null}>
       <header
-        className={`sb-header ${show ? "sb-space-toggle" : null}`}></header>
+        className={`sb-header ${show ? "sb-space-toggle" : null}`}
+      ></header>
       <aside className="sb-sidebar">
         <nav className={`sb-nav ${show ? "sb-show" : null}`}>
           <div className="sb-nav-list">
@@ -55,7 +56,7 @@ function Sidebar(props) {
               <i className="fa-solid fa-bars"></i>
             </div>
             <div className="py-4 flex flex-col gap-4">
-              <Link to="" className="">
+              <Link to="/Bandeja" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
@@ -75,12 +76,12 @@ function Sidebar(props) {
                   aria-label="dashboard"
                 />
               </Link>
-              <Link to="/correos-represados" className="">
+              <Link to="correos-represados" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
                   variant="solid"
-                  tooltip="Reportes"
+                  tooltip="correos represados"
                   icon={MailIcon}
                   aria-label="correos represados"
                 />
@@ -100,7 +101,7 @@ function Sidebar(props) {
         <div className=""></div>
       </aside>
       <div className="row sb-fond py-4">
-        {pathname === "/" ? (
+        {pathname === "/Bandeja" ? (
           <>
             {show && (
               <div className="col-2">

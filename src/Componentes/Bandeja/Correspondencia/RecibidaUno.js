@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
-import Position from "../Position";
+import Position from "./Position";
 import {
   Grid,
   Col,
@@ -13,9 +13,9 @@ import {
   SelectBox,
   SelectBoxItem,
 } from "@tremor/react";
-import { dataBandeja } from "../../Utils/UrlBase";
+import { dataBandeja } from "../UrlBase";
 
-function EnviadaUno(props) {
+function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
   const [usuarioDp, setUsuarioDp] = useState([]);
   const [empresa, setEmpresa] = useState([]);
@@ -380,7 +380,7 @@ function EnviadaUno(props) {
               className="my-1"
               name="Subject"
               onChange={e => props.handleChange(e)}
-              /* value={props.formFields.Subject} */
+              value={props.formFields.Subject}
               placeholder=""
             />
           </Col>
@@ -469,7 +469,7 @@ function EnviadaUno(props) {
               variant="primary"
               to="/Corresp"
               onClick={() => {
-                props.setEnviadaPasoUno(2);
+                props.setRecibidoPasoUno(2);
               }}>
               Siguiente
             </Button>
@@ -480,4 +480,4 @@ function EnviadaUno(props) {
   );
 }
 
-export default EnviadaUno;
+export default RecibidaUno;

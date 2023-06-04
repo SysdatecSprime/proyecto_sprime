@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Position from "../Position";
+import Position from "./Position";
 import {
   Grid,
   Col,
@@ -14,7 +14,7 @@ import {
 } from "@tremor/react";
 import { FolderDownloadIcon } from "@heroicons/react/outline";
 
-function EnviadaTres(props) {
+function RecibidaTres(props) {
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = event => {
@@ -111,7 +111,7 @@ function EnviadaTres(props) {
             size="lg"
             variant="secondary"
             onClick={() => {
-              props.setEnviadaPasoUno(2);
+              props.setRecibidoPasoUno(2);
             }}>
             Atrás
           </Button>
@@ -133,4 +133,4 @@ function EnviadaTres(props) {
   );
 }
 
-export default EnviadaTres;
+export default RecibidaTres;

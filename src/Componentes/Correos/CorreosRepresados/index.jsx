@@ -4,6 +4,7 @@ import { DropDownElement } from "../DropDownElement";
 import { TextInputElement } from "../TextInputElement";
 import { DateElement } from "../DateElement";
 import { useState, useEffect } from "react";
+import "../../dashboard/pqrs/Dashboard.css"
 
 const URLS = {
   Internos:
@@ -265,7 +266,7 @@ export default function CorreosRepresados() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    async function fetchData() {
+    async function fetch_Data() {
       const body = {
         ...formValues,
       };
@@ -287,36 +288,36 @@ export default function CorreosRepresados() {
       setLoading(false);
     }
     setLoading(true);
-    fetchData();
+    fetch_Data();
   };
 
   const handleChange = (e) => {
     setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(URLS.Internos, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      });
+  // useEffect(() => {
+  //   async function fetchData_() {
+  //     const response = await fetch(URLS.Internos, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({}),
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      setData(data);
-      setLoading(false);
-    }
-    setLoading(true);
-    fetchData();
-  }, []);
+  //     setData(data);
+  //     setLoading(false);
+  //   }
+  //   setLoading(true);
+  //   fetchData_();
+  // }, []);
 
   console.log({ data });
 
   return (
-    <section className="px-4 min-h-screen">
+    <section className="px-4 min-h-screen dashboard">
       <div className="p-4 pl-0">
         <Title>Correos Represados</Title>
       </div>
@@ -527,7 +528,7 @@ export default function CorreosRepresados() {
             Se encontraron {data.length} resultados {">"}
           </small>
           {data.length > 0 && (
-            <Tabla rows={data} columns={columnas[selectedColumn]} />
+            <Tabla className="table" rows={data} columns={columnas[selectedColumn]} />
           )}
         </>
       )}

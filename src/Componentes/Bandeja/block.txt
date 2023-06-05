@@ -1,0 +1,87 @@
+const handleGestionModalOpen = (item) => {
+    setGestionModal(true);
+    setNumRadicado(item.CodeReceivMail);
+    SetAsunto(item.Subject);
+    setObservaciones(item.Observations);
+
+    // Realizar la solicitud GET a la API REST
+    axios
+      .get(
+        `https://sadecv.sysdatec.com/SPRIMESERVICES/wsocr/api/WF_Files/${item.CodeReceivMail}`
+      )
+      .then((response) => {
+        // Obtener los datos de la respuesta
+        const newFilesData = response.data.map((file) => ({
+          fileName: file.fileName,
+          extension: file.extension,
+          base64File: file.base64File,
+        }));
+
+        console.log(newFilesData);
+
+        setFilesData(newFilesData);
+        setShowTable(true);
+        // Utilizar react-table para crear la tabla
+        const columns = [
+          {
+            Header: "Archivos Cargados",
+            accessor: "fileName",
+            Cell: ({ value, row }) => (
+              <a
+                href={`data:application/octet-stream;base64,${row.original.base64File}`}
+                download={`${value}.${row.original.extension}`}
+              >
+                {`${value}.${row.original.extension}`}
+              </a>
+            ),
+          },
+        ];
+
+        const {
+          getTableProps,
+          getTableBodyProps,
+          headerGroups,
+          rows,
+          prepareRow,
+        } = useTable({ columns, data: filesData });
+
+        return (
+          <Col numColSpanLg={2}>
+            <Card className="h-full">
+              <Title>N° Radicado: {NumRadicado && NumRadicado + " "}</Title>
+              <table {...getTableProps()}>
+                <thead>
+                  {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        <th {...column.getHeaderProps()}>
+                          {column.render("Header")}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                  {rows.map((row) => {
+                    prepareRow(row);
+                    return (
+                      <tr {...row.getRowProps()}>
+                        {row.cells.map((cell) => (
+                          <td {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </Card>
+          </Col>
+        );
+      })
+      .catch((error) => {
+        // Manejar el error de la solicitud
+        console.error("Error al realizar la solicitud GET:", error);
+      });
+  };

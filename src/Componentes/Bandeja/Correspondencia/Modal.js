@@ -4,7 +4,7 @@ import {
   HeaderModal,
   BotonCerrar,
   Container,
-} from "../elementos/ElementoModal";
+} from "../../elementos/ElementoModal";
 import * as FaIcons from "react-icons/fa";
 
 const Modal = ({ children, estado, cambiarEstado, titulo }) => {

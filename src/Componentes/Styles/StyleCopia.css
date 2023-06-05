@@ -301,3 +301,69 @@ input[type="radio"]:checked ~ label {
 p {
   margin-bottom: 0% !important;
 }
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom-table a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.custom-table a:hover {
+  text-decoration: underline;
+}
+
+.custom-tableUpdates {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.custom-tableUpdates th,
+.custom-tableUpdates td {
+  padding: 2px 2px; /* Ajusta los valores de padding según tus preferencias */
+  text-align: left;
+  line-height: 1.2; /* Ajusta el valor de line-height según tus preferencias */
+}
+
+
+.custom-tableUpdates th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.custom-tableUpdates tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom-tableUpdates a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.custom-tableUpdates a:hover {
+  text-decoration: underline;
+}
+
+.custom-tableUpdates tbody tr {
+  height: 10px; /* Ajusta el valor de height según tus preferencias */
+}

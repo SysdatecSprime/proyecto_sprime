@@ -32,3 +32,15 @@ code {
   background-repeat: no-repeat;
   width: 100%;
 }
+
+.image-upload-wrap {
+  display: flex;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  top: 10%;
+  bottom: 10%;
+  background: #f9f9fb;
+  border: 1px dashed #d2d7e5;
+  border-radius: 16px;
+}

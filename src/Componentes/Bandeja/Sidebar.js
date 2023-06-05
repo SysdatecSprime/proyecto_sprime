@@ -61,7 +61,7 @@ function Sidebar(props) {
                   className="ml-4"
                   size="sm"
                   variant="solid"
-                  tooltip="Carpeta"
+                  tooltip="Bandeja"
                   icon={FolderOpenIcon}
                   aria-label="hola"
                 />
@@ -76,7 +76,7 @@ function Sidebar(props) {
                   aria-label="dashboard"
                 />
               </Link>
-              <Link to="correos-represados" className="">
+              <Link to="/correosrepresados" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
@@ -92,7 +92,7 @@ function Sidebar(props) {
             <Icon
               className=""
               size="sm"
-              tooltip="Carpeta"
+              tooltip="Bandeja"
               icon={ArrowRightIcon}
               aria-label="hola"
             />

@@ -14,8 +14,20 @@ function App() {
           <Route path="/" exact={true} element={<Login />} />
           <Route path="/dashboard/*" element={<DashboardWithSidebar />} />
           <Route path="/Bandeja" exact={true} element={<Sidebar />} />
+          <Route path="/CorreosRepresados" element={<ReporteWithSidebar />} />
         </Routes>
       </BrowserRouter>
+    </>
+  );
+}
+
+function ReporteWithSidebar() {
+  return (
+    <>
+      <SidebarGeneral />
+      <Routes>
+        <Route path="/" element={<CorreosRepresados />} />
+      </Routes>
     </>
   );
 }
@@ -27,7 +39,7 @@ function DashboardWithSidebar() {
       <Routes>
         <Route path="/" element={<Pqrs />} />
         <Route path="pqrs" element={<Pqrs />} />
-        <Route path="correos-represados" element={<CorreosRepresados />} />
+        {/* <Route path="correosrepresados" element={<CorreosRepresados />} /> */}
       </Routes>
     </>
   );

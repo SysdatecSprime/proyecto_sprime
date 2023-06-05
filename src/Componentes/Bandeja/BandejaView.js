@@ -41,9 +41,11 @@ import {
   CalculatorIcon,
 } from "@heroicons/react/outline";
 import MainCorrespondencia from "./MainCorrespondencia";
-import Modal from "./Modal";
-import DragAndDrop from "./DragAndDrop";
+import Modal from "./Correspondencia/Modal";
+import DragAndDrop from "./Correspondencia/DragAndDrop";
 import "../Styles/StyleCopia.css";
+import axios from "axios";
+import { useTable } from "react-table";
 
 const data = [
   {
@@ -81,6 +83,10 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   const [NumRadicado, setNumRadicado] = useState({});
   const [Asunto, SetAsunto] = useState({});
   const [Observaciones, setObservaciones] = useState({});
+  const [filesData, setFilesData] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+  const [showTableUpdate, setShowTableUpdate] = useState(false);
+  const [UpdateData, setUpdateData] = useState([]);
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -91,6 +97,62 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     });
 
     setCheckboxes(updatedCheckboxes);
+  };
+
+  const handleGestionModalOpen = (item) => {
+    setGestionModal(true);
+    setNumRadicado(item.CodeReceivMail);
+    SetAsunto(item.Subject);
+    setObservaciones(item.Observations);
+
+    // Realizar la solicitud GET a la API REST
+    axios
+      .get(
+        `https://sadecv.sysdatec.com/SPRIMESERVICES/wsocr/api/WF_Files/${item.CodeReceivMail}`
+      )
+      .then((response) => {
+        // Obtener los datos de la respuesta
+        const newFilesData = response.data.map((file) => ({
+          fileName: file.fileName,
+          extension: file.extension,
+          base64File: file.base64File,
+        }));
+
+        console.log(newFilesData);
+
+        setFilesData(newFilesData);
+        setShowTable(true);
+      })
+      .catch((error) => {
+        // Manejar el error de la solicitud
+        console.error("Error al realizar la solicitud GET:", error);
+      });
+  };
+
+  const handleUpdateRecModalOpen = (item) => {
+    // Realizar la solicitud POST a la API REST
+    axios
+      .post("https://sadecv.sysdatec.com/MailBox/PostUpdates", {
+        TipoCorreo: 1,
+        CodeReceivMail: item.CodeReceivMail,
+      })
+      .then((response) => {
+        // Obtener los datos de la respuesta
+        const UpdateData = response.data.map((update) => ({
+          Asignado: update.Asignado,
+          Responsable: update.Responsable,
+          DiasGestion: update.Dias,
+        }));
+
+        console.log(UpdateData);
+
+        setUpdateData(UpdateData);
+        setShowTableUpdate(true);
+      })
+      .catch((error) => {
+        // Manejar el error de la solicitud
+        console.error("Error al realizar la solicitud POST:", error);
+      });
   };
 
   const MyDatePicker = () => {
@@ -204,7 +266,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   function Medalla({ status }) {
     let badgeColorClass = "";
 
-    console.log(status);
+    // console.log(status);
 
     // Asigna la clase de color según el valor de item.MailStatus
     if (status === "ACTIVO") {
@@ -221,7 +283,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   function MedallaPrioridad({ priority }) {
     let badgeColorClass = "";
 
-    console.log(priority);
+    // console.log(priority);
 
     // Asigna la clase de color según el valor de item.MailStatus
     if (priority === "BAJA") {
@@ -408,10 +470,12 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                   <TableRow
                     key={item.IdMailReceived}
                     onClick={() => {
-                      setGestionModal(!gestionModal);
-                      setNumRadicado(item.CodeReceivMail);
-                      SetAsunto(item.Subject);
-                      setObservaciones(item.Observations);
+                      // setGestionModal(true);
+                      // setNumRadicado(item.CodeReceivMail);
+                      // SetAsunto(item.Subject);
+                      // setObservaciones(item.Observations);
+                      handleGestionModalOpen(item);
+                      handleUpdateRecModalOpen(item);
                     }}
                   >
                     <TableCell>
@@ -489,6 +553,32 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                           <Title>
                             N° Radicado: {NumRadicado && NumRadicado + " "}
                           </Title>
+
+                          {showTable && (
+                            <Table className="custom-table">
+                              <TableHead>
+                                <TableRow>
+                                  <TableHeaderCell>
+                                    Archivos Cargados
+                                  </TableHeaderCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {filesData.map((file, index) => (
+                                  <TableRow key={index}>
+                                    <TableCell>
+                                      <a
+                                        href={`data:application/octet-stream;base64,${file.base64File}`}
+                                        download={`${file.fileName}.${file.extension}`}
+                                      >
+                                        {file.fileName}.{file.extension}
+                                      </a>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          )}
                         </Card>
                       </Col>
 
@@ -571,7 +661,39 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                       <Col numColSpanLg={1}>
                         <div className="space-y-2">
                           <Card>
-                            <div className="h-24" />
+                            <Title>Flujo variable</Title>
+                            {showTableUpdate && (
+                              <Table>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableHeaderCell>
+                                      Actualizaciones
+                                    </TableHeaderCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {UpdateData.map((update, index) => (
+                                    <React.Fragment key={index}>
+                                      <TableRow>
+                                        <TableCell>
+                                          Asignado: {update.Asignado}
+                                        </TableCell>
+                                      </TableRow>
+                                      <TableRow>
+                                        <TableCell>
+                                          Responsable: {update.Responsable}
+                                        </TableCell>
+                                      </TableRow>
+                                      <TableRow>
+                                        <TableCell>
+                                          Dias: {update.DiasGestion}
+                                        </TableCell>
+                                      </TableRow>
+                                    </React.Fragment>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            )}
                           </Card>
                         </div>
                       </Col>

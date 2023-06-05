@@ -14,6 +14,7 @@ import {
   SelectBoxItem,
 } from "@tremor/react";
 import { dataBandeja } from "../UrlBase";
+import axios from "axios";
 
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -26,6 +27,7 @@ function RecibidaUno(props) {
   const [contacto, setContacto] = useState([]);
   const [medioRecepcion, setMedioRecepcion] = useState([]);
   const [validated, setValidated] = useState(false);
+
   useEffect(() => {
     obtenerPrioridad();
   }, []);
@@ -56,127 +58,166 @@ function RecibidaUno(props) {
 
   //llamado a prioridad
   const obtenerPrioridad = async () => {
-    const prioridadProm = await fetch(
-      `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
-      {
-        method: "GET",
+    try {
+      const prioridadProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
+        {
+          method: "GET",
+        }
+      );
+      const respPrioridad = await prioridadProm.json();
+      console.log(respPrioridad);
+      if (prioridadProm.ok) {
+        setPrioridad(respPrioridad);
       }
-    );
-    const respPrioridad = await prioridadProm.json();
-    console.log(respPrioridad);
-    if (prioridadProm.ok) {
-      setPrioridad(respPrioridad);
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Usuario con Dependencia
   const obtenerUsuarioDp = async () => {
-    const usuarioDpProm = await fetch(
-      `${dataBandeja}/Configs/UserDep/GetUserDeps`,
-      {
-        method: "GET",
+    try {
+      const usuarioDpProm = await fetch(
+        `${dataBandeja}/Configs/UserDep/GetUserDeps`,
+        {
+          method: "GET",
+        }
+      );
+      const respUsuarioDp = await usuarioDpProm.json();
+      console.log(respUsuarioDp);
+      if (usuarioDpProm.ok) {
+        setUsuarioDp(respUsuarioDp);
       }
-    );
-    const respUsuarioDp = await usuarioDpProm.json();
-    console.log(respUsuarioDp);
-    if (usuarioDpProm.ok) {
-      setUsuarioDp(respUsuarioDp);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   //llamado a Empresas
   const obtenerEmpresa = async () => {
-    const empresaProm = await fetch(
-      `${dataBandeja}/Configs/Bussiness/GetBussiness`,
-      {
-        method: "GET",
+    try {
+      const empresaProm = await fetch(
+        `${dataBandeja}/Configs/Bussiness/GetBussiness`,
+        {
+          method: "GET",
+        }
+      );
+      const respEmpresa = await empresaProm.json();
+      console.log(respEmpresa);
+      if (empresaProm.ok) {
+        setEmpresa(respEmpresa);
       }
-    );
-    const respEmpresa = await empresaProm.json();
-    console.log(respEmpresa);
-    if (empresaProm.ok) {
-      setEmpresa(respEmpresa);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   //llamado a Tipificacion
   const obtenerTipificacion = async () => {
-    const tipificacionProm = await fetch(
-      `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
-      {
-        method: "GET",
+    try {
+      const tipificacionProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
+        {
+          method: "GET",
+        }
+      );
+      const respTipificacion = await tipificacionProm.json();
+      console.log(respTipificacion);
+      if (tipificacionProm.ok) {
+        setTipificacion(respTipificacion);
       }
-    );
-    const respTipificacion = await tipificacionProm.json();
-    console.log(respTipificacion);
-    if (tipificacionProm.ok) {
-      setTipificacion(respTipificacion);
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Clase de correspondencia
   const obtenerClassCorrespondencia = async () => {
-    const classCorrespondenciaProm = await fetch(
-      `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
-      {
-        method: "GET",
+    try {
+      const classCorrespondenciaProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
+        {
+          method: "GET",
+        }
+      );
+      const respClassCorrespondencia = await classCorrespondenciaProm.json();
+      console.log(respClassCorrespondencia);
+      if (classCorrespondenciaProm.ok) {
+        setClassCorrespondencia(respClassCorrespondencia);
       }
-    );
-    const respClassCorrespondencia = await classCorrespondenciaProm.json();
-    console.log(respClassCorrespondencia);
-    if (classCorrespondenciaProm.ok) {
-      setClassCorrespondencia(respClassCorrespondencia);
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Negocios
   const obtenerNegocio = async () => {
-    const negocioProm = await fetch(
-      `${dataBandeja}/Configs/Company/GetCompany`,
-      {
-        method: "GET",
+    try {
+      const negocioProm = await fetch(
+        `${dataBandeja}/Configs/Company/GetCompany`,
+        {
+          method: "GET",
+        }
+      );
+      const respNegocio = await negocioProm.json();
+      console.log(respNegocio);
+      if (negocioProm.ok) {
+        setNegocio(respNegocio);
       }
-    );
-    const respNegocio = await negocioProm.json();
-    console.log(respNegocio);
-    if (negocioProm.ok) {
-      setNegocio(respNegocio);
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Grupos
   const obtenerGrupo = async () => {
-    const grupoProm = await fetch(`${dataBandeja}/Configs/Group/GetGroups`, {
-      method: "GET",
-    });
-    const respGrupo = await grupoProm.json();
-    console.log(respGrupo);
-    if (grupoProm.ok) {
-      setGrupo(respGrupo);
+    try {
+      const grupoProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailGroup`,
+        {
+          method: "GET",
+        }
+      );
+      const respGrupo = await grupoProm.json();
+      console.log(respGrupo);
+      if (grupoProm.ok) {
+        setGrupo(respGrupo);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Contacto
   const obtenerContacto = async () => {
-    const contactoProm = await fetch(
-      `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
-      {
-        method: "GET",
+    try {
+      const contactoProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
+        {
+          method: "GET",
+        }
+      );
+      const respContacto = await contactoProm.json();
+      console.log(respContacto);
+      if (contactoProm.ok) {
+        setContacto(respContacto);
       }
-    );
-    const respContacto = await contactoProm.json();
-    console.log(respContacto);
-    if (contactoProm.ok) {
-      setContacto(respContacto);
+    } catch (error) {
+      console.error(error);
     }
   };
   //llamado a Medio de recepción
   const obtenerMedioRecepcion = async () => {
-    const medioRecepcionProm = await fetch(
-      `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
-      {
-        method: "GET",
+    try {
+      const medioRecepcionProm = await fetch(
+        `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
+        {
+          method: "GET",
+        }
+      );
+      const respMedioRecepcion = await medioRecepcionProm.json();
+      console.log(respMedioRecepcion);
+      if (medioRecepcionProm.ok) {
+        setMedioRecepcion(respMedioRecepcion);
       }
-    );
-    const respMedioRecepcion = await medioRecepcionProm.json();
-    console.log(respMedioRecepcion);
-    if (medioRecepcionProm.ok) {
-      setMedioRecepcion(respMedioRecepcion);
+    } catch (error) {
+      console.error(error);
     }
   };
   const handleSubmit = (event) => {
@@ -350,8 +391,8 @@ function RecibidaUno(props) {
             >
               {grupo.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.GroupDesc}>
-                    {element.IdGroups}
+                  <SelectBoxItem key={index} value={element.groMailDesc}>
+                    {element.idGroupMail}
                   </SelectBoxItem>
                 );
               })}

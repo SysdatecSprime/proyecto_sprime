@@ -47,7 +47,7 @@ function SidebarGeneral(props) {
                   aria-label="dashboard"
                 />
               </Link>
-              <Link to="/correos-represados" className="">
+              <Link to="/correosrepresados" className="">
                 <Icon
                   className="ml-4"
                   size="sm"

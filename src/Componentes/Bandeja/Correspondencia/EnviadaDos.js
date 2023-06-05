@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import DragAndDrop from "../DragAndDrop";
+import DragAndDrop from "./DragAndDrop";
 import Position from "./Position";
 import {
   Grid,

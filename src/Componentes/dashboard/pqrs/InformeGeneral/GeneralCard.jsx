@@ -10,21 +10,96 @@ import {
 } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { formatDate } from "../../../../Utils/dashboard";
+import axios from "axios";
+import Select from "react-select";
+import { PDFViewer, Page, View } from "@react-pdf/renderer";
+
+let timerId;
+
+const ChartPDF = ({ data }) => (
+  <PDFViewer>
+    <Page>
+      <View>
+        <Text>Gráfico</Text>
+        {/* Renderiza aquí tu componente de gráfico (por ejemplo, <GeneralBarChart data={data} />) */}
+        {/* <GeneralBarChart data={data} /> */}
+      </View>
+    </Page>
+  </PDFViewer>
+);
+
+const SelectBox = ({
+  url,
+  valueKey,
+  labelKey,
+  onChange,
+  onValueChange,
+  onDependenciaChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [selectedDependencia, setSelectedDependencia] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey],
+        }));
+
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+    onChange(option);
+    onValueChange(option); // Llamar a la función de devolución de llamada con la opción seleccionada
+    setSelectedDependencia(option.value); // Establecer la dependencia seleccionada en el nuevo estado
+  };
+
+  return (
+    <Select
+      className="max-w-[450px]"
+      options={options}
+      placeholder="Dependencia"
+      value={selectedOption}
+      onChange={handleOptionChange} // Actualizar la función de devolución de llamada
+    />
+  );
+};
 
 const now = new Date();
 const startDay = new Date(now.getFullYear(), now.getMonth(), 1);
 
 export default function GeneralCard() {
   const [value, setValue] = useState([startDay, now]);
+  const [depen, setDepen] = useState();
   const [url, setUrl] = useState(null);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [showChartPDF, setShowChartPDF] = useState(false);
+  const [selectedDependencia, setSelectedDependencia] = useState(null);
+  // const [endDate, setEndDate] = useState(now);
+  const [startDate, endDate] = value; // Agregar esta línea
 
   useEffect(() => {
     if (value[0] === null || value[1] === null) return;
 
     const [startDate, endDate] = value;
+    const CodDep = depen;
 
     if (!startDate || !endDate) return;
 
@@ -39,40 +114,47 @@ export default function GeneralCard() {
       }
 
       try {
+        const requestBody = {
+          startDate: formatStartDate,
+          endDate: formatEndDate,
+        };
+
+        if (selectedDependencia !== null) {
+          requestBody.CodDep = selectedDependencia;
+        }
+
         const requestOptions = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            startDate: formatStartDate,
-            endDate: formatEndDate,
-          }),
+          body: JSON.stringify(requestBody),
         };
 
         const request1 = fetch(
           "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek",
           requestOptions
         );
-        const request2 = new Promise((resolve) =>
-          setTimeout(resolve, 1000)
-        ).then(() =>
-          fetch(
-            "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
-            requestOptions
-          )
-        );
+        // const request2 = new Promise((resolve) =>
+        //   setTimeout(resolve, 1000)
+        // ).then(() =>
+        //   fetch(
+        //     "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
+        //     requestOptions
+        //   )
+        // );
 
-        const [response1, response2] = await Promise.all([request1, request2]);
+        // const [response1, response2] = await Promise.all([request1, request2]);
+        const [response1] = await Promise.all([request1]);
         const json = await response1.json();
-        const jsonxls = await response2.json();
+        // const jsonxls = await response2.json();
 
-        const xlsData = jsonxls.Archivo;
+        // const xlsData = jsonxls.Archivo;
 
-        const xlsBlob = new Blob([atob(xlsData)], {
-          type: "application/vnd.ms-excel",
-        });
-        const url = window.URL.createObjectURL(xlsBlob);
+        // const xlsBlob = new Blob([atob(xlsData)], {
+        //   type: "application/vnd.ms-excel",
+        // });
+        // const url = window.URL.createObjectURL(xlsBlob);
 
         setUrl(url);
         let transformedJson = Object.keys(json[0])
@@ -91,10 +173,75 @@ export default function GeneralCard() {
 
     setIsLoading(true);
     fetchData();
-  }, [value]);
+  }, [value[0], value[1], selectedDependencia]);
 
   const handleChange = (value) => {
     setValue(value);
+    setDepen(null);
+  };
+
+  const handleDependenciaChange = async (option) => {
+    if (option) {
+      setSelectedDependencia(option.value);
+    } else {
+      setSelectedDependencia(null);
+    }
+
+    const formatStartDate = formatDate(startDate);
+    const formatEndDate = formatDate(endDate);
+
+    // try {
+    //   const requestOptions = {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       startDate: formatStartDate,
+    //       endDate: formatEndDate,
+    //       CodDep: option.value,
+    //     }),
+    //   };
+
+    //   const request1 = fetch(
+    //     "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek",
+    //     requestOptions
+    //   );
+    //   // const request2 = new Promise((resolve) =>
+    //   //   setTimeout(resolve, 1000)
+    //   // ).then(() =>
+    //   //   fetch(
+    //   //     "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek_xls",
+    //   //     requestOptions
+    //   //   )
+    //   // );
+
+    //   // const [response1, response2] = await Promise.all([request1, request2]);
+    //   const [response1] = await Promise.all([request1]);
+    //   const json = await response1.json();
+    //   // const jsonxls = await response2.json();
+
+    //   // const xlsData = jsonxls.Archivo;
+
+    //   // const xlsBlob = new Blob([atob(xlsData)], {
+    //   //   type: "application/vnd.ms-excel",
+    //   // });
+    //   // const url = window.URL.createObjectURL(xlsBlob);
+
+    //   setUrl(url);
+    //   let transformedJson = Object.keys(json[0])
+    //     .slice(1)
+    //     .map((key) => {
+    //       let value = json.reduce((acc, curr) => acc + curr[key], 0);
+    //       return { name: key, requerimientos: value };
+    //     });
+    //   setData(transformedJson);
+    //   setError(null);
+    // } catch (error) {
+    //   setError(error);
+    // }
+
+    setIsLoading(false);
   };
 
   return (
@@ -108,11 +255,15 @@ export default function GeneralCard() {
           enableDropdown={false}
         />
 
-        <Dropdown placeholder="Elige una Dependencia">
-          <DropdownItem value="Dependencia1" text="Dependencia1" />
-          <DropdownItem value="Dependencia2" text="Dependencia2" />
-          <DropdownItem value="Dependencia3" text="Dependencia3" />
-        </Dropdown>
+        <SelectBox
+          url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
+          valueKey="CodeDepen"
+          labelKey="DepenDesc"
+          onChange={setSelectedOption}
+          onValueChange={handleDependenciaChange}
+          onDependenciaChange={handleDependenciaChange} // Agregar la función de devolución de llamada
+          isDisabled={true}
+        />
       </div>
       <GeneralCardPie data={data} loading={isLoading} error={error} />
       <GeneralProgressBar data={data} loading={isLoading} error={error} />

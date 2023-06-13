@@ -13,6 +13,13 @@ const transformData = (data) =>
     };
   });
 
+const downloadFile = (base64Data, fileName) => {
+  const link = document.createElement("a");
+  link.href = `data:application/vnd.ms-excel;base64,${base64Data}`;
+  link.download = fileName;
+  link.click();
+};
+
 const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
   const [data, setData] = useState(initialValue);
   const [url, setUrl] = useState("");
@@ -72,12 +79,8 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
 
       const xlsData = data.Archivo;
 
-      const xlsBlob = new Blob([atob(xlsData)], {
-        type: "application/vnd.ms-excel",
-      });
-      const url = window.URL.createObjectURL(xlsBlob);
+      downloadFile(xlsData, "archivo_excel.xlsx");
 
-      setUrl(url);
       setError(null);
     } catch (error) {
       setError(error);
@@ -85,7 +88,22 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
     } finally {
       setIsLoading(false);
     }
-  }, [year]);
+  }, [data.Archivo]);
+
+  //     const xlsBlob = new Blob([atob(xlsData)], {
+  //       type: "application/vnd.ms-excel",
+  //     });
+  //     const url = window.URL.createObjectURL(xlsBlob);
+
+  //     setUrl(url);
+  //     setError(null);
+  //   } catch (error) {
+  //     setError(error);
+  //     setUrl("");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }, [year]);
 
   useEffect(() => {
     console.log({ month });

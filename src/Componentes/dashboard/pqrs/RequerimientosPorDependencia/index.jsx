@@ -10,10 +10,53 @@ import {
 import DonutDependencias from "./DonutDependencias";
 import { useCallback, useEffect, useState } from "react";
 import { getMonth } from "../../../../Utils/dashboard";
+import axios from "axios";
+import Select from "react-select";
+import "../../pqrs/Dashboard.css";
+
+const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey],
+        }));
+
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  return (
+    <Select
+      className="max-w-[350px]"
+      options={options}
+      placeholder="Seleccione una Dependencia"
+      value={selectedOption}
+      onChange={(option) => {
+        setSelectedOption(option);
+        onChange(option);
+      }}
+    />
+  );
+};
 
 export default function RequerimientosPorDependencia() {
   const [year, setYear] = useState("2023");
   const { data: result, loading, error, url, retry } = useFetchData(4, year);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
 
   if (typeof error === "string") {
     return (
@@ -71,18 +114,29 @@ export default function RequerimientosPorDependencia() {
               </a>
             )}
           </div>
-          <Dropdown
-            onValueChange={(value) => {
-              setYear(value);
-            }}
-            value={year}
-            placeholder="Tipo de filtrado"
-            className="max-w-[150px]"
-          >
-            <DropdownItem value="2023" text="2023" />
-            <DropdownItem value="2022" text="2022" />
-            <DropdownItem value="2021" text="2021" />
-          </Dropdown>
+          <Col numColSpanLg={2} className="max-w-[150px] xl:max-w-full">
+            <Dropdown
+              onValueChange={(value) => {
+                setYear(value);
+              }}
+              value={year}
+              placeholder="Tipo de filtrado"
+              className="max-w-[150px]"
+            >
+              <DropdownItem value="2023" text="2023" />
+              <DropdownItem value="2022" text="2022" />
+              <DropdownItem value="2021" text="2021" />
+            </Dropdown>
+          </Col>
+          <Col numColSpanLg={2} className="max-w-[300px]">
+            <SelectBox
+              url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
+              valueKey="CodeDepen"
+              labelKey="DepenDesc"
+              onChange={setSelectedOption}
+              isDisabled={true}
+            />
+          </Col>
           {loading ? (
             <AreaChart
               data={[

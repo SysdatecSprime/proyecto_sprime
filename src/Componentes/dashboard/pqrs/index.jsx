@@ -4,6 +4,8 @@ import RequerimientosPorDependencia from "./RequerimientosPorDependencia";
 import RequerimientosPorTipoDeSolicitud from "./RequerimientosPorTipoDeSolicitud";
 import TiempoPorTipoDeSolicitud from "./TiempoPorTipoDeSolicitud";
 import EstadoDeRequerimientos from "./EstadoDeRequerimientos";
+import CRC from "./CRC";
+import React from "react";
 import "./Dashboard.css"; // Archivo CSS para estilos del Dashboard
 
 export default function Pqrs() {
@@ -18,6 +20,7 @@ export default function Pqrs() {
         <RequerimientosPorTipoDeSolicitud />
         <TiempoPorTipoDeSolicitud />
         <EstadoDeRequerimientos />
+        <CRC />
       </div>
     </div>
   );

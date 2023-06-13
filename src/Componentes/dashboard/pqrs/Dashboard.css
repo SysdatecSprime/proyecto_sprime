@@ -17,3 +17,10 @@
     text-overflow: ellipsis;
   }
   
+  .seleccion {
+    width: 100%;
+    border: 1px solid lightgray; /* Establece un borde sólido de 1px de ancho en color gris */
+    border-radius: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }

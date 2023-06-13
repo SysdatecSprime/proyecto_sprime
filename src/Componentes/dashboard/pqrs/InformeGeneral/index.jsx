@@ -7,18 +7,25 @@ import {
   Subtitle,
   Title,
 } from "@tremor/react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MONTH, MONTH_CURRENT } from "../../../../Utils/dashboard/constants";
 import GeneralBarChart from "./GeneralBarChart";
 import GeneralCard from "./GeneralCard";
 import { nextMonth } from "../../../../Utils/dashboard";
 import useFetchDataMonth from "./hooks/useFetchDataMonth";
 import useFetchDataWeek from "./hooks/useFetchDataWeek";
+import axios from "axios";
+import Select from "react-select";
+import "../../pqrs/Dashboard.css";
+import html2pdf from "html2pdf.js";
 
 export default function InformeGeneral() {
   const [year, setYear] = useState("2023");
   const [month, setMonth] = useState(" ");
   const [isDataMonth, setIsDataMonth] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [url, setUrl] = useState("");
   console.log({ isDataMonth });
 
   const startDate = month !== " " ? `${year}${month}01` : null;
@@ -52,6 +59,52 @@ export default function InformeGeneral() {
 
   const monthAccordingToYear = year === "2023" ? MONTH_CURRENT : MONTH;
 
+  const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [options, setOptions] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(url);
+          const data = response.data;
+
+          const mappedOptions = data.map((item) => ({
+            value: item[valueKey],
+            label: item[labelKey],
+          }));
+
+          setOptions(mappedOptions);
+        } catch (error) {
+          console.error("Error fetching options:", error);
+        }
+      };
+
+      fetchData();
+    }, [url, valueKey, labelKey]);
+
+    return (
+      <Select
+        options={options}
+        placeholder="Seleccione una Dependencia"
+        value={selectedOption}
+        onChange={(option) => {
+          setSelectedOption(option);
+          onChange(option);
+        }}
+      />
+    );
+  };
+
+  const handleExportToPDF = () => {
+    if (url) {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "formato_excel.xlsx";
+      link.click();
+    }
+  };
+
   return (
     <Grid numColsLg={7} className="gap-4">
       <Col numColSpanLg={2}>
@@ -69,13 +122,9 @@ export default function InformeGeneral() {
                 !errorWeek &&
                 (dataWeek || dataMonth) && (
                   <a
-                    className="text-blue-500 hover:text-blue-600 p-2 transition-all"
                     href={selectedUrl}
-                    download={
-                      urlWeek
-                        ? `InformeGeneral_${year}_${month}`
-                        : `InformeGeneral_${year}`
-                    }
+                    download="formato_excel.xlsx"
+                    onClick={handleExportToPDF}
                   >
                     Descargar Formato Excel{">"}
                   </a>
@@ -86,7 +135,7 @@ export default function InformeGeneral() {
               denuncias
             </Subtitle>
           </div>
-          <Grid numColsLg={7} className="w-3/5 gap-2">
+          <Grid numColsLg={7} className="w-4/5 gap-2">
             <Col numColSpanLg={2} className="max-w-[150px] xl:max-w-full">
               <Dropdown
                 onValueChange={(value) => {
@@ -121,22 +170,26 @@ export default function InformeGeneral() {
                 })}
               </Dropdown>
             </Col>
-            <Col numColSpanLg={1} className="max-w-[150px]">
-              <Dropdown placeholder="Elige una Dependencia">
-                <DropdownItem value="Dependencia1" text="Dependencia1" />
-                <DropdownItem value="Dependencia2" text="Dependencia2" />
-                <DropdownItem value="Dependencia3" text="Dependencia3" />
-              </Dropdown>
+            <Col numColSpanLg={2} className="max-w-[150px] xl:max-w-full">
+              <SelectBox
+                url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
+                valueKey="CodeDepen"
+                labelKey="DepenDesc"
+                onChange={setSelectedOption}
+              />
             </Col>
           </Grid>
-          {selectedData && (
-            <GeneralBarChart
-              data={isDataMonth ? dataMonth : dataWeek}
-              loading={isLoadingMonth || isLoadingWeek}
-              error={isDataMonth ? errorMonth : errorWeek}
-              reload={selectedReload}
-            />
-          )}
+          <div id="contentToExport">
+            {selectedData && (
+              <GeneralBarChart
+                data={isDataMonth ? dataMonth : dataWeek}
+                loading={isLoadingMonth || isLoadingWeek}
+                error={isDataMonth ? errorMonth : errorWeek}
+                reload={selectedReload}
+              />
+            )}
+          </div>
+          <button onClick={handleExportToPDF}>Exportar a PDF</button>
         </Card>
       </Col>
     </Grid>

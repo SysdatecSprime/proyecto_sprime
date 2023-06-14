@@ -5,16 +5,17 @@ import {
   Dropdown,
   DropdownItem,
   Grid,
-  Title,
+  Title
 } from "@tremor/react";
 import DonutDependencias from "./DonutDependencias";
-import { useCallback, useEffect, useState } from "react";
-import { getMonth } from "../../../../Utils/dashboard";
+import {useCallback, useEffect, useState} from "react";
+import {getMonth} from "../../../../Utils/dashboard";
 import axios from "axios";
 import Select from "react-select";
 import "../../pqrs/Dashboard.css";
+import {exportToCsv} from "../../../../Utils/download/downloadExcel";
 
-const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
+const SelectBox = ({url, valueKey, labelKey, onChange}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
 
@@ -26,7 +27,7 @@ const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
 
         const mappedOptions = data.map((item) => ({
           value: item[valueKey],
-          label: item[labelKey],
+          label: item[labelKey]
         }));
 
         setOptions(mappedOptions);
@@ -54,9 +55,19 @@ const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
 
 export default function RequerimientosPorDependencia() {
   const [year, setYear] = useState("2023");
-  const { data: result, loading, error, url, retry } = useFetchData(4, year);
   const [selectedOption, setSelectedOption] = useState(null);
+  const {
+    data: result,
+    loading,
+    error,
+    url,
+    retry
+  } = useFetchData(4, year, selectedOption);
   const [options, setOptions] = useState([]);
+
+  const handleDownloadExcel = (data) => {
+    exportToCsv(data, Object.keys(data[0]), "formato_excel");
+  };
 
   if (typeof error === "string") {
     return (
@@ -107,10 +118,10 @@ export default function RequerimientosPorDependencia() {
             {!loading && !error && result && url && (
               <a
                 className="text-blue-500 hover:text-blue-600 p-2 transition-all"
-                href={url}
-                download={`RequerimientosPorDependencia_${year}`}
+                style={{textDecoration: "underline", cursor: "pointer"}}
+                onClick={() => handleDownloadExcel(result.data)}
               >
-                Descargar xls{">"}
+                Descargar CSV{">"}
               </a>
             )}
           </div>
@@ -141,8 +152,8 @@ export default function RequerimientosPorDependencia() {
             <AreaChart
               data={[
                 {
-                  Cargando: "Cargando",
-                },
+                  Cargando: "Cargando"
+                }
               ]}
               index="Cargando"
             />
@@ -164,7 +175,7 @@ export default function RequerimientosPorDependencia() {
   );
 }
 
-const useFetchData = (top = 4, year = 2023) => {
+const useFetchData = (top = 4, year = 2023, selectedOption) => {
   const [data, setData] = useState([]);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -172,15 +183,19 @@ const useFetchData = (top = 4, year = 2023) => {
 
   const getData = useCallback(async () => {
     try {
+      const requestBody = {
+        NTop: top,
+        Year: year
+      };
+      if (selectedOption) {
+        requestBody.CodeDep = selectedOption.value;
+      }
       const options = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          NTop: top,
-          Year: year,
-        }),
+        body: JSON.stringify(requestBody)
       };
 
       const res = await fetch(
@@ -208,7 +223,7 @@ const useFetchData = (top = 4, year = 2023) => {
       }
 
       const xlsData = urlDependencias.Archivo;
-      const xlsBlob = new Blob([atob(xlsData)], { type: "c" });
+      const xlsBlob = new Blob([atob(xlsData)], {type: "c"});
       const url = window.URL.createObjectURL(xlsBlob);
 
       setUrl(url);
@@ -216,7 +231,7 @@ const useFetchData = (top = 4, year = 2023) => {
       const modifiedDataDependencias = dataDependencias
         .map((item) => ({
           Month: getMonth(item.Month),
-          [item.DepenDesc]: item.Count,
+          [item.DepenDesc]: item.Count
         }))
         .reverse();
 
@@ -253,7 +268,7 @@ const useFetchData = (top = 4, year = 2023) => {
       const result = Object.keys(groupedData).map((key) => {
         return {
           Month: parseInt(key),
-          ...groupedData[key],
+          ...groupedData[key]
         };
       });
 
@@ -268,14 +283,14 @@ const useFetchData = (top = 4, year = 2023) => {
       });
 
       setError(null);
-      setData({ data: resultWithZero, categories });
+      setData({data: resultWithZero, categories});
     } catch (error) {
       setData([]);
       setError(error);
     } finally {
       setLoading(false);
     }
-  }, [top, year]);
+  }, [top, year, selectedOption]);
 
   useEffect(() => {
     setLoading(true);
@@ -288,5 +303,5 @@ const useFetchData = (top = 4, year = 2023) => {
     getData();
   };
 
-  return { data, loading, error, url, retry };
+  return {data, loading, error, url, retry};
 };

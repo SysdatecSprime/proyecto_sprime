@@ -5,19 +5,60 @@ import {
   DropdownItem,
   Grid,
   Subtitle,
-  Title,
+  Title
 } from "@tremor/react";
-import React, { useEffect, useState } from "react";
-import { MONTH, MONTH_CURRENT } from "../../../../Utils/dashboard/constants";
+import React, {useEffect, useState} from "react";
+import {MONTH, MONTH_CURRENT} from "../../../../Utils/dashboard/constants";
 import GeneralBarChart from "./GeneralBarChart";
 import GeneralCard from "./GeneralCard";
-import { nextMonth } from "../../../../Utils/dashboard";
+import {nextMonth} from "../../../../Utils/dashboard";
 import useFetchDataMonth from "./hooks/useFetchDataMonth";
 import useFetchDataWeek from "./hooks/useFetchDataWeek";
 import axios from "axios";
 import Select from "react-select";
 import "../../pqrs/Dashboard.css";
 import html2pdf from "html2pdf.js";
+import {
+  downloadExcel,
+  exportToCsv
+} from "../../../../Utils/download/downloadExcel";
+
+const SelectBox = ({url, valueKey, labelKey, onChange}) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey]
+        }));
+
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  return (
+    <Select
+      options={options}
+      placeholder="Seleccione una Dependencia"
+      value={selectedOption}
+      onChange={(option) => {
+        setSelectedOption(option);
+        onChange(option);
+      }}
+    />
+  );
+};
 
 export default function InformeGeneral() {
   const [year, setYear] = useState("2023");
@@ -26,7 +67,6 @@ export default function InformeGeneral() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
   const [url, setUrl] = useState("");
-  console.log({ isDataMonth });
 
   const startDate = month !== " " ? `${year}${month}01` : null;
   const endDate =
@@ -41,16 +81,22 @@ export default function InformeGeneral() {
     isLoading: isLoadingWeek,
     error: errorWeek,
     reload: reloadWeek,
-    url: urlWeek,
-  } = useFetchDataWeek(startDate, endDate, setIsDataMonth, null);
+    url: urlWeek
+  } = useFetchDataWeek(
+    startDate,
+    endDate,
+    setIsDataMonth,
+    null,
+    selectedOption
+  );
 
   const {
     data: dataMonth,
     isLoading: isLoadingMonth,
     error: errorMonth,
     reload: reloadMonth,
-    url: urlMonth,
-  } = useFetchDataMonth(year, month, setIsDataMonth);
+    url: urlMonth
+  } = useFetchDataMonth(year, month, setIsDataMonth, [], selectedOption);
 
   const selectedData = dataWeek || dataMonth;
   const selectedUrl = urlWeek || urlMonth;
@@ -59,59 +105,32 @@ export default function InformeGeneral() {
 
   const monthAccordingToYear = year === "2023" ? MONTH_CURRENT : MONTH;
 
-  const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [options, setOptions] = useState([]);
+  const handleExportToPDF = () => {
+    const element = document.getElementById("contentToExport");
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(url);
-          const data = response.data;
-
-          const mappedOptions = data.map((item) => ({
-            value: item[valueKey],
-            label: item[labelKey],
-          }));
-
-          setOptions(mappedOptions);
-        } catch (error) {
-          console.error("Error fetching options:", error);
-        }
-      };
-
-      fetchData();
-    }, [url, valueKey, labelKey]);
-
-    return (
-      <Select
-        options={options}
-        placeholder="Seleccione una Dependencia"
-        value={selectedOption}
-        onChange={(option) => {
-          setSelectedOption(option);
-          onChange(option);
-        }}
-      />
-    );
+    html2pdf()
+      .set({
+        margin: 0,
+        filename: "exported_content.pdf",
+        image: {type: "jpeg", quality: 1},
+        html2canvas: {dpi: 400, letterRendering: true},
+        jsPDF: {unit: "in", format: "legal", orientation: "landscape"}
+      })
+      .from(element)
+      .save();
   };
 
-  const handleExportToPDF = () => {
-    if (url) {
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "formato_excel.xlsx";
-      link.click();
-    }
+  const handleDownloadExcel = (data) => {
+    exportToCsv(data, Object.keys(data[0]), "formato_excel");
   };
 
   return (
     <Grid numColsLg={7} className="gap-4">
-      <Col numColSpanLg={2}>
+      <Col numColSpanLg={3}>
         <GeneralCard />
       </Col>
 
-      <Col numColSpanLg={5}>
+      <Col numColSpanLg={4} id="contentToExport">
         <Card className="flex flex-col gap-4">
           <div className="py-3">
             <div className="flex justify-between">
@@ -122,11 +141,10 @@ export default function InformeGeneral() {
                 !errorWeek &&
                 (dataWeek || dataMonth) && (
                   <a
-                    href={selectedUrl}
-                    download="formato_excel.xlsx"
-                    onClick={handleExportToPDF}
+                    style={{textDecoration: "underline", cursor: "pointer"}}
+                    onClick={() => handleDownloadExcel(dataWeek || dataMonth)}
                   >
-                    Descargar Formato Excel{">"}
+                    Descargar Formato CSV{">"}
                   </a>
                 )}
             </div>
@@ -179,7 +197,7 @@ export default function InformeGeneral() {
               />
             </Col>
           </Grid>
-          <div id="contentToExport">
+          <div>
             {selectedData && (
               <GeneralBarChart
                 data={isDataMonth ? dataMonth : dataWeek}

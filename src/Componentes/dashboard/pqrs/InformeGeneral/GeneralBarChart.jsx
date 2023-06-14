@@ -1,8 +1,8 @@
-import { BarChart } from "@tremor/react";
+import {BarChart} from "@tremor/react";
 import LoadingBarChart from "./LoadingBarChart";
 
-export default function GeneralBarChart({ data, loading, reload, error }) {
-  console.log({data, loading, reload, error});
+export default function GeneralBarChart({data, loading, reload, error}) {
+  //console.log({data, loading, reload, error});
   if (loading) return <LoadingBarChart />;
 
   if (data && !error) {

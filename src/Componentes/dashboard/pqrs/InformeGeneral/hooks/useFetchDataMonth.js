@@ -20,7 +20,7 @@ const downloadFile = (base64Data, fileName) => {
   link.click();
 };
 
-const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
+const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = [], selectedOption) => {
   const [data, setData] = useState(initialValue);
   const [url, setUrl] = useState("");
   const [error, setError] = useState(null);
@@ -28,6 +28,12 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
 
   const fetchData = useCallback(async () => {
     try {
+      const requestBody = {
+        year,
+      };
+      if (selectedOption) {
+        requestBody.CodeDep = selectedOption.value;
+      }
       const response = await fetch(
         "https://sadecv.sysdatec.com/Dashboard/Month/PostDataMonth",
         {
@@ -35,9 +41,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            year,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       const json = await response.json();
@@ -54,7 +58,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
     } finally {
       setIsLoading(false);
     }
-  }, [year]);
+  }, [year, selectedOption]);
 
   const getUrl = useCallback(async () => {
     try {
@@ -78,8 +82,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
       }
 
       const xlsData = data.Archivo;
-
-      downloadFile(xlsData, "archivo_excel.xlsx");
+      //downloadFile(xlsData, "archivo_excel.xlsx");
 
       setError(null);
     } catch (error) {
@@ -106,7 +109,7 @@ const useFetchDataMonth = (year, month, setIsDataMonth, initialValue = []) => {
   // }, [year]);
 
   useEffect(() => {
-    console.log({ month });
+    //console.log({ month });
     if (month !== " ") {
       return;
     }

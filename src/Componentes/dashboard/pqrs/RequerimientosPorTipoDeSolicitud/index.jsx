@@ -5,18 +5,67 @@ import {
   Title,
   Col,
   Dropdown,
-  DropdownItem,
+  DropdownItem
 } from "@tremor/react";
-import { useCallback, useEffect, useState } from "react";
-import { MONTH, MONTH_CURRENT } from "../../../../Utils/dashboard/constants";
+import {useCallback, useEffect, useState} from "react";
+import {MONTH, MONTH_CURRENT} from "../../../../Utils/dashboard/constants";
 import LoadingChart from "./LoadingChart";
+import Select from "react-select";
+import axios from "axios";
+import {exportToCsv} from "../../../../Utils/download/downloadExcel";
+
+const SelectBox = ({url, valueKey, labelKey, onChange}) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey]
+        }));
+        console.log(mappedOptions);
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  return (
+    <Select
+      options={options}
+      placeholder="Seleccione un Tipo de Solicitud"
+      value={selectedOption}
+      onChange={(option) => {
+        setSelectedOption(option);
+        onChange(option);
+      }}
+    />
+  );
+};
 
 export default function RequerimientosPorTipoDeSolicitud() {
   const [year, setYear] = useState("2023");
   const [month, setMonth] = useState(" ");
-  const { data, loading, error, url } = useFetchData(8, year, month);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const {data, loading, error, url} = useFetchData(
+    8,
+    year,
+    month,
+    selectedOption
+  );
 
   const monthAccordingToYear = year === "2023" ? MONTH_CURRENT : MONTH;
+
+  const handleDownloadExcel = (data) => {
+    exportToCsv(data, Object.keys(data[0]), "formato_excel");
+  };
 
   if (typeof error === "string") {
     return (
@@ -101,10 +150,10 @@ export default function RequerimientosPorTipoDeSolicitud() {
         {!loading && !error && data && url && (
           <a
             className="text-blue-500 hover:text-blue-600 p-2 transition-all"
-            href={url}
-            download={`RequerimientosPorTipoDeSolicitud_${year}`}
+            style={{textDecoration: "underline", cursor: "pointer"}}
+            onClick={() => handleDownloadExcel(data)}
           >
-            Descargar xls{">"}
+            Descargar CSV{">"}
           </a>
         )}
       </div>
@@ -143,6 +192,14 @@ export default function RequerimientosPorTipoDeSolicitud() {
             })}
           </Dropdown>
         </Col>
+        <Col>
+          <SelectBox
+            url="https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf/api/WF_MailClass"
+            valueKey="idMailClass"
+            labelKey="mailDesc"
+            onChange={setSelectedOption}
+          />
+        </Col>
       </Grid>
       {loading ? (
         <LoadingChart />
@@ -157,7 +214,7 @@ export default function RequerimientosPorTipoDeSolicitud() {
   );
 }
 
-const useFetchData = (top = 4, year = 2023, month = 0) => {
+const useFetchData = (top = 4, year = 2023, month = 0, selectedOption) => {
   const [data, setData] = useState([]);
   const [url, setUrl] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -165,16 +222,20 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
 
   const getData = useCallback(async () => {
     try {
+      const requestBody = {
+        NTop: top,
+        Year: year,
+        Month: month === " " ? 0 : month
+      };
+      if (selectedOption) {
+        requestBody.MailClass = selectedOption.value;
+      }
       const options = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          NTop: top,
-          Year: year,
-          Month: month === " " ? 0 : month,
-        }),
+        body: JSON.stringify(requestBody)
       };
       const res = await fetch(
         "https://sadecv.sysdatec.com/Dashboard/Class/PostDataClass",
@@ -193,7 +254,9 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
       }
 
       const xlsData = urlTipoSolicitud.Archivo;
-      const xlsBlob = new Blob([atob(xlsData)], { type: "application/vnd.ms-excel" });
+      const xlsBlob = new Blob([atob(xlsData)], {
+        type: "application/vnd.ms-excel"
+      });
       const url = window.URL.createObjectURL(xlsBlob);
 
       setUrl(url);
@@ -207,7 +270,7 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
       setData(
         dataDependencias.map((item) => ({
           ...item,
-          Requerimientos: item.Count,
+          Requerimientos: item.Count
         }))
       );
       setError(null);
@@ -217,7 +280,7 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
     } finally {
       setLoading(false);
     }
-  }, [top, year, month]);
+  }, [top, year, month, selectedOption]);
 
   useEffect(() => {
     setLoading(true);
@@ -229,5 +292,5 @@ const useFetchData = (top = 4, year = 2023, month = 0) => {
     getData();
   };
 
-  return { data, loading, error, url, retry };
+  return {data, loading, error, url, retry};
 };

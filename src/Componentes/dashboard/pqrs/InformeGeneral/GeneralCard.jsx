@@ -6,17 +6,18 @@ import {
   DropdownItem,
   Flex,
   ProgressBar,
-  Text,
+  Text
 } from "@tremor/react";
-import { useEffect, useState } from "react";
-import { formatDate } from "../../../../Utils/dashboard";
+import {useEffect, useState} from "react";
+import {formatDate} from "../../../../Utils/dashboard";
 import axios from "axios";
 import Select from "react-select";
-import { PDFViewer, Page, View } from "@react-pdf/renderer";
+import {PDFViewer, Page, View} from "@react-pdf/renderer";
+import {exportToCsv} from "../../../../Utils/download/downloadExcel";
 
 let timerId;
 
-const ChartPDF = ({ data }) => (
+const ChartPDF = ({data}) => (
   <PDFViewer>
     <Page>
       <View>
@@ -34,7 +35,7 @@ const SelectBox = ({
   labelKey,
   onChange,
   onValueChange,
-  onDependenciaChange,
+  onDependenciaChange
 }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
@@ -48,7 +49,7 @@ const SelectBox = ({
 
         const mappedOptions = data.map((item) => ({
           value: item[valueKey],
-          label: item[labelKey],
+          label: item[labelKey]
         }));
 
         setOptions(mappedOptions);
@@ -116,7 +117,7 @@ export default function GeneralCard() {
       try {
         const requestBody = {
           startDate: formatStartDate,
-          endDate: formatEndDate,
+          endDate: formatEndDate
         };
 
         if (selectedDependencia !== null) {
@@ -126,9 +127,9 @@ export default function GeneralCard() {
         const requestOptions = {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify(requestBody)
         };
 
         const request1 = fetch(
@@ -155,13 +156,12 @@ export default function GeneralCard() {
         //   type: "application/vnd.ms-excel",
         // });
         // const url = window.URL.createObjectURL(xlsBlob);
-
         setUrl(url);
         let transformedJson = Object.keys(json[0])
           .slice(1)
           .map((key) => {
             let value = json.reduce((acc, curr) => acc + curr[key], 0);
-            return { name: key, requerimientos: value };
+            return {name: key, requerimientos: value};
           });
         setData(transformedJson);
         setError(null);
@@ -244,11 +244,17 @@ export default function GeneralCard() {
     setIsLoading(false);
   };
 
+  const handleDownloadExcel = (data) => {
+    exportToCsv(data, Object.keys(data[0]), "formato_excel");
+  };
+
   return (
     <Card className="h-full flex flex-col gap-4">
       <div className="flex gap-4">
         <DateRangePicker
-          className="max-w-md mx-auto"
+          style={{
+            width: "50%"
+          }}
           value={value}
           onValueChange={handleChange}
           maxDate={now}
@@ -256,6 +262,9 @@ export default function GeneralCard() {
         />
 
         <SelectBox
+          style={{
+            width: "50%"
+          }}
           url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
           valueKey="CodeDepen"
           labelKey="DepenDesc"
@@ -267,27 +276,20 @@ export default function GeneralCard() {
       </div>
       <GeneralCardPie data={data} loading={isLoading} error={error} />
       <GeneralProgressBar data={data} loading={isLoading} error={error} />
-      {url &&
-        value.length > 0 &&
-        !isLoading &&
-        !error &&
-        value[0] &&
-        value[1] && (
-          <a
-            className="text-blue-500 hover:text-blue-600 p-2 transition-all float-right text-right"
-            href={url}
-            download={`InformeGeneral_${formatDate(value[0])}_${formatDate(
-              value[1]
-            )}`}
-          >
-            Descargar Formato Excel{">"}
-          </a>
-        )}
+      {value.length > 0 && !isLoading && !error && value[0] && value[1] && (
+        <a
+          className="text-blue-500 hover:text-blue-600 p-2 transition-all float-right text-right"
+          style={{textDecoration: "underline", cursor: "pointer"}}
+          onClick={() => handleDownloadExcel(data)}
+        >
+          Descargar Formato CSV{">"}
+        </a>
+      )}
     </Card>
   );
 }
 
-const GeneralCardPie = ({ data, loading, error }) => {
+const GeneralCardPie = ({data, loading, error}) => {
   if (loading) {
     return;
   }
@@ -311,7 +313,7 @@ const GeneralCardPie = ({ data, loading, error }) => {
   }
 };
 
-const GeneralProgressBar = ({ data, error, loading }) => {
+const GeneralProgressBar = ({data, error, loading}) => {
   if (loading) {
     return (
       <Text className="grow flex justify-center items-center">Cargando...</Text>

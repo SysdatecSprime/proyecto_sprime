@@ -16,7 +16,8 @@ const useFetchDataWeek = (
   startDate,
   endDate,
   setIsDataMonth,
-  initialValue = []
+  initialValue = [],
+  selectedOption
 ) => {
   const [data, setData] = useState(initialValue);
   const [error, setError] = useState(null);
@@ -30,6 +31,13 @@ const useFetchDataWeek = (
       return;
     }
     try {
+      const requestBody = {
+        startDate,
+        endDate,
+      };
+      if(selectedOption){
+        requestBody.CodeDep = selectedOption.value;
+      }
       const response = await fetch(
         "https://sadecv.sysdatec.com/Dashboard/Week/PostDataWeek",
         {
@@ -37,10 +45,7 @@ const useFetchDataWeek = (
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            startDate,
-            endDate,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       const json = await response.json();
@@ -57,7 +62,7 @@ const useFetchDataWeek = (
     } finally {
       setIsLoading(false);
     }
-  }, [startDate, endDate, initialValue]);
+  }, [startDate, endDate, initialValue, selectedOption]);
 
   const getUrl = useCallback(async () => {
     if (!startDate || !endDate) {

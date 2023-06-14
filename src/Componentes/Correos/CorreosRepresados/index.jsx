@@ -4,7 +4,10 @@ import { DropDownElement } from "../DropDownElement";
 import { TextInputElement } from "../TextInputElement";
 import { DateElement } from "../DateElement";
 import { useState, useEffect } from "react";
-import "../../dashboard/pqrs/Dashboard.css"
+import "../../dashboard/pqrs/Dashboard.css";
+import Select from "react-select";
+import axios from "axios";
+import "tailwindcss/tailwind.css";
 
 const URLS = {
   Internos:
@@ -258,11 +261,102 @@ const columnas = {
   Enviados: columnasEnviados,
 };
 
+const SelectBox = ({
+  url,
+  valueKey,
+  labelKey,
+  onChange,
+  placeholder,
+  title,
+  name,
+}) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        const mappedOptions = data.map((item) => ({
+          value: item[valueKey],
+          label: item[labelKey],
+        }));
+
+        setOptions(mappedOptions);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+
+    fetchData();
+  }, [url, valueKey, labelKey]);
+
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={name}>{title}</label>
+      <Select
+        options={options}
+        placeholder={placeholder}
+        title={title}
+        name={name}
+        value={selectedOption}
+        onChange={(option) => {
+          setSelectedOption(option);
+          onChange(option);
+        }}
+      />
+    </div>
+  );
+};
+
+const optionsimple = [
+  { value: "si", label: "Sí" },
+  { value: "no", label: "No" },
+];
+
+const optionReporte = [
+  { value: "Internos", label: "Internos" },
+  { value: "Recibidos", label: "Recibidos" },
+  { value: "Enviados", label: "Enviados" },
+];
+
+const optionConsulta = [
+  { value: "Correos de seguimiento", label: "Correos de seguimiento" },
+  { value: "Mis Correos", label: "Mis Correos" },
+  { value: "Otras Dependencias", label: "Otras Dependencias" },
+];
+
+const SelectSimple = ({ onChange, placeholder, title, name, seloptionsel }) => {
+  const [selectedOptionSimple, setSelectedOptionSimple] = useState(null);
+  const [formValues, setFormValues] = useState({});
+
+  const handleChange = (e) => {
+    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(formValues);
+  };
+
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={name}>{title}</label>
+      <Select
+        options={seloptionsel}
+        placeholder="Selecciona una opción"
+        value={selectedOptionSimple}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+
 export default function CorreosRepresados() {
   const [data, setData] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState("Internos");
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({});
+  const [empresas, setEmpresas] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -270,6 +364,8 @@ export default function CorreosRepresados() {
       const body = {
         ...formValues,
       };
+
+      console.log(body);
 
       delete body.tipoConsulta;
 
@@ -293,26 +389,12 @@ export default function CorreosRepresados() {
 
   const handleChange = (e) => {
     setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(formValues);
   };
 
-  // useEffect(() => {
-  //   async function fetchData_() {
-  //     const response = await fetch(URLS.Internos, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({}),
-  //     });
-
-  //     const data = await response.json();
-
-  //     setData(data);
-  //     setLoading(false);
-  //   }
-  //   setLoading(true);
-  //   fetchData_();
-  // }, []);
+  const handleChangeSimple = (option) => {
+    console.log(option);
+  };
 
   console.log({ data });
 
@@ -325,45 +407,44 @@ export default function CorreosRepresados() {
         className="flex flex-wrap justify-evenly gap-y-2 gap-x-4 "
         onSubmit={handleSubmit}
       >
-        <DropDownElement
-          title="Tipo Consulta"
+        <SelectSimple
           name="tipoConsulta"
-          handleChange={handleChange}
-          placeholder="Tipo Consulta"
-          options={["Internos", "Recibidos", "Enviados"]}
+          title="Tipo de Correo"
+          onChange={handleChange}
+          seloptionsel={optionReporte}
         />
-        <DropDownElement
-          title="Tipo Correo"
-          placeholder="Tipo correo"
-          name="tipoCorreo"
-          handleChange={handleChange}
-          options={[
-            "Todos",
-            "Correos de seguimiento",
-            "Mis Correos",
-            "Otras Dependencias",
-          ]}
+        <SelectSimple
+          name="Tipo de Reporte"
+          title="Tipo de Reporte"
+          onChange={handleChangeSimple}
+          seloptionsel={optionConsulta}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/Configs/Bussiness/GetBussiness"
+          valueKey="IdBusiness"
+          labelKey="BusinessDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione una Empresa"}
           title="Empresa"
           name="IDBUSINESS"
-          handleChange={handleChange}
-          placeholder="Empresa"
-          options={["Empresa 1", "Empresa 2", "Empresa 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/Configs/Company/GetCompany"
+          valueKey="IdCompany"
+          labelKey="CompanyDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione un Tipo de Negocio"}
           title="Tipo de Negocio"
           name="IDCOMPANY"
-          handleChange={handleChange}
-          placeholder="Tipo de negocio"
-          options={["Tipo 1", "Tipo 2", "Tipo 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf/api/WF_Typification"
+          valueKey="codeTypific"
+          labelKey="typificDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione una Tipificacion"}
           title="Tipificación"
           name="IDTIPIFICATION"
-          handleChange={handleChange}
-          placeholder="Tipificación"
-          options={["Tipificación 1", "Tipificación 2", "Tipificación 3"]}
         />
         <DropDownElement
           title="Responsable Paso Flujo"
@@ -372,33 +453,41 @@ export default function CorreosRepresados() {
           placeholder="Responsable Paso Flujo"
           options={["Responsable 1", "Responsable 2", "Responsable 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
+          valueKey="CodeDepen"
+          labelKey="DepenDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione una Dependencia Paso Flujo"}
           title="Dependencia Paso Flujo"
           name="IDDEPENDENCE"
-          handleChange={handleChange}
-          placeholder="Dependencia Paso Flujo"
-          options={["Dependencia 1", "Dependencia 2", "Dependencia 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf/api/WF_MailFlow"
+          valueKey="codeFlow"
+          labelKey="description"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione un flujo"}
           title="Flujo"
           name="IDFLOW"
-          handleChange={handleChange}
-          placeholder="Flujo"
-          options={["Flujo 1", "Flujo 2", "Flujo 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf/api/WF_MailStatus"
+          valueKey="codeStatus"
+          labelKey="statusDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione un Estado "}
           title="Estado Correos"
           name="IDMAILSTATUS"
-          handleChange={handleChange}
-          placeholder="Estado Correos"
-          options={["Estado 1", "Estado 2", "Estado 3"]}
         />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf/api/WF_MailClass"
+          valueKey="codeMailClass"
+          labelKey="mailDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione una Clase de Correspondencia "}
           title="Clase de Correspondencia"
           name="IDMAILCLASS"
-          handleChange={handleChange}
-          placeholder="Clase de correspondencia"
-          options={["Clase 1", "Clase 2", "Clase 3"]}
         />
         <TextInputElement
           title="Numero de Radicado"
@@ -424,12 +513,11 @@ export default function CorreosRepresados() {
           handleChange={handleChange}
           placeholder="Descripcion de la Tipificación"
         />
-        <DropDownElement
+        <SelectSimple
+          name="ReqRespuesta"
           title="Requiere Respuesta"
-          name="REQANSWER"
-          handleChange={handleChange}
-          placeholder={"Requiere Respuesta"}
-          options={["Si", "No"]}
+          onChange={handleChangeSimple}
+          seloptionsel={optionsimple}
         />
         <DropDownElement
           title="Responsable Paso Flujo"
@@ -439,46 +527,26 @@ export default function CorreosRepresados() {
           options={["Responsable 1", "Responsable 2", "Responsable 3"]}
         />
         <DropDownElement
-          title="Dependencia Paso Flujo"
-          name="DEPENDENCIAPASOFLUJO"
-          handleChange={handleChange}
-          placeholder="Dependencia Paso Flujo"
-          options={["Dependencia 1", "Dependencia 2", "Dependencia 3"]}
-        />
-        <DropDownElement
           title="Usuario Remite"
           name="USUARIOREMITE"
           handleChange={handleChange}
           placeholder="Usuario Remite"
           options={["Usuario 1", "Usuario 2", "Usuario 3"]}
         />
-        <DropDownElement
-          title="Descripcion del Flujo"
-          name="FLOWDESC"
-          handleChange={handleChange}
-          placeholder="Descripcion del Flujo"
-          options={["Flujo 1", "Flujo 2", "Flujo 3"]}
-        />
-        <DropDownElement
+        <SelectBox
+          url="https://sadecv.sysdatec.com/Configs/Deps/GetDeps"
+          valueKey="CodeDepen"
+          labelKey="DepenDesc"
+          onChange={setSelectedOption}
+          placeholder={"Seleccione una Dependencia Inicial"}
           title="Dependencia Inicial"
-          name="DEPENDENCIAINICIAL"
-          handleChange={handleChange}
-          placeholder="Dependencia Inicial"
-          options={["Dependencia 1", "Dependencia 2", "Dependencia 3"]}
+          name="StartIDDEPENDENCE"
         />
-        <DropDownElement
-          title="Estado Correos"
-          name="STATUSDESC"
-          handleChange={handleChange}
-          placeholder="Estado Correos"
-          options={["Estado 1", "Estado 2", "Estado 3"]}
-        />
-        <DropDownElement
-          title="Notificados"
+        <SelectSimple
           name="NOTIFIED"
-          handleChange={handleChange}
-          placeholder="Notificados"
-          options={["Si", "No"]}
+          title="Notificados"
+          onChange={handleChangeSimple}
+          seloptionsel={optionsimple}
         />
         <DateElement
           title="Fecha Radicado"
@@ -511,7 +579,6 @@ export default function CorreosRepresados() {
           handleChange={handleChange}
           placeholder="Numero de Documento"
         />
-
         <div className="w-full py-4">
           <Button type="submit" variant="primary" className="float-right w-40">
             Buscar
@@ -528,7 +595,11 @@ export default function CorreosRepresados() {
             Se encontraron {data.length} resultados {">"}
           </small>
           {data.length > 0 && (
-            <Tabla className="table" rows={data} columns={columnas[selectedColumn]} />
+            <Tabla
+              className="table"
+              rows={data}
+              columns={columnas[selectedColumn]}
+            />
           )}
         </>
       )}

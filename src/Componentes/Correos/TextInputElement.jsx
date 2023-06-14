@@ -1,20 +1,18 @@
 import { Text, TextInput } from "@tremor/react";
 
-export const TextInputElement = ({
-  title,
-  placeholder,
-  name,
-  handleChange,
-}) => {
+export const TextInputElement = ({ title, name, handleChange, placeholder }) => {
   return (
-    <div className="min-w-[10rem] w-1/5">
-      <Text>{title}</Text>
-      <TextInput
-        className="mt-2"
-        placeholder={placeholder}
+    <div className="flex flex-col">
+      <label htmlFor={name}>{title}</label>
+      <input
+        type="text"
+        id={name}
         name={name}
         onChange={handleChange}
+        placeholder={placeholder}
+        className="border border-gray-300 px-2 py-1 rounded-md"
       />
     </div>
   );
 };
+

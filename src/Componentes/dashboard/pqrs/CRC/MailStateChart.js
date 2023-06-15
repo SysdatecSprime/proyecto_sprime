@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Card, DonutChart, Title, Dropdown, DropdownItem } from "@tremor/react";
-import { mailStateChartData } from "./constants";
+import React, {useState} from "react";
+import {Card, DonutChart, Title, Dropdown, DropdownItem} from "@tremor/react";
+import {mailStateChartData} from "./constants";
 
 const MailStateChart = () => {
   const [dependence, setDependence] = useState("0");
@@ -10,7 +10,7 @@ const MailStateChart = () => {
       <Title>Estado actual de los correos</Title>
       <Dropdown
         className="mt-2"
-        onValueChange={(value) => setDependence(value)}
+        onValueChange={value => setDependence(value)}
         placeholder="Selecciona la dependencia"
       >
         <DropdownItem value="0" text="Todas las dependencias" />

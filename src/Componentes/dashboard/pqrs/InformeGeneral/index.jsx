@@ -141,6 +141,7 @@ export default function InformeGeneral() {
                 !errorWeek &&
                 (dataWeek || dataMonth) && (
                   <a
+                    className="text-blue-500 hover:text-blue-600 p-2 transition-all float-right text-right"
                     style={{textDecoration: "underline", cursor: "pointer"}}
                     onClick={() => handleDownloadExcel(dataWeek || dataMonth)}
                   >

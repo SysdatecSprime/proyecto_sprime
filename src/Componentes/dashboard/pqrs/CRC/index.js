@@ -9,19 +9,19 @@ import {
   Title,
   Col,
   Dropdown,
-  DropdownItem,
+  DropdownItem
 } from "@tremor/react";
 
 export default function CRC() {
   return (
-    <div className="flex flex-col gap-4   my-4">
+    <div className="flex flex-col gap-4 my-4">
       <Grid numCols={5} className="gap-4">
-        <Col numColSpan={4}>
+        <Col numColSpan={5}>
           <MailTable />
         </Col>
-        <Col>
+        {/*  <Col>
           <MailStateChart />
-        </Col>
+        </Col> */}
       </Grid>
     </div>
   );

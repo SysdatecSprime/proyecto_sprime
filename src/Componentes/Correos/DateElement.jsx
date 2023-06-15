@@ -1,4 +1,4 @@
-import { DateRangePicker, Text } from "@tremor/react";
+import {DateRangePicker, Text} from "@tremor/react";
 
 const now = new Date();
 
@@ -12,20 +12,20 @@ const formatDate = (date) => {
   }${year}`;
 };
 
-export const DateElement = ({ title, placeholder, name, handleChange }) => {
+export const DateElement = ({title, placeholder, name, handleChange}) => {
   const changeValue = (value) => {
     const e = {
       target: {
         name: name,
-        value: formatDate(value[0]),
-      },
+        value: formatDate(value[0])
+      }
     };
 
     handleChange(e);
   };
 
   return (
-    <div className="min-w-[10rem] w-1/5">
+    <div className="flex flex-col">
       <Text>{title}</Text>
       <DateRangePicker
         placeholder={placeholder}

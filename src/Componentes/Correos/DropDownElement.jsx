@@ -1,24 +1,24 @@
-import { Dropdown, DropdownItem, Text } from "@tremor/react";
+import {Dropdown, DropdownItem, Text} from "@tremor/react";
 
 export const DropDownElement = ({
   title,
   placeholder,
   options,
   name,
-  handleChange,
+  handleChange
 }) => {
   const changeValue = (value) => {
     const e = {
       target: {
         name: name,
-        value: value,
-      },
+        value: value
+      }
     };
 
     handleChange(e);
   };
   return (
-    <div className="min-w-[10rem] w-1/5">
+    <div className="flex flex-col">
       <Text>{title}</Text>
       <Dropdown
         className="mt-2"

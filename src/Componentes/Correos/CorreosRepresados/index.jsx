@@ -1,9 +1,9 @@
-import { Button, Title } from "@tremor/react";
+import {Button, Title} from "@tremor/react";
 import Tabla from "../Tabla";
-import { DropDownElement } from "../DropDownElement";
-import { TextInputElement } from "../TextInputElement";
-import { DateElement } from "../DateElement";
-import { useState, useEffect } from "react";
+import {DropDownElement} from "../DropDownElement";
+import {TextInputElement} from "../TextInputElement";
+import {DateElement} from "../DateElement";
+import {useState, useEffect} from "react";
 import "../../dashboard/pqrs/Dashboard.css";
 import Select from "react-select";
 import axios from "axios";
@@ -15,250 +15,250 @@ const URLS = {
   Recibidos:
     "https://sadecv.sysdatec.com/Dashboard/ReportMailReceived/ReportMailReceived",
   Enviados:
-    "https://sadecv.sysdatec.com/Dashboard/ReportMailSent/ReportMailSent",
+    "https://sadecv.sysdatec.com/Dashboard/ReportMailSent/ReportMailSent"
 };
 
 const columnasInternos = [
   {
     key: "CodeInterMail",
-    name: "Numero de radicado",
+    name: "Numero de radicado"
   },
   {
     key: "Asunto",
-    name: "Asunto",
+    name: "Asunto"
   },
   {
     key: "ClaseCorrespondencia",
-    name: "Clase de Correspondencia",
+    name: "Clase de Correspondencia"
   },
   {
     key: "CompanyDesc",
-    name: "Descripcion del Tipo de Negocio",
+    name: "Descripcion del Tipo de Negocio"
   },
   {
     key: "CreationDate",
-    name: "Fecha Ingreso",
+    name: "Fecha Ingreso"
   },
   {
     key: "DependenciaInicial",
-    name: "Dependencia Inicial",
+    name: "Dependencia Inicial"
   },
   {
     key: "DependenciaPasoFlujo",
-    name: "Dependencia Paso Flujo",
+    name: "Dependencia Paso Flujo"
   },
   {
     key: "FechaRadicado",
-    name: "Fecha Radicado",
+    name: "Fecha Radicado"
   },
   {
     key: "FlowDesc",
-    name: "Descripcion del Flujo",
+    name: "Descripcion del Flujo"
   },
   {
     key: "IdDocSendCopy",
-    name: "Id Doc Send Copy",
+    name: "Id Doc Send Copy"
   },
   {
     key: "Notified",
-    name: "Notificados",
+    name: "Notificados"
   },
   {
     key: "ReqAnswer",
-    name: "Requiere respuesta",
+    name: "Requiere respuesta"
   },
   {
     key: "ResponsablePasoFlujo",
-    name: "Responsable Paso Flujo",
+    name: "Responsable Paso Flujo"
   },
   {
     key: "StatusDesc",
-    name: "Estado Correos",
+    name: "Estado Correos"
   },
   {
     key: "TipoCorreo",
-    name: "Tipo Correo",
+    name: "Tipo Correo"
   },
   {
     key: "TypificDesc",
-    name: "Descripcion de la Tipificación",
+    name: "Descripcion de la Tipificación"
   },
   {
     key: "UsuarioRemite",
-    name: "Usuario Remite",
-  },
+    name: "Usuario Remite"
+  }
 ];
 
 const columnasRecibidos = [
   {
     key: "CodeReceivMail",
-    name: "Numero de radicado",
+    name: "Numero de radicado"
   },
   {
     key: "Asunto",
-    name: "Asunto",
+    name: "Asunto"
   },
   {
     key: "BusinessDesc",
-    name: "Descripcion de la Empresa",
+    name: "Descripcion de la Empresa"
   },
   {
     key: "ClaseCorrespondencia",
-    name: "Clase de Correspondencia",
+    name: "Clase de Correspondencia"
   },
   {
     key: "CompanyDesc",
-    name: "Descripcion del Tipo de Negocio",
+    name: "Descripcion del Tipo de Negocio"
   },
   {
     key: "CreationDate",
-    name: "Fecha Ingreso",
+    name: "Fecha Ingreso"
   },
   {
     key: "DependenciaInicial",
-    name: "Dependencia Inicial",
+    name: "Dependencia Inicial"
   },
   {
     key: "DependenciaPasoFlujo",
-    name: "Dependencia Paso Flujo",
+    name: "Dependencia Paso Flujo"
   },
   {
     key: "DocNumber",
-    name: "Numero de Documento",
+    name: "Numero de Documento"
   },
   {
     key: "FechaRadicado",
-    name: "Fecha Radicado",
+    name: "Fecha Radicado"
   },
   {
     key: "FlowDesc",
-    name: "Descripcion del Flujo",
+    name: "Descripcion del Flujo"
   },
   {
     key: "Notified",
-    name: "Notificados",
+    name: "Notificados"
   },
   {
     key: "ReqAnswer",
-    name: "Requiere respuesta",
+    name: "Requiere respuesta"
   },
   {
     key: "ResponsablePasoFlujo",
-    name: "Responsable Paso Flujo",
+    name: "Responsable Paso Flujo"
   },
   {
     key: "StatusDesc",
-    name: "Estado Correos",
+    name: "Estado Correos"
   },
   {
     key: "TipoCorreo",
-    name: "Tipo Correo",
+    name: "Tipo Correo"
   },
   {
     key: "TypificDesc",
-    name: "Descripcion de la Tipificación",
+    name: "Descripcion de la Tipificación"
   },
   {
     key: "UsuarioRemite",
-    name: "Usuario Remite",
-  },
+    name: "Usuario Remite"
+  }
 ];
 
 const columnasEnviados = [
   {
     key: "CodeMailSent",
-    name: "Numero de radicado",
+    name: "Numero de radicado"
   },
   {
     key: "BusinessDesc",
-    name: "Descripcion de la Empresa",
+    name: "Descripcion de la Empresa"
   },
   {
     key: "CompanyDesc",
-    name: "Descripcion del Tipo de Negocio",
+    name: "Descripcion del Tipo de Negocio"
   },
   {
     key: "ConsecAnual",
-    name: "Consecutivo Anual",
+    name: "Consecutivo Anual"
   },
   {
     key: "CreadoPor",
-    name: "Creado Por",
+    name: "Creado Por"
   },
   {
     key: "CreationDate",
-    name: "Fecha Ingreso",
+    name: "Fecha Ingreso"
   },
   {
     key: "DateIn",
-    name: "Fecha In",
+    name: "Fecha In"
   },
   {
     key: "DeliveryDesc",
-    name: "Delivery Desc",
+    name: "Delivery Desc"
   },
   {
     key: "DepenDesc",
-    name: "Descripción de la Dependencia",
+    name: "Descripción de la Dependencia"
   },
   {
     key: "DestinAddress",
-    name: "Dirección Destino",
+    name: "Dirección Destino"
   },
   {
     key: "DestinatPerson",
-    name: "Destinatario",
+    name: "Destinatario"
   },
   {
     key: "GroMailDesc",
-    name: "Grupo de Correo",
+    name: "Grupo de Correo"
   },
   {
     key: "GuideNumber",
-    name: "Numero de Guia",
+    name: "Numero de Guia"
   },
   {
     key: "NroComunication",
-    name: "Numero de Comunicación",
+    name: "Numero de Comunicación"
   },
   {
     key: "NroFolios",
-    name: "Numero de Folios",
+    name: "Numero de Folios"
   },
   {
     key: "Observations",
-    name: "Observaciones",
+    name: "Observaciones"
   },
   {
     key: "PriorityDesc",
-    name: "Prioridad",
+    name: "Prioridad"
   },
   {
     key: "Remitente",
-    name: "Remitente",
+    name: "Remitente"
   },
   {
     key: "ShippingDesc",
-    name: "Envio",
+    name: "Envio"
   },
   {
     key: "Subject",
-    name: "Asunto",
+    name: "Asunto"
   },
   {
     key: "TypificDesc",
-    name: "Descripcion de la Tipificación",
+    name: "Descripcion de la Tipificación"
   },
   {
     key: "Year",
-    name: "Año",
-  },
+    name: "Año"
+  }
 ];
 
 const columnas = {
   Internos: columnasInternos,
   Recibidos: columnasRecibidos,
-  Enviados: columnasEnviados,
+  Enviados: columnasEnviados
 };
 
 const SelectBox = ({
@@ -268,7 +268,7 @@ const SelectBox = ({
   onChange,
   placeholder,
   title,
-  name,
+  name
 }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
@@ -281,7 +281,7 @@ const SelectBox = ({
 
         const mappedOptions = data.map((item) => ({
           value: item[valueKey],
-          label: item[labelKey],
+          label: item[labelKey]
         }));
 
         setOptions(mappedOptions);
@@ -312,23 +312,23 @@ const SelectBox = ({
 };
 
 const optionsimple = [
-  { value: "si", label: "Sí" },
-  { value: "no", label: "No" },
+  {value: "si", label: "Sí"},
+  {value: "no", label: "No"}
 ];
 
 const optionReporte = [
-  { value: "Internos", label: "Internos" },
-  { value: "Recibidos", label: "Recibidos" },
-  { value: "Enviados", label: "Enviados" },
+  {value: "Internos", label: "Internos"},
+  {value: "Recibidos", label: "Recibidos"},
+  {value: "Enviados", label: "Enviados"}
 ];
 
 const optionConsulta = [
-  { value: "Correos de seguimiento", label: "Correos de seguimiento" },
-  { value: "Mis Correos", label: "Mis Correos" },
-  { value: "Otras Dependencias", label: "Otras Dependencias" },
+  {value: "Correos de seguimiento", label: "Correos de seguimiento"},
+  {value: "Mis Correos", label: "Mis Correos"},
+  {value: "Otras Dependencias", label: "Otras Dependencias"}
 ];
 
-const SelectSimple = ({ onChange, placeholder, title, name, seloptionsel }) => {
+const SelectSimple = ({onChange, placeholder, title, name, seloptionsel}) => {
   const [selectedOptionSimple, setSelectedOptionSimple] = useState(null);
 
   const handleChangeSimple = (option) => {
@@ -362,7 +362,7 @@ export default function CorreosRepresados() {
     e.preventDefault();
     async function fetch_Data() {
       const body = {
-        ...formValues,
+        ...formValues
       };
 
       console.log(body);
@@ -372,9 +372,9 @@ export default function CorreosRepresados() {
       const response = await fetch(URLS[formValues.tipoConsulta], {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
 
       const data = await response.json();
@@ -389,7 +389,7 @@ export default function CorreosRepresados() {
 
   const handleChange = (e) => {
     console.log(e);
-    setFormValues((prev) => ({ ...prev, [e.target.value]: e.target.value }));
+    setFormValues((prev) => ({...prev, [e.target.value]: e.target.value}));
     console.log(formValues);
   };
 
@@ -397,7 +397,7 @@ export default function CorreosRepresados() {
     console.log(option);
   };
 
-  console.log({ data });
+  console.log({data});
 
   return (
     <section className="px-4 min-h-screen dashboard">
@@ -405,12 +405,12 @@ export default function CorreosRepresados() {
         <Title>Correos Represados</Title>
       </div>
       <form
-        className="flex flex-wrap justify-evenly gap-y-2 gap-x-4 "
+        className="grid flex flex-wrap justify-stretch grid-cols-4 gap-y-2 gap-x-4 "
         onSubmit={handleSubmit}
       >
         <SelectSimple
           name="tipoConsulta"
-          title="tipo Consulta"
+          title="Tipo Consulta"
           onChange={handleChange}
           seloptionsel={optionReporte}
         />
@@ -448,6 +448,7 @@ export default function CorreosRepresados() {
           name="IDTIPIFICATION"
         />
         <DropDownElement
+          className="flex flex-col"
           title="Responsable Paso Flujo"
           name="IDUSERNAME"
           handleChange={handleChangeSimple}
@@ -459,7 +460,7 @@ export default function CorreosRepresados() {
           valueKey="CodeDepen"
           labelKey="DepenDesc"
           onChange={setSelectedOption}
-          placeholder={"Seleccione una Dependencia Paso Flujo"}
+          placeholder={"Dependencia Paso Flujo"}
           title="Dependencia Paso Flujo"
           name="IDDEPENDENCE"
         />
@@ -486,7 +487,7 @@ export default function CorreosRepresados() {
           valueKey="codeMailClass"
           labelKey="mailDesc"
           onChange={setSelectedOption}
-          placeholder={"Seleccione una Clase de Correspondencia "}
+          placeholder={"Clase de Correspondencia "}
           title="Clase de Correspondencia"
           name="IDMAILCLASS"
         />
@@ -581,7 +582,7 @@ export default function CorreosRepresados() {
           placeholder="Numero de Documento"
         />
         <div className="w-full py-4">
-          <Button type="submit" variant="primary" className="float-right w-40">
+          <Button type="submit" variant="primary" className="float-left w-40">
             Buscar
           </Button>
         </div>

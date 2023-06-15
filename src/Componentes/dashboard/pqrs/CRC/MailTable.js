@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   Card,
   Table,
@@ -9,11 +9,29 @@ import {
   TableCell,
   Text,
   Title,
-  Badge,
+  Badge
 } from "@tremor/react";
-import { mailTableData } from "./constants";
+import {mailTableData} from "./constants";
 
 const MailTable = () => {
+  const [mailTableData, setMailTableData] = useState([]);
+
+  useEffect(() => {
+    getMailTableData();
+  }, []);
+
+  const getMailTableData = async () => {
+    const dataProm = await fetch("http://localhost:3001/api/mail", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await dataProm.json();
+    console.log(data);
+    setMailTableData(data);
+  };
+
   return (
     <Card>
       <Title>Correos por Usuarios</Title>
@@ -27,30 +45,34 @@ const MailTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {mailTableData.map((item, index) => (
+          {mailTableData.map((item, index) =>
             <TableRow key={index}>
-              <TableCell>{item.receptor}</TableCell>
               <TableCell>
-                <Text>{item.emisor}</Text>
+                {item.receptor}
               </TableCell>
               <TableCell>
-                <Text>{item.dependencia}</Text>
+                <Text>
+                  {item.emisor}
+                </Text>
+              </TableCell>
+              <TableCell>
+                <Text>
+                  {item.dependencia}
+                </Text>
               </TableCell>
               <TableCell>
                 <Badge
                   color={
                     item.status === "Respondido"
                       ? "emerald"
-                      : item.status === "Entregado"
-                      ? "indigo"
-                      : "rose"
+                      : item.status === "Entregado" ? "indigo" : "rose"
                   }
                 >
                   {item.status}
                 </Badge>
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </Card>

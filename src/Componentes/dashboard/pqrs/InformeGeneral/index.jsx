@@ -126,7 +126,7 @@ export default function InformeGeneral() {
 
   return (
     <Grid numColsLg={7} className="gap-4">
-      <Col numColSpanLg={3}>
+      <Col numColSpanLg={3} style={{zIndex: 0}}>
         <GeneralCard />
       </Col>
 

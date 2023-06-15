@@ -80,7 +80,7 @@ const SelectBox = ({
 };
 
 const now = new Date();
-const startDay = new Date(now.getFullYear(), now.getMonth(), 1);
+const startDay = new Date(now.getFullYear(), 3, 1);
 
 export default function GeneralCard() {
   const [value, setValue] = useState([startDay, now]);

@@ -27,7 +27,6 @@ const SelectBox = ({url, valueKey, labelKey, onChange}) => {
           value: item[valueKey],
           label: item[labelKey]
         }));
-        console.log(mappedOptions);
         setOptions(mappedOptions);
       } catch (error) {
         console.error("Error fetching options:", error);

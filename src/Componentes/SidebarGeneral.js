@@ -1,30 +1,29 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./Styles/StyleCopia.css";
-import { Link } from "react-router-dom";
-import { Icon } from "@tremor/react";
+import {Link} from "react-router-dom";
+import {Icon} from "@tremor/react";
 import {
   FolderOpenIcon,
   ArrowRightIcon,
   ChartPieIcon,
   MailIcon,
+  PresentationChartBarIcon
 } from "@heroicons/react/outline";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 // import BandejaView from "./BandejaView"; // Ruta relativa al archivo BandejaView
 
 function SidebarGeneral(props) {
   const [show, setShow] = useState(true);
 
   return (
-    <main className={show ? "sb-space-toggle" : null}>
-      <header
-        className={`sb-header ${show ? "sb-space-toggle" : null}`}
-      ></header>
+    <main className={show ? "sb-space-toggle" : null} style={{zIndex: 100}}>
+      <header className={`sb-header ${show ? "sb-space-toggle" : null}`} />
       <aside className="sb-sidebar">
         <nav className={`sb-nav ${show ? "sb-show" : null}`}>
           <div className="sb-nav-list">
             {/*Boton de despliegue*/}
             <div className="sb-header-toggle" onClick={() => setShow(!show)}>
-              <i className="fa-solid fa-bars"></i>
+              <i className="fa-solid fa-bars" />
             </div>
             <div className="py-4 flex flex-col gap-4">
               {/* <Link to="/Bandeja" className="">
@@ -53,7 +52,7 @@ function SidebarGeneral(props) {
                   size="sm"
                   variant="solid"
                   tooltip="Reportes"
-                  icon={MailIcon}
+                  icon={PresentationChartBarIcon}
                   aria-label="correos represados"
                 />
               </Link>
@@ -69,9 +68,10 @@ function SidebarGeneral(props) {
             />
           </Link>
         </nav>
-        <div className=""></div>
+        <div className="" />
       </aside>
-      <div className="row sb-fond py-4">
+      {/* <div className="row sb-fond py-4"> */}
+      <div>
         <Outlet />
       </div>
     </main>

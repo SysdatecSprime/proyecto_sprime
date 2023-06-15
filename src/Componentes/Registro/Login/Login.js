@@ -90,9 +90,10 @@ function Login() {
           Password,
         })
         .then((response) => {
-          setModalMessage("Inicio de sesión exitoso");
+          /* setModalMessage("Inicio de sesión exitoso");
           setIsLoginSuccessful(true);
-          setShowModal(true);
+          setShowModal(true); */
+          navigate("/dashboard");
         })
         .catch((error) => {
           setModalMessage("Error en el inicio de sesión");

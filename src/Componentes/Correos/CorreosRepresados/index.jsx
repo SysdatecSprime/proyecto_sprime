@@ -330,11 +330,10 @@ const optionConsulta = [
 
 const SelectSimple = ({ onChange, placeholder, title, name, seloptionsel }) => {
   const [selectedOptionSimple, setSelectedOptionSimple] = useState(null);
-  const [formValues, setFormValues] = useState({});
 
-  const handleChange = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    console.log(formValues);
+  const handleChangeSimple = (option) => {
+    setSelectedOptionSimple(option);
+    onChange(option);
   };
 
   return (
@@ -344,7 +343,8 @@ const SelectSimple = ({ onChange, placeholder, title, name, seloptionsel }) => {
         options={seloptionsel}
         placeholder="Selecciona una opción"
         value={selectedOptionSimple}
-        onChange={handleChange}
+        onChange={handleChangeSimple}
+        id={`select_${title}`}
       />
     </div>
   );
@@ -388,7 +388,8 @@ export default function CorreosRepresados() {
   };
 
   const handleChange = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(e);
+    setFormValues((prev) => ({ ...prev, [e.target.value]: e.target.value }));
     console.log(formValues);
   };
 
@@ -409,7 +410,7 @@ export default function CorreosRepresados() {
       >
         <SelectSimple
           name="tipoConsulta"
-          title="Tipo de Correo"
+          title="tipo Consulta"
           onChange={handleChange}
           seloptionsel={optionReporte}
         />
@@ -449,7 +450,7 @@ export default function CorreosRepresados() {
         <DropDownElement
           title="Responsable Paso Flujo"
           name="IDUSERNAME"
-          handleChange={handleChange}
+          handleChange={handleChangeSimple}
           placeholder="Responsable Paso Flujo"
           options={["Responsable 1", "Responsable 2", "Responsable 3"]}
         />

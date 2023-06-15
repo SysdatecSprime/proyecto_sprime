@@ -104,7 +104,7 @@ const MailTable = () => {
     <>
     {pieChartData && !loading && <Card className="max-w">
      
-      <Title>Estado actual de los correos</Title>
+      <Title>Distribucion de los correos</Title>
       <div className="flex gap-4">
       <a
           className="text-blue-500 hover:text-blue-600 p-2 transition-all float-right text-right"
@@ -118,10 +118,10 @@ const MailTable = () => {
       <Dropdown
         className="mt-2"
         onValueChange={(value) => setStateFilter(value)}
-        placeholder="Selecciona el estado"
+        placeholder="Selecciona la clasificación"
       >
         <DropdownItem value="0" text="Todas los estados" />
-        <DropdownItem value="1" text="Anexos" />
+        <DropdownItem value="1" text="Radicados con o sin anexos" />
       </Dropdown>
       
       <DonutChart

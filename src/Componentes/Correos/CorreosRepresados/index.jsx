@@ -334,8 +334,17 @@ const optionConsulta = [
   {value: "Otras Dependencias", label: "Otras Dependencias"}
 ];
 
-const SelectSimple = ({onChange, placeholder, title, name, seloptionsel}) => {
-  const [selectedOptionSimple, setSelectedOptionSimple] = useState(null);
+const SelectSimple = ({
+  onChange,
+  placeholder,
+  title,
+  name,
+  seloptionsel,
+  selectedOption
+}) => {
+  const [selectedOptionSimple, setSelectedOptionSimple] = useState(
+    selectedOption ? {value: selectedOption, label: selectedOption} : null
+  );
 
   const handleChangeSimple = (option) => {
     setSelectedOptionSimple(option);
@@ -396,17 +405,23 @@ export default function CorreosRepresados() {
   };
 
   const handleChange = (e, filterName) => {
-    console.log(e.value);
-    console.log(filterName);
+    /*     console.log(e.value);
+    console.log(filterName); */
+
     setFormValues((prev) => ({...prev, [filterName]: e.value}));
-    console.log(formValues);
+    if (filterName === "tipoCorrespondencia" && e.value === "Enviados") {
+      setFormValues((prev) => ({
+        ...prev,
+        ["tipoConsulta"]: "Despacho de Correspondencia"
+      }));
+    }
   };
 
   const handleChangeSimple = (option) => {
     console.log(option);
   };
 
-  console.log({data});
+  /* console.log({data}); */
 
   return (
     <section className="px-4 min-h-screen dashboard">
@@ -420,8 +435,11 @@ export default function CorreosRepresados() {
         <SelectSimple
           name="tipoCorrespondencia"
           title="Tipo de Correspondencia"
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e, "tipoCorrespondencia");
+          }}
           seloptionsel={optionReporte}
+          selectedOption={formValues["tipoCorrespondencia"]}
         />
         <SelectSimple
           name="tipoConsulta"
@@ -430,6 +448,7 @@ export default function CorreosRepresados() {
             handleChange(e, "tipoConsulta");
           }}
           seloptionsel={optionTipoConsulta}
+          selectedOption={formValues.tipoConsulta}
         />
         <SelectSimple
           name="Tipo de Reporte"

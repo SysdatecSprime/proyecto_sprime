@@ -322,6 +322,12 @@ const optionReporte = [
   {value: "Enviados", label: "Enviados"}
 ];
 
+const optionTipoConsulta = [
+  {value: "Correos Represados", label: "Correos Represados"},
+  {value: "Estados Correos", label: "Estados Correos"},
+  {value: "Despacho de Correspondencia", label: "Despacho de Correspondencia"}
+];
+
 const optionConsulta = [
   {value: "Correos de seguimiento", label: "Correos de seguimiento"},
   {value: "Mis Correos", label: "Mis Correos"},
@@ -402,17 +408,23 @@ export default function CorreosRepresados() {
   return (
     <section className="px-4 min-h-screen dashboard">
       <div className="p-4 pl-0">
-        <Title>Correos Represados</Title>
+        <Title>Reportes Correspondencia</Title>
       </div>
       <form
         className="grid flex flex-wrap justify-stretch grid-cols-4 gap-y-2 gap-x-4 "
         onSubmit={handleSubmit}
       >
         <SelectSimple
+          name="tipoCorrespondencia"
+          title="Tipo de Correspondencia"
+          onChange={handleChange}
+          seloptionsel={optionReporte}
+        />
+        <SelectSimple
           name="tipoConsulta"
           title="Tipo Consulta"
           onChange={handleChange}
-          seloptionsel={optionReporte}
+          seloptionsel={optionTipoConsulta}
         />
         <SelectSimple
           name="Tipo de Reporte"

@@ -344,7 +344,7 @@ const SelectSimple = ({onChange, placeholder, title, name, seloptionsel}) => {
         placeholder="Selecciona una opción"
         value={selectedOptionSimple}
         onChange={handleChangeSimple}
-        id={`select_${title}`}
+        id={`select_${name}`}
       />
     </div>
   );
@@ -365,7 +365,9 @@ export default function CorreosRepresados() {
         ...formValues
       };
 
+      console.log("inicia");
       console.log(body);
+      console.log("termina");
 
       delete body.tipoConsulta;
 
@@ -387,9 +389,10 @@ export default function CorreosRepresados() {
     fetch_Data();
   };
 
-  const handleChange = (e) => {
-    console.log(e);
-    setFormValues((prev) => ({...prev, [e.target.value]: e.target.value}));
+  const handleChange = (e, filterName) => {
+    console.log(e.value);
+    console.log(filterName);
+    setFormValues((prev) => ({...prev, [filterName]: e.value}));
     console.log(formValues);
   };
 
@@ -411,7 +414,7 @@ export default function CorreosRepresados() {
         <SelectSimple
           name="tipoConsulta"
           title="Tipo Consulta"
-          onChange={handleChange}
+          onChange={(e)=>{handleChange(e, "tipoConsulta")}}
           seloptionsel={optionReporte}
         />
         <SelectSimple
@@ -554,6 +557,7 @@ export default function CorreosRepresados() {
           title="Fecha Radicado"
           placeholder="Fecha Radicado"
           name="FECHARADICADO"
+          // onChange={(e)=>{handleChange(e, "tipoConsulta")}}
           handleChange={handleChange}
         />
         <DropDownElement

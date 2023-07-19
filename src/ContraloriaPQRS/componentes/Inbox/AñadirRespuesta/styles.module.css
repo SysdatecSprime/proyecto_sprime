@@ -1,0 +1,54 @@
+.btn {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: transparent;
+  text-transform: uppercase;
+  color: #2c3763;
+  border: 1px solid #2c3763;
+}
+
+.submitBtn {
+  text-transform: uppercase;
+  align-self: flex-end;
+}
+
+.backBtn {
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1;
+}
+
+.dragAndDrop {
+  flex: 1;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dragAndDrop button:nth-child(1) {
+  height: 200px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  color: #2c3763;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.response {
+  display: flex;
+  gap: 20px;
+}

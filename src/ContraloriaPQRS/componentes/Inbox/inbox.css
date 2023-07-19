@@ -1,0 +1,122 @@
+.inbox-title {
+  position: absolute;
+  width: 1000px;
+  height: 60px;
+  left: 72px;
+  top: 194px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  color: #000000;
+}
+
+.inbox-card {
+  position: absolute;
+  width: 90%;
+  height: 550px;
+  left: 37px;
+  top: 270px;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+
+.tabla{
+  text-align: center;
+  vertical-align: middle;
+}
+
+.inbox-element {
+  width: 90%;
+  height: 79px;
+  line-height: 79px;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background: #f9f9fb;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.inbox-attachments {
+  width: 90px;
+  height: 30px;
+  line-height: 27px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50px;
+  text-align: center;
+  justify-content: center;
+}
+
+.inbox-convention-color {
+  width: 32px;
+  height: 31px;
+  border-radius: 100%;
+  margin: 0 auto;
+}
+
+.inbox-convention-color.green {
+  background: #0fd60b;
+}
+.inbox-convention-color.red {
+  background: #d60b0b;
+}
+.inbox-convention-color.yellow {
+  background: #d2d60b;
+}
+
+.inbox-conventions {
+  width: 90%;
+  position: absolute;
+  height: 80px;
+  line-height: 80px;
+}
+.inbox-conventions .inbox-convention-text {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 12%;
+  letter-spacing: -0.05em;
+}
+
+.inbox-conventions .inbox-convention-color {
+  position: absolute;
+  width: 32px;
+  height: 31px;
+  border-radius: 100%;
+}
+
+.inbox-convention-color .green {
+  background: #0fd60b;
+}
+.inbox-convention-color .red {
+  background: #d60b0b;
+}
+.inbox-convention-color .yellow {
+  background: #d2d60b;
+}
+
+.inbox-convention-text{
+  font-weight: 600;
+}
+
+.legend{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+}
+
+.legend .semaforo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}

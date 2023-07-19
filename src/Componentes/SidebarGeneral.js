@@ -26,7 +26,7 @@ function SidebarGeneral(props) {
               <i className="fa-solid fa-bars" />
             </div>
             <div className="py-4 flex flex-col gap-4">
-              {/* <Link to="/Bandeja" className="">
+              <Link to="/Bandeja" className="">
                 <Icon
                   className="ml-4"
                   size="sm"
@@ -35,7 +35,7 @@ function SidebarGeneral(props) {
                   icon={FolderOpenIcon}
                   aria-label="hola"
                 />
-              </Link> */}
+              </Link>
               <Link to="/dashboard" className="">
                 <Icon
                   className="ml-4"

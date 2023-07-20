@@ -38,6 +38,11 @@ const tiposDocumento = [
   { label: "PPT", value: "PPT" },
 ];
 
+const mediosRespuesta = [
+  { label: "Correo Electrónico", value: "2" },
+  { label: "Correo Certificado", value: "1" },
+  { label: "Otros", value: "1" },
+];
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
   const [usuarioDp, setUsuarioDp] = useState([]);

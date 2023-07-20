@@ -19,7 +19,13 @@ import {
   SelectBox,
   SelectBoxItem,
 } from "@tremor/react";
-import { MailIcon, GlobeIcon, InboxInIcon } from "@heroicons/react/outline";
+import {
+  MailIcon,
+  PlusIcon,
+  GlobeIcon,
+  InboxInIcon,
+  DownloadIcon,
+} from "@heroicons/react/outline";
 
 function RecibidaDos(props) {
   const [validated, setValidated] = useState(false);
@@ -27,7 +33,7 @@ function RecibidaDos(props) {
   const [digitalizarRecibidoModal, setDigitalizarRecibidoModal] =
     useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -41,22 +47,11 @@ function RecibidaDos(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setRecibidoPasoUno(paso)}
+            />
           </div>
-        </Col>
-        <Col numColSpan={1} numColSpanLg={1} className="mt-2">
-          <Flex className="gap-2">
-            <Title>Fecha:</Title>
-            <TextInput className="my-1 ms-5" />
-          </Flex>
-          <Flex className="gap-2">
-            <Title>Remision:</Title>
-            <TextInput className="my-1 ms-3" />
-          </Flex>
-          <Flex className="gap-2">
-            <Title>Prioridad:</Title>
-            <TextInput className="my-1 ms-3" />
-          </Flex>
         </Col>
       </Grid>
 
@@ -64,7 +59,7 @@ function RecibidaDos(props) {
         <Form>
           <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
             <Col numColSpan={1} numColSpanLg={4}>
-              <Title>Caracteristicas</Title>
+              <Title>Características (max. 3500 caracteres)</Title>
             </Col>
             <Col numColSpan={1} numColSpanLg={4}>
               <Form.Control
@@ -72,7 +67,11 @@ function RecibidaDos(props) {
                 rows={3}
                 className="my-1"
                 name="Observations"
-                onChange={e => props.handleChange(e)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 3500) {
+                    props.handleChange(e);
+                  }
+                }}
                 value={props.formFields.Observations}
               />
             </Col>
@@ -80,7 +79,7 @@ function RecibidaDos(props) {
           <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2 my-5 ">
             <Col numColSpan={1} numColSpanLg={4}>
               <Title>Anexos</Title>
-              <DragAndDrop />
+              <DragAndDrop handleDirectChange={props.handleDirectChange} />
               <Flex justifyContent="end" className="space-x-2 textDigitaliza">
                 <Title
                   size="sm"
@@ -88,10 +87,23 @@ function RecibidaDos(props) {
                   color="blue"
                   onClick={() =>
                     setDigitalizarRecibidoModal(!digitalizarRecibidoModal)
-                  }>
+                  }
+                >
                   Digitalizar
                 </Title>
               </Flex>
+              {props.formFields.Files.map((file, index) => {
+                return (
+                  <Flex
+                    justifyContent="start"
+                    className="space-x-2 textDigitaliza"
+                  >
+                    <Title size="sm" variant="light" color="blue" key={index}>
+                      {file.name}
+                    </Title>
+                  </Flex>
+                );
+              })}
             </Col>
           </Grid>
 
@@ -103,10 +115,11 @@ function RecibidaDos(props) {
               <Col numColSpan={1} numColSpanLg={4}>
                 <Dropdown
                   className="mt-2"
-                  onValueChange={value =>
+                  onValueChange={(value) =>
                     console.log("The selected value is", value)
                   }
-                  placeholder="Render mode">
+                  placeholder="Render mode"
+                >
                   <DropdownItem value="1" text="Transparent" />
                   <DropdownItem value="2" text="Outline" />
                 </Dropdown>
@@ -120,8 +133,7 @@ function RecibidaDos(props) {
                   className="bandejaIcons m-3"
                   size="sm"
                   variant="solid"
-                  tooltip="Correo"
-                  icon={MailIcon}
+                  icon={PlusIcon}
                   onClick={() => setModalCrearDocumento(!modalCrearDocumento)}
                 />
               </Flex>
@@ -130,7 +142,8 @@ function RecibidaDos(props) {
               <Modal
                 estado={digitalizarRecibidoModal}
                 cambiarEstado={setDigitalizarRecibidoModal}
-                titulo="Digitalizacion de archivo">
+                titulo="Digitalizacion de archivo"
+              >
                 <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
                   <Col numColSpan={1} numColSpanLg={1}>
                     <Flex alignitems="center">
@@ -152,10 +165,11 @@ function RecibidaDos(props) {
                     <Flex alignitems="center">
                       <Title className="w-80">Seleccione el scanner:</Title>
                       <SelectBox
-                        onValueChange={value =>
+                        onValueChange={(value) =>
                           console.log("the new value is", value)
                         }
-                        defaultValue="1">
+                        defaultValue="1"
+                      >
                         <SelectBoxItem value="1" text="" />
                         <SelectBoxItem value="2" text="" />
                         <SelectBoxItem value="3" text="" />
@@ -168,7 +182,8 @@ function RecibidaDos(props) {
                       <Button
                         size="lg"
                         variant="secondary"
-                        onClick={() => console.log("clicked")}>
+                        onClick={() => console.log("clicked")}
+                      >
                         Digitalizar
                       </Button>
 
@@ -176,7 +191,8 @@ function RecibidaDos(props) {
                         size="lg"
                         variant="primary"
                         to="/Corresp"
-                        onClick={() => console.log("clicked")}>
+                        onClick={() => console.log("clicked")}
+                      >
                         Guardar
                       </Button>
                     </Flex>
@@ -195,12 +211,14 @@ function RecibidaDos(props) {
               <Modal
                 estado={modalCrearDocumento}
                 cambiarEstado={setModalCrearDocumento}
-                titulo="Creación de documento">
+                titulo="Creación de documento"
+              >
                 <Grid
                   numCols={1}
                   numColsSm={2}
-                  numColsLg={3}
-                  className="gap-2 mb-2">
+                  numColsLg={4}
+                  className="gap-2 mb-2"
+                >
                   <Col numColSpan={1} numColSpanLg={1}>
                     <Text>Correspondencia</Text>
                     <TextInput placeholder="Disabled" disabled={true} />
@@ -213,94 +231,42 @@ function RecibidaDos(props) {
                     <Text>Código</Text>
                     <TextInput placeholder="Disabled" disabled={true} />
                   </Col>
-                </Grid>
-                <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
-                  <Col numColSpan={1} numColSpanLg={1}>
-                    <Text>Correspondencia</Text>
-                    <Dropdown
-                      className="mt-2"
-                      onValueChange={value =>
-                        console.log("The selected value is", value)
-                      }
-                      placeholder="Render mode">
-                      <DropdownItem value="1" text="Transparent" />
-                      <DropdownItem value="2" text="Outline" />
-                    </Dropdown>
-                  </Col>
-                  <Col numColSpan={1} numColSpanLg={1}>
-                    <Text>Revisión</Text>
-                    <Dropdown
-                      className="mt-2"
-                      onValueChange={value =>
-                        console.log("The selected value is", value)
-                      }
-                      placeholder="Render mode">
-                      <DropdownItem value="1" text="Transparent" />
-                      <DropdownItem value="2" text="Outline" />
-                    </Dropdown>
-                  </Col>
-
                   <Flex
                     alignItems="center"
                     justifyContent="center"
-                    className="mt-3">
+                    className="mt-3"
+                  >
                     <Text>Requiere Firma</Text>
                     <input type="checkbox" className="m-4"></input>
                   </Flex>
                 </Grid>
+
                 <Flex justifyContent="end">
                   <TextInput placeholder="Versión" disabled={true} />
-                  <Icon
-                    className="bandejaIcons"
-                    size="sm"
-                    tooltip="Global"
-                    icon={GlobeIcon}
-                  />
-                  <Icon
-                    className="bandejaIcons"
-                    size="sm"
-                    tooltip="Correo"
-                    icon={MailIcon}
-                  />
-                  <Icon
-                    className="bandejaIcons"
-                    size="sm"
-                    tooltip="Descarga"
-                    icon={InboxInIcon}
-                  />
-                  <Icon
-                    className="bandejaIcons"
-                    size="sm"
-                    tooltip="Global"
-                    icon={GlobeIcon}
-                  />
-                  <Icon
-                    className="bandejaIcons"
-                    size="sm"
-                    tooltip="Correo"
-                    icon={MailIcon}
-                  />
                 </Flex>
                 <Card></Card>
                 <Grid
                   numCols={1}
                   numColsSm={2}
                   numColsLg={1}
-                  className="gap-2 mt-3">
+                  className="gap-2 mt-3"
+                >
                   <Flex justifyContent="end" className="space-x-2">
                     <Button
                       size="lg"
                       variant="secondary"
                       onClick={() =>
                         setModalCrearDocumento(!modalCrearDocumento)
-                      }>
+                      }
+                    >
                       Cerrar
                     </Button>
                     <Button
                       size="lg"
                       variant="primary"
                       to="/Corresp"
-                      onClick={() => console.log("clicked")}>
+                      onClick={() => console.log("clicked")}
+                    >
                       Enviar
                     </Button>
                   </Flex>
@@ -321,7 +287,8 @@ function RecibidaDos(props) {
                 variant="secondary"
                 onClick={() => {
                   props.setRecibidoPasoUno(1);
-                }}>
+                }}
+              >
                 Atrás
               </Button>
 
@@ -331,7 +298,8 @@ function RecibidaDos(props) {
                 to="/Corresp"
                 onClick={() => {
                   props.setRecibidoPasoUno(3);
-                }}>
+                }}
+              >
                 Siguiente
               </Button>
             </Flex>

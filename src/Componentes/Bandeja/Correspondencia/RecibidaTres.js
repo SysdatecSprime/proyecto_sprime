@@ -17,7 +17,7 @@ import { FolderDownloadIcon } from "@heroicons/react/outline";
 function RecibidaTres(props) {
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -31,22 +31,11 @@ function RecibidaTres(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setRecibidoPasoUno(paso)}
+            />
           </div>
-        </Col>
-        <Col numColSpan={1} numColSpanLg={1} className="mt-2">
-          <Flex className="gap-2">
-            <Title>Fecha:</Title>
-            <TextInput className="my-1 ms-5" />
-          </Flex>
-          <Flex className="gap-2">
-            <Title>Remision:</Title>
-            <TextInput className="my-1 ms-3" />
-          </Flex>
-          <Flex className="gap-2">
-            <Title>Prioridad:</Title>
-            <TextInput className="my-1 ms-3" />
-          </Flex>
         </Col>
       </Grid>
       <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
@@ -54,19 +43,21 @@ function RecibidaTres(props) {
           <Title>Detalle de la correspondencia</Title>
         </Col>{" "}
         <Flex className="justify-content-start">
-          <Subtitle>Destinatario:</Subtitle>
+          <Subtitle>Destinatario: {props.formFields.SenderName}</Subtitle>
           <Text className="mx-3"></Text>
         </Flex>
         <Flex className="justify-content-start">
-          <Subtitle>Clase de correspondencia:</Subtitle>
+          <Subtitle>
+            Clase de correspondencia: {props.formFields.MailClassName}
+          </Subtitle>
           <Text className="mx-3 "></Text>
         </Flex>
         <Flex className="justify-content-start">
-          <Subtitle>Remitente:</Subtitle>
+          <Subtitle>Remitente: {props.formFields.LegalName}</Subtitle>
           <Text className="mx-3"></Text>
         </Flex>
         <Flex className="justify-content-start">
-          <Subtitle>Observaciones:</Subtitle>
+          <Subtitle>Observaciones: {props.formFields.Observations}</Subtitle>
           <Text className="mx-3"></Text>
         </Flex>
       </Grid>
@@ -74,14 +65,11 @@ function RecibidaTres(props) {
         <Col numColSpan={1} numColSpanLg={1}>
           <Title>Archivos cargados</Title>
         </Col>{" "}
-        <TextInput
-          placeholder="Disabled"
-          disabled={true}
-          decoration="bottom"
-          decorationColor="indigo"
-        />
-        <TextInput placeholder="Disabled" disabled={true} />
-        <TextInput placeholder="Disabled" disabled={true} />
+        {props.formFields.Files.map((file, index) => {
+          return (
+            <TextInput key="index" placeholder={file.name} disabled={true} />
+          );
+        })}
       </Grid>
       <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
         <Col numColSpan={1} numColSpanLg={1}>
@@ -112,7 +100,8 @@ function RecibidaTres(props) {
             variant="secondary"
             onClick={() => {
               props.setRecibidoPasoUno(2);
-            }}>
+            }}
+          >
             Atrás
           </Button>
 
@@ -124,7 +113,8 @@ function RecibidaTres(props) {
               console.log("acaba de entrar aqui..");
 
               props.CrearRecibida(1);
-            }}>
+            }}
+          >
             Guardar
           </Button>
         </Flex>

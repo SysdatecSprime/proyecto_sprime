@@ -1,15 +1,20 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { FileListToBase64List } from "../../../ContraloriaPQRS/utils/files";
 
 function DragAndDrop(props) {
   const [imagePrevious, setImagePrevious] = useState(null);
-  const changeImage = e => {
+
+  const changeImage = async (e) => {
     const reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = e => {
-      e.preventDefault();
-      setImagePrevious(e.target.result);
-    };
+    let file = null;
+    let files = [];
+    const base64 = await FileListToBase64List(e.target.files);
+    for (let i = 0; i < e.target.files.length; i++) {
+      file = e.target.files[i];
+      files.push({ name: file.name, base64: base64[i], id: i + 1 });
+    }
+    props.handleDirectChange("Files", files);
   };
   return (
     <div>
@@ -18,9 +23,9 @@ function DragAndDrop(props) {
           <input
             className="file-upload-input"
             type="file"
-            accept="image/*"
+            accept={["image/*", "application/pdf"]}
             multiple
-            onChange={e => {
+            onChange={(e) => {
               changeImage(e);
             }}
           />
@@ -61,7 +66,7 @@ const StyleDragArea = styled.div`
   .image-upload-wrap {
     display: flex;
     justify-content: center;
-    height: 200px;
+    height: 60px;
     width: 100%;
     top: 50%;
     bottom: 50%%;

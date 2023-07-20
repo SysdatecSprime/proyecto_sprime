@@ -1,22 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Styles/StyleCopia.css";
-import {Link} from "react-router-dom";
-import {Icon} from "@tremor/react";
+import { Link } from "react-router-dom";
+import { Icon } from "@tremor/react";
 import {
   FolderOpenIcon,
   ArrowRightIcon,
   ChartPieIcon,
   MailIcon,
-  PresentationChartBarIcon
+  PresentationChartBarIcon,
+  InboxInIcon,
 } from "@heroicons/react/outline";
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 // import BandejaView from "./BandejaView"; // Ruta relativa al archivo BandejaView
 
 function SidebarGeneral(props) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   return (
-    <main className={show ? "sb-space-toggle" : null} style={{zIndex: 100}}>
+    <main className={show ? "sb-space-toggle" : null} style={{ zIndex: 100 }}>
       <header className={`sb-header ${show ? "sb-space-toggle" : null}`} />
       <aside className="sb-sidebar">
         <nav className={`sb-nav ${show ? "sb-show" : null}`}>
@@ -32,8 +33,8 @@ function SidebarGeneral(props) {
                   size="sm"
                   variant="solid"
                   tooltip="Bandeja"
-                  icon={FolderOpenIcon}
-                  aria-label="hola"
+                  icon={InboxInIcon}
+                  aria-label="Bandeja"
                 />
               </Link>
               <Link to="/dashboard" className="">

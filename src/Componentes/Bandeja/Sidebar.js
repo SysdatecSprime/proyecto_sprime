@@ -8,6 +8,7 @@ import {
   ArrowRightIcon,
   ChartPieIcon,
   MailIcon,
+  InboxInIcon,
 } from "@heroicons/react/outline";
 import SelectView from "./SelectView";
 import { dataBandeja } from "./UrlBase";
@@ -49,7 +50,7 @@ function Sidebar(props) {
         className={`sb-header ${show ? "sb-space-toggle" : null}`}
       ></header>
       <aside className="sb-sidebar">
-        <nav className={`sb-nav ${show ? "sb-show" : null}`}>
+        <nav className={`sb-nav`}>
           <div className="sb-nav-list">
             {/*Boton de despliegue*/}
             <div className="sb-header-toggle" onClick={() => setShow(!show)}>
@@ -62,8 +63,8 @@ function Sidebar(props) {
                   size="sm"
                   variant="solid"
                   tooltip="Bandeja"
-                  icon={FolderOpenIcon}
-                  aria-label="hola"
+                  icon={InboxInIcon}
+                  aria-label="bandeja"
                 />
               </Link>
               <Link to="/dashboard" className="">

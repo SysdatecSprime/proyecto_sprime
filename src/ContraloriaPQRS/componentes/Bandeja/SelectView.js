@@ -18,7 +18,8 @@ function SelectView({
           icon={PlusIcon}
           onClick={() => {
             setCrearNuevo(true);
-          }}>
+          }}
+        >
           Crear Nueva
         </Button>
         <Button
@@ -30,7 +31,8 @@ function SelectView({
             consultaRadicado(1);
             setTipoCorrespondencia(1);
             setCrearNuevo(false);
-          }}>
+          }}
+        >
           Correspondencia Recibida
         </Button>
         <Button
@@ -41,7 +43,8 @@ function SelectView({
           onClick={() => {
             consultaRadicado(2);
             setTipoCorrespondencia(2);
-          }}>
+          }}
+        >
           Correspondencia Enviada
         </Button>
         <Button
@@ -52,7 +55,8 @@ function SelectView({
           onClick={() => {
             consultaRadicado(3);
             setTipoCorrespondencia(3);
-          }}>
+          }}
+        >
           Correspondencia Interna
         </Button>
         <Button
@@ -60,7 +64,8 @@ function SelectView({
           size="md"
           variant="secondary"
           icon={CogIcon}
-          onClick={() => console.log("clicked")}>
+          onClick={() => console.log("clicked")}
+        >
           Expedientes
         </Button>
         <Button
@@ -68,7 +73,8 @@ function SelectView({
           size="md"
           variant="secondary"
           icon={CogIcon}
-          onClick={() => console.log("clicked")}>
+          onClick={() => console.log("clicked")}
+        >
           Documentos
         </Button>
       </Col>

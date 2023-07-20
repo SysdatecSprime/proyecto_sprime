@@ -1,5 +1,5 @@
 import { Tab, TabList } from "@tremor/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MailIcon } from "@heroicons/react/outline";
 import RecibidaUno from "../Bandeja/Correspondencia/RecibidaUno";
 import RecibidaDos from "../Bandeja/Correspondencia/RecibidaDos";
@@ -18,32 +18,83 @@ function MainCorrespondencia() {
   const [enviadaPasoUno, setEnviadaPasoUno] = useState(1);
   const [internaPasoUno, setInternaPasoUno] = useState(1);
   const [recibido, setRecibido] = useState([]);
-  const handleChange = event => {
+
+  const handleChange = (event) => {
     setFormFields({
       ...formFields,
       [event.target.name]: event.target.value,
     });
   };
-  const handleTabClick = value => {
+
+  const handleDirectChange = (name, value) => {
+    if (name === "IdUser") {
+      setFormFields({
+        ...formFields,
+        IdUser: value.id,
+        SenderName: value.name,
+      });
+    } else if (name === "IdMailClass") {
+      setFormFields({
+        ...formFields,
+        IdMailClass: value.id,
+        MailClassName: value.name,
+      });
+    } else {
+      setFormFields({
+        ...formFields,
+        [name]: value,
+      });
+      if (name === "IdTipology" && value === "Anonimo") {
+        setFormFields({
+          ...formFields,
+          IdContact: "Anonimo",
+          LegalName: "Anonimo",
+          Phone: "Anonimo",
+          [name]: value,
+        });
+      }
+      if (
+        formFields.IdTipology === "Anonimo" &&
+        name === "IdTipology" &&
+        value !== "Anonimo"
+      ) {
+        setFormFields({
+          ...formFields,
+          IdContact: "1",
+          LegalName: "",
+          Phone: "",
+          [name]: value,
+        });
+      }
+    }
+  };
+
+  const handleTabClick = (value) => {
     setSelecTabView(value);
   };
   const [formFields, setFormFields] = useState({
     CodeReceivMail: "20230002250",
     ResponDesc: "MANUEL.CASTILLO",
     ConsecAnual: "0",
-    IdUserName: "1",
+    IdUser: 0,
     IdMailClass: "1",
+    MailClassName: "",
     IdDependence: "1",
     IdTypification: "1",
     IdTipology: "1",
     IdSerie: "1",
     IdMailStatus: "1",
     IdFile: "0",
-    IdCountry: "1",
+    IdCountry: "",
     IdCity: "1",
+    IdDepartment: "1",
     IdCompany: "1",
     IdBusiness: "1",
     IdRespMed: "1",
+    IdRecMed: "1",
+    IdContact: "1",
+    LegalName: "",
+    IdGroups: "1",
     IdDeliveryType: "1",
     IdCopyDocSent: "1",
     IdPriority: "1",
@@ -63,17 +114,20 @@ function MainCorrespondencia() {
     NroFolios: "0",
     NroCopiesRot: "1",
     ContactSends: "CIUDADANO",
-    AddressSends: "BOGOTA DC",
+    AddressSends: "",
     NroComunication: "0",
-    Phone: "3118918011",
+    Phone: "",
     EmailSender: "MANUEL@SYSDATEC.COM",
     EmailSend: "0",
     DateIn: "20230511",
     ShippingDate: "20230511",
+    DueDate: new Date(Date.now()).toDateString(),
     CreatedBy: "1",
     CreationDate: "20230511",
     UpdatedBy: "1",
     UpdateDate: "20230511",
+    IsTemporal: false,
+    Files: [],
   });
 
   async function CrearRecibida(TipoCorreo) {
@@ -176,6 +230,7 @@ function MainCorrespondencia() {
               setRecibidoPasoUno={setRecibidoPasoUno}
               formFields={formFields}
               handleChange={handleChange}
+              handleDirectChange={handleDirectChange}
             />
           )}
           {recibidoPasoUno === 2 && (
@@ -184,6 +239,7 @@ function MainCorrespondencia() {
               setRecibidoPasoUno={setRecibidoPasoUno}
               formFields={formFields}
               handleChange={handleChange}
+              handleDirectChange={handleDirectChange}
             />
           )}
           {recibidoPasoUno === 3 && (

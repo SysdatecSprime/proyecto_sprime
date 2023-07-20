@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
+
 import Position from "./Position";
 import {
   Grid,
@@ -12,9 +13,30 @@ import {
   Button,
   SelectBox,
   SelectBoxItem,
+  DateRangePicker,
+  DateRangePickerValue,
 } from "@tremor/react";
-import { dataBandeja } from "../UrlBase";
+import { es } from "date-fns/locale";
+import { dataBandeja, adminUrl } from "../UrlBase";
 import axios from "axios";
+
+const tiposSolicitante = [
+  { label: "Persona Natural", value: "Persona Natural" },
+  { label: "Persona Jurídica", value: "Persona Juridica" },
+  { label: "Niño/Niña", value: "Niño/Niña" },
+  { label: "Adolescente", value: "Adolescente" },
+  { label: "Apoderado", value: "Apoderado" },
+  { label: "Anónimo", value: "Anonimo" },
+];
+
+const tiposDocumento = [
+  { label: "Cédula Ciudadanía", value: "CC" },
+  { label: "Cédula Extranjería", value: "CE" },
+  { label: "Registro Civil", value: "RC" },
+  { label: "Tarjeta de Identidad", value: "TI" },
+  { label: "NIT", value: "NIT" },
+  { label: "PPT", value: "PPT" },
+];
 
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -27,34 +49,96 @@ function RecibidaUno(props) {
   const [contacto, setContacto] = useState([]);
   const [medioRecepcion, setMedioRecepcion] = useState([]);
   const [validated, setValidated] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if (props.formFields.IdDepartment) {
+      getCitiesByDepartment(props.formFields.IdDepartment);
+    }
+  }, [props.formFields.IdDepartment]);
+
+  useEffect(() => {
+    if (props.formFields.IdCountry) {
+      getDepartments(props.formFields.IdCountry);
+      getCitiesByCountry(props.formFields.IdCountry);
+    }
+  }, [props.formFields.IdCountry]);
 
   useEffect(() => {
     obtenerPrioridad();
-  }, []);
-  useEffect(() => {
     obtenerUsuarioDp();
-  }, []);
-  useEffect(() => {
     obtenerEmpresa();
-  }, []);
-  useEffect(() => {
     obtenerTipificacion();
-  }, []);
-  useEffect(() => {
     obtenerClassCorrespondencia();
-  }, []);
-  useEffect(() => {
     obtenerNegocio();
-  }, []);
-  useEffect(() => {
     obtenerGrupo();
-  }, []);
-  useEffect(() => {
     obtenerContacto();
-  }, []);
-  useEffect(() => {
     obtenerMedioRecepcion();
+    getCountries();
   }, []);
+
+  const getCountries = async () => {
+    const countriesProm = await fetch(`${adminUrl}/Conf_Country`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const respCountries = await countriesProm.json();
+    if (countriesProm.ok) {
+      setCountries(respCountries);
+    }
+  };
+
+  const getDepartments = async (idCountry) => {
+    const departmentsProm = await fetch(
+      `${adminUrl}/Conf_Departament/ByCountry/${idCountry}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const respDepartments = await departmentsProm.json();
+    if (departmentsProm.ok) {
+      setDepartments(respDepartments);
+    }
+  };
+
+  const getCitiesByDepartment = async (idDepartment) => {
+    const citiesProm = await fetch(
+      `${adminUrl}/Conf_City/ByDepart/${idDepartment}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const respCities = await citiesProm.json();
+    if (citiesProm.ok) {
+      setCities(respCities);
+    }
+  };
+
+  const getCitiesByCountry = async (idCountry) => {
+    const citiesProm = await fetch(
+      `${adminUrl}/Conf_City/ByCountry/${idCountry}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const respCities = await citiesProm.json();
+    if (citiesProm.ok) {
+      setCities(respCities);
+    }
+  };
 
   //llamado a prioridad
   const obtenerPrioridad = async () => {
@@ -84,7 +168,6 @@ function RecibidaUno(props) {
         }
       );
       const respUsuarioDp = await usuarioDpProm.json();
-      console.log(respUsuarioDp);
       if (usuarioDpProm.ok) {
         setUsuarioDp(respUsuarioDp);
       }
@@ -176,7 +259,6 @@ function RecibidaUno(props) {
         }
       );
       const respGrupo = await grupoProm.json();
-      console.log(respGrupo);
       if (grupoProm.ok) {
         setGrupo(respGrupo);
       }
@@ -235,34 +317,67 @@ function RecibidaUno(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setRecibidoPasoUno(paso)}
+            />
           </div>
         </Col>
         <Col numColSpan={1} numColSpanLg={1} className="mt-2">
           <Flex className="gap-2">
             <Title>Fecha:</Title>
-            <TextInput className="my-1 ms-5" placeholder="" />
+            <DateRangePicker
+              className="max-w-md mx-auto"
+              value={[new Date(), new Date()]}
+              enableDropdown={false}
+              enableClear={false}
+              disabled={true}
+            />
           </Flex>
           <Flex className="gap-2">
-            <Title>Remision:</Title>
-            <TextInput className="my-1 ms-3" placeholder="" />
+            <Title>Fecha de vencimiento:</Title>
+            <DateRangePicker
+              className="max-w-md mx-auto"
+              value={[
+                new Date(props.formFields.DueDate),
+                new Date(props.formFields.DueDate),
+              ]}
+              onValueChange={(e) => {
+                props.handleDirectChange("DueDate", e[0]);
+              }}
+              enableDropdown={false}
+              enableClear={false}
+            />
           </Flex>
           <Flex className="gap-2">
             <Title>Prioridad:</Title>
             <SelectBox
               className="my-1 ms-3"
-              name="idPriority"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              name="IdPriority"
+              onValueChange={(e) => props.handleDirectChange("IdPriority", e)}
+              value={props.formFields.IdPriority}
             >
               {prioridad.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.priorityDesc}>
-                    {element.idPriority}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.priorityDesc}
+                    value={element.idPriority}
+                  />
                 );
               })}
             </SelectBox>
+          </Flex>
+          <Flex className="gap-2">
+            <Form.Check
+              type="checkbox"
+              label="Correspondencia temporal"
+              name="IsTemporal"
+              checked={props.formFields.IsTemporal}
+              onChange={(e) => {
+                props.handleDirectChange("IsTemporal", e.target.checked);
+              }}
+            />
           </Flex>
         </Col>
       </Grid>
@@ -276,14 +391,23 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdUser"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              onValueChange={(e) => {
+                props.handleDirectChange("IdUser", {
+                  id: e,
+                  name: usuarioDp.find((element) => element.IdUser === e)
+                    .UserDesc,
+                });
+              }}
+              value={props.formFields.IdUser}
             >
               {usuarioDp.map((element, index) => {
+                console.log(element);
                 return (
-                  <SelectBoxItem key={index} value={element.UserDesc}>
-                    {element.IdUser}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    value={element.IdUser}
+                    text={element.UserDesc}
+                  />
                 );
               })}
             </SelectBox>
@@ -300,11 +424,7 @@ function RecibidaUno(props) {
           </Col>
           <Col numColSpan={1} numColSpanLg={2}>
             <Subtitle>Notificar:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
-          </Col>
-          <Col numColSpan={1} numColSpanLg={2}>
-            <Subtitle>Dependencia:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput className="my-1" placeholder="" onChange={(e) => {}} />
           </Col>
         </Grid>
         <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2 mt-3">
@@ -316,14 +436,16 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdBusiness"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              onValueChange={(e) => props.handleDirectChange("IdBusiness", e)}
+              value={props.formFields.IdBusiness}
             >
               {empresa.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.BusinessDesc}>
-                    {element.IdBusiness}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    value={element.IdBusiness}
+                    text={element.BusinessDesc}
+                  />
                 );
               })}
             </SelectBox>
@@ -333,15 +455,19 @@ function RecibidaUno(props) {
             <Subtitle>Tipificacion:</Subtitle>
             <SelectBox
               className="my-1"
-              name="idTypification"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              name="IdTypification"
+              onValueChange={(e) =>
+                props.handleDirectChange("IdTypification", e)
+              }
+              value={props.formFields.IdTypification}
             >
               {tipificacion.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.typificDesc}>
-                    {element.idTypification}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.typificDesc}
+                    value={element.idTypification}
+                  />
                 );
               })}
             </SelectBox>
@@ -351,15 +477,24 @@ function RecibidaUno(props) {
             <Subtitle>Clase de correspondencia:</Subtitle>
             <SelectBox
               className="my-1"
-              name="idMailClass"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              name="IdMailClass"
+              onValueChange={(e) =>
+                props.handleDirectChange("IdMailClass", {
+                  id: e,
+                  name: classCorrespondencia.find(
+                    (element) => element.idMailClass === e
+                  ).mailDesc,
+                })
+              }
+              value={props.formFields.IdMailClass}
             >
               {classCorrespondencia.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.mailDesc}>
-                    {element.idMailClass}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    value={element.idMailClass}
+                    text={element.mailDesc}
+                  />
                 );
               })}
             </SelectBox>
@@ -369,14 +504,16 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdCompany"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              onValueChange={(e) => props.handleDirectChange("IdCompany", e)}
+              value={props.formFields.IdCompany}
             >
               {negocio.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.CompanyDesc}>
-                    {element.IdCompany}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.CompanyDesc}
+                    value={element.IdCompany}
+                  />
                 );
               })}
             </SelectBox>
@@ -386,14 +523,16 @@ function RecibidaUno(props) {
             <SelectBox
               className="my-1"
               name="IdGroups"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              onValueChange={(e) => props.handleDirectChange("IdGroups", e)}
+              value={props.formFields.IdGroups}
             >
               {grupo.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.groMailDesc}>
-                    {element.idGroupMail}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.groMailDesc}
+                    value={element.idMailGroup}
+                  />
                 );
               })}
             </SelectBox>
@@ -402,36 +541,55 @@ function RecibidaUno(props) {
             <Subtitle>Medio de recepción:</Subtitle>
             <SelectBox
               className="my-1"
-              name="idRecMed"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              name="IdRecMed"
+              onValueChange={(e) => props.handleDirectChange("IdRecMed", e)}
+              value={props.formFields.IdRecMed}
             >
               {medioRecepcion.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.recMedDesc}>
-                    {element.idRecMed}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.recMedDesc}
+                    value={element.idRecMed}
+                  />
                 );
               })}
             </SelectBox>
           </Col>
           <Col numColSpan={1} numColSpanLg={3}>
-            <Subtitle>Asunto:</Subtitle>
+            <Subtitle>Asunto (máximo 150 caracteres):</Subtitle>
             <TextInput
               className="my-1"
               name="Subject"
-              onChange={(e) => props.handleChange(e)}
+              onChange={(e) => {
+                if (e.target.value.length <= 150) {
+                  props.handleChange(e);
+                }
+              }}
               value={props.formFields.Subject}
               placeholder=""
             />
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>N° Folio:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              className="my-1"
+              placeholder=""
+              type="number"
+              name="NroFolios"
+              value={props.formFields.NroFolios}
+              onChange={(e) => props.handleChange(e)}
+            />
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>N° Comunicación:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              className="my-1"
+              placeholder=""
+              name="NroComunication"
+              value={props.formFields.NroComunication}
+              onChange={(e) => props.handleChange(e)}
+            />
           </Col>
         </Grid>
         <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2 mt-3">
@@ -440,56 +598,168 @@ function RecibidaUno(props) {
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Tipo de remitente:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <SelectBox
+              className="my-1"
+              name="IdTipology"
+              onValueChange={(e) => props.handleDirectChange("IdTipology", e)}
+              value={props.formFields.IdTipology}
+            >
+              {tiposSolicitante.map((element, index) => {
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    text={element.label}
+                    value={element.value}
+                  />
+                );
+              })}
+            </SelectBox>
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Contacto:</Subtitle>
             <SelectBox
               className="my-1"
-              name="idContact"
-              onChange={(e) => props.handleChange(e)}
-              /* value={props.formFields.IdPriority} */
+              name="IdContact"
+              onValueChange={(e) => props.handleDirectChange("IdContact", e)}
+              value={props.formFields.IdContact}
             >
               {contacto.map((element, index) => {
                 return (
-                  <SelectBoxItem key={index} value={element.name}>
-                    {element.idContact}
-                  </SelectBoxItem>
+                  <SelectBoxItem
+                    key={index}
+                    text={element.name}
+                    value={element.idContact}
+                  />
                 );
               })}
             </SelectBox>
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Remitente/ Razon social:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              name="LegalName"
+              value={props.formFields.LegalName}
+              onChange={(e) => props.handleChange(e)}
+              className="my-1"
+              placeholder=""
+            />
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Tipo de documento:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <SelectBox
+              className="my-1"
+              name="IdIdentificType"
+              onValueChange={(e) =>
+                props.handleDirectChange("IdIdentificType", e)
+              }
+              value={props.formFields.IdIdentificType}
+            >
+              {tiposDocumento.map((element, index) => {
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    text={element.label}
+                    value={element.value}
+                  />
+                );
+              })}
+            </SelectBox>
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Numero de documento:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              className="my-1"
+              placeholder=""
+              name="DocNumber"
+              value={props.formFields.DocNumber}
+              onChange={(e) => props.handleChange(e)}
+            />
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Teléfono:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              className="my-1"
+              placeholder=""
+              name="Phone"
+              value={props.formFields.Phone}
+              onChange={(e) => props.handleChange(e)}
+            />
           </Col>
-          <Col numColSpan={1} numColSpanLg={1}>
-            <Subtitle>País:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
-          </Col>
-          <Col numColSpan={1} numColSpanLg={1}>
-            <Subtitle>Departamento:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
-          </Col>
-          <Col numColSpan={1} numColSpanLg={1}>
-            <Subtitle>Ciudad:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
-          </Col>
+          {countries && (
+            <Col numColSpan={1} numColSpanLg={1}>
+              <Subtitle>País:</Subtitle>
+              <SelectBox
+                className="my-1"
+                name="IdCountry"
+                onValueChange={(e) => props.handleDirectChange("IdCountry", e)}
+                value={props.formFields.IdCountry}
+              >
+                {countries.map((element, index) => {
+                  return (
+                    <SelectBoxItem
+                      key={index}
+                      text={element.countryDesc}
+                      value={element.idCountry}
+                    />
+                  );
+                })}
+              </SelectBox>
+            </Col>
+          )}
+          {departments && (
+            <Col numColSpan={1} numColSpanLg={1}>
+              <Subtitle>Departamento:</Subtitle>
+              <SelectBox
+                className="my-1"
+                name="IdDepartment"
+                onValueChange={(e) =>
+                  props.handleDirectChange("IdDepartment", e)
+                }
+                value={props.formFields.IdDepartment}
+              >
+                {departments.map((element, index) => {
+                  return (
+                    <SelectBoxItem
+                      key={index}
+                      text={element.departDesc}
+                      value={element.idDepart}
+                    />
+                  );
+                })}
+              </SelectBox>
+            </Col>
+          )}
+          {cities && (
+            <Col numColSpan={1} numColSpanLg={1}>
+              <Subtitle>Ciudad:</Subtitle>
+              <SelectBox
+                className="my-1"
+                name="IdCity"
+                onValueChange={(e) => props.handleDirectChange("IdCity", e)}
+                value={props.formFields.IdCity}
+              >
+                {cities.map((element, index) => {
+                  return (
+                    <SelectBoxItem
+                      key={index}
+                      text={element.cityDesc}
+                      value={element.idCity}
+                    />
+                  );
+                })}
+              </SelectBox>
+            </Col>
+          )}
+
           <Col numColSpan={1} numColSpanLg={2}>
             <Subtitle>Dirección:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <TextInput
+              className="my-1"
+              placeholder=""
+              name="AddressSends"
+              value={props.formFields.AddressSends}
+              onChange={(e) => props.handleChange(e)}
+            />
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Medio de respuesta:</Subtitle>

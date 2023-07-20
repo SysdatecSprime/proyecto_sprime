@@ -39,6 +39,7 @@ import {
   DocumentIcon,
   ShareIcon,
   CalculatorIcon,
+  DownloadIcon,
 } from "@heroicons/react/outline";
 import MainCorrespondencia from "./MainCorrespondencia";
 import Modal from "./Correspondencia/Modal";
@@ -207,7 +208,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
             <Title>Comentario:</Title>
             <TextInput
               className="my-1"
-              placeholder="Ingrese un comentario para responder al ciudadano"
+              placeholder="Ingrese un comentario para responder al solicitante"
             />
           </div>
         );
@@ -247,7 +248,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
             Gestionar Radicado
           </option>
           <option value="Respuesta" className="my-1">
-            Responder al Ciudadano
+            Responder al Solicitante
           </option>
           <option value="Email" className="my-1">
             Responder por Correo Electronico
@@ -396,7 +397,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                 size="sm"
                 variant="solid"
                 tooltip="Descarga"
-                icon={InboxInIcon}
+                icon={DownloadIcon}
                 onClick={() => setEstadoModal(!estadoModal)}
               />
               <Icon
@@ -631,7 +632,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 size="lg"
                                 variant="solid"
                                 tooltip="Descarga"
-                                icon={InboxInIcon}
+                                icon={DownloadIcon}
                                 onClick={() => setFirmaModal(!firmaModal)}
                               />
                               <Icon

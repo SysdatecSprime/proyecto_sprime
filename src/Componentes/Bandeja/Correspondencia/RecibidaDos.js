@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import DragAndDrop from "./DragAndDrop";
@@ -17,14 +17,14 @@ import {
   Icon,
   Text,
   SelectBox,
-  SelectBoxItem,
+  SelectBoxItem
 } from "@tremor/react";
 import {
   MailIcon,
   PlusIcon,
   GlobeIcon,
   InboxInIcon,
-  DownloadIcon,
+  DownloadIcon
 } from "@heroicons/react/outline";
 
 function RecibidaDos(props) {
@@ -44,8 +44,8 @@ function RecibidaDos(props) {
   };
   return (
     <>
-      <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
-        <Col numColSpan={1} numColSpanLg={3} className="mt-5">
+      <Grid numCols={1} numColsSm={1} numColsLg={4} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={4} className="mt-5">
           <div>
             <Position
               paso={props.paso}
@@ -58,10 +58,10 @@ function RecibidaDos(props) {
       <Row>
         <Form>
           <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
-            <Col numColSpan={1} numColSpanLg={4}>
+            <Col numColSpan={2} numColSpanLg={4}>
               <Title>Características (max. 3500 caracteres)</Title>
             </Col>
-            <Col numColSpan={1} numColSpanLg={4}>
+            <Col numColSpan={2} numColSpanLg={4}>
               <Form.Control
                 as="textarea"
                 rows={3}
@@ -77,7 +77,7 @@ function RecibidaDos(props) {
             </Col>
           </Grid>
           <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2 my-5 ">
-            <Col numColSpan={1} numColSpanLg={4}>
+            <Col numColSpan={1} numColSpanLg={4} numColSpanSm={2}>
               <Title>Anexos</Title>
               <DragAndDrop handleDirectChange={props.handleDirectChange} />
               <Flex justifyContent="end" className="space-x-2 textDigitaliza">

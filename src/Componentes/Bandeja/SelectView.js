@@ -1,12 +1,8 @@
-import { Grid, Col, Button, Card } from "@tremor/react";
-import { useState, useEffect } from "react";
-import { PlusIcon, ClockIcon, CogIcon } from "@heroicons/react/outline";
+import {Grid, Col, Button, Card} from "@tremor/react";
+import {useState, useEffect} from "react";
+import {PlusIcon, ClockIcon, CogIcon} from "@heroicons/react/outline";
 
-function SelectView({
-  consultaRadicado,
-  setTipoCorrespondencia,
-  setCrearNuevo,
-}) {
+function SelectView({consultaRadicado, setTipoCorrespondencia, setCrearNuevo}) {
   return (
     <Grid numColsLg={1} className="gap-6">
       {/* Main section */}

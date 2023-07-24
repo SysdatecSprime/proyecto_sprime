@@ -1,6 +1,7 @@
-import { useState } from "react";
+import {useState} from "react";
 import styled from "styled-components";
-import { FileListToBase64List } from "../../../ContraloriaPQRS/utils/files";
+import {FileListToBase64List} from "../../../ContraloriaPQRS/utils/files";
+import {addLabelToFile} from "../../../Utils/download/rotulo";
 
 function DragAndDrop(props) {
   const [imagePrevious, setImagePrevious] = useState(null);
@@ -10,9 +11,24 @@ function DragAndDrop(props) {
     let file = null;
     let files = [];
     const base64 = await FileListToBase64List(e.target.files);
+
     for (let i = 0; i < e.target.files.length; i++) {
+      let base64WithLabel = await addLabelToFile(
+        base64[i].split(",")[1],
+        "TOP_RIGHT",
+        "11/Nov/2023",
+        "Consorcio",
+        "Correspondencia",
+        "Asunto",
+        "Km 16",
+        "CORRESPONDENCIA",
+        "20002356",
+        "123",
+        "Interno"
+      );
+      console.log(base64WithLabel);
       file = e.target.files[i];
-      files.push({ name: file.name, base64: base64[i], id: i + 1 });
+      files.push({name: file.name, base64: base64[i], id: i + 1});
     }
     props.handleDirectChange("Files", files);
   };

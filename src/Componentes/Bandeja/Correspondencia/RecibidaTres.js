@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Position from "./Position";
 import {
   Grid,
@@ -10,9 +10,9 @@ import {
   Text,
   Button,
   Icon,
-  Card,
+  Card
 } from "@tremor/react";
-import { FolderDownloadIcon } from "@heroicons/react/outline";
+import {FolderDownloadIcon} from "@heroicons/react/outline";
 
 function RecibidaTres(props) {
   const [validated, setValidated] = useState(false);
@@ -28,8 +28,8 @@ function RecibidaTres(props) {
   };
   return (
     <>
-      <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
-        <Col numColSpan={1} numColSpanLg={3} className="mt-5">
+      <Grid numCols={1} numColsSm={1} numColsLg={4} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={4} className="mt-5">
           <div>
             <Position
               paso={props.paso}
@@ -71,7 +71,7 @@ function RecibidaTres(props) {
           );
         })}
       </Grid>
-      <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
+      {/* <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
         <Col numColSpan={1} numColSpanLg={1}>
           <Title>Relacion de expediente</Title>
         </Col>{" "}
@@ -85,7 +85,7 @@ function RecibidaTres(props) {
           />
           <Text>N° de expediente</Text>
         </Flex>
-      </Grid>
+      </Grid> */}
       <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2">
         <Col numColSpan={1} numColSpanLg={1}>
           <Title>Flujo</Title>
@@ -110,8 +110,6 @@ function RecibidaTres(props) {
             variant="primary"
             to="/Corresp"
             onClick={() => {
-              console.log("acaba de entrar aqui..");
-
               props.CrearRecibida(1);
             }}
           >

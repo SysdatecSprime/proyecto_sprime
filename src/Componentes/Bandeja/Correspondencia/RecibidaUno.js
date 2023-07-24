@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 
@@ -14,34 +14,34 @@ import {
   SelectBox,
   SelectBoxItem,
   DateRangePicker,
-  DateRangePickerValue,
+  DateRangePickerValue
 } from "@tremor/react";
-import { es } from "date-fns/locale";
-import { dataBandeja, adminUrl } from "../UrlBase";
+import {es} from "date-fns/locale";
+import {dataBandeja, adminUrl} from "../UrlBase";
 import axios from "axios";
 
 const tiposSolicitante = [
-  { label: "Persona Natural", value: "Persona Natural" },
-  { label: "Persona Jurídica", value: "Persona Juridica" },
-  { label: "Niño/Niña", value: "Niño/Niña" },
-  { label: "Adolescente", value: "Adolescente" },
-  { label: "Apoderado", value: "Apoderado" },
-  { label: "Anónimo", value: "Anonimo" },
+  {label: "Persona Natural", value: "Persona Natural"},
+  {label: "Persona Jurídica", value: "Persona Juridica"},
+  {label: "Niño/Niña", value: "Niño/Niña"},
+  {label: "Adolescente", value: "Adolescente"},
+  {label: "Apoderado", value: "Apoderado"},
+  {label: "Anónimo", value: "Anonimo"}
 ];
 
 const tiposDocumento = [
-  { label: "Cédula Ciudadanía", value: "CC" },
-  { label: "Cédula Extranjería", value: "CE" },
-  { label: "Registro Civil", value: "RC" },
-  { label: "Tarjeta de Identidad", value: "TI" },
-  { label: "NIT", value: "NIT" },
-  { label: "PPT", value: "PPT" },
+  {label: "Cédula Ciudadanía", value: "CC"},
+  {label: "Cédula Extranjería", value: "CE"},
+  {label: "Registro Civil", value: "RC"},
+  {label: "Tarjeta de Identidad", value: "TI"},
+  {label: "NIT", value: "NIT"},
+  {label: "PPT", value: "PPT"}
 ];
 
 const mediosRespuesta = [
-  { label: "Correo Electrónico", value: "2" },
-  { label: "Correo Certificado", value: "1" },
-  { label: "Otros", value: "1" },
+  {label: "Correo Electrónico", value: "2"},
+  {label: "Correo Certificado", value: "1"},
+  {label: "Otros", value: "1"}
 ];
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -88,8 +88,8 @@ function RecibidaUno(props) {
     const countriesProm = await fetch(`${adminUrl}/Conf_Country`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
     const respCountries = await countriesProm.json();
     if (countriesProm.ok) {
@@ -103,8 +103,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respDepartments = await departmentsProm.json();
@@ -119,8 +119,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respCities = await citiesProm.json();
@@ -135,8 +135,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respCities = await citiesProm.json();
@@ -151,7 +151,7 @@ function RecibidaUno(props) {
       const prioridadProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respPrioridad = await prioridadProm.json();
@@ -169,7 +169,7 @@ function RecibidaUno(props) {
       const usuarioDpProm = await fetch(
         `${dataBandeja}/Configs/UserDep/GetUserDeps`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respUsuarioDp = await usuarioDpProm.json();
@@ -187,7 +187,7 @@ function RecibidaUno(props) {
       const empresaProm = await fetch(
         `${dataBandeja}/Configs/Bussiness/GetBussiness`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respEmpresa = await empresaProm.json();
@@ -206,7 +206,7 @@ function RecibidaUno(props) {
       const tipificacionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respTipificacion = await tipificacionProm.json();
@@ -224,7 +224,7 @@ function RecibidaUno(props) {
       const classCorrespondenciaProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respClassCorrespondencia = await classCorrespondenciaProm.json();
@@ -242,7 +242,7 @@ function RecibidaUno(props) {
       const negocioProm = await fetch(
         `${dataBandeja}/Configs/Company/GetCompany`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respNegocio = await negocioProm.json();
@@ -260,7 +260,7 @@ function RecibidaUno(props) {
       const grupoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailGroup`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respGrupo = await grupoProm.json();
@@ -277,7 +277,7 @@ function RecibidaUno(props) {
       const contactoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respContacto = await contactoProm.json();
@@ -295,7 +295,7 @@ function RecibidaUno(props) {
       const medioRecepcionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respMedioRecepcion = await medioRecepcionProm.json();
@@ -320,7 +320,7 @@ function RecibidaUno(props) {
   return (
     <>
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
-        <Col numColSpan={1} numColSpanLg={3} className="mt-5">
+        <Col numColSpan={1} numColSpanLg={2} className="mt-5">
           <div>
             <Position
               paso={props.paso}
@@ -328,7 +328,7 @@ function RecibidaUno(props) {
             />
           </div>
         </Col>
-        <Col numColSpan={1} numColSpanLg={1} className="mt-2">
+        <Col numColSpan={1} numColSpanLg={2} className="mt-2">
           <Flex className="gap-2">
             <Title>Fecha:</Title>
             <DateRangePicker
@@ -345,7 +345,7 @@ function RecibidaUno(props) {
               className="max-w-md mx-auto"
               value={[
                 new Date(props.formFields.DueDate),
-                new Date(props.formFields.DueDate),
+                new Date(props.formFields.DueDate)
               ]}
               onValueChange={(e) => {
                 props.handleDirectChange("DueDate", e[0]);
@@ -400,7 +400,7 @@ function RecibidaUno(props) {
                 props.handleDirectChange("IdUser", {
                   id: e,
                   name: usuarioDp.find((element) => element.IdUser === e)
-                    .UserDesc,
+                    .UserDesc
                 });
               }}
               value={props.formFields.IdUser}
@@ -429,7 +429,25 @@ function RecibidaUno(props) {
           </Col>
           <Col numColSpan={1} numColSpanLg={2}>
             <Subtitle>Notificar:</Subtitle>
-            <TextInput className="my-1" placeholder="" onChange={(e) => {}} />
+            <SelectBox
+              className="my-1"
+              name="NotifyIdUser"
+              onValueChange={(e) => {
+                props.handleDirectChange("NotifyIdUser", e);
+              }}
+              value={props.formFields.NotifyIdUser}
+            >
+              {usuarioDp.map((element, index) => {
+                console.log(element);
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    value={element.IdUser}
+                    text={element.UserDesc}
+                  />
+                );
+              })}
+            </SelectBox>
           </Col>
         </Grid>
         <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2 mt-3">
@@ -488,7 +506,7 @@ function RecibidaUno(props) {
                   id: e,
                   name: classCorrespondencia.find(
                     (element) => element.idMailClass === e
-                  ).mailDesc,
+                  ).mailDesc
                 })
               }
               value={props.formFields.IdMailClass}
@@ -768,7 +786,22 @@ function RecibidaUno(props) {
           </Col>
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Medio de respuesta:</Subtitle>
-            <TextInput className="my-1" placeholder="" />
+            <SelectBox
+              className="my-1"
+              name="IdRespMed"
+              onValueChange={(e) => props.handleDirectChange("IdRespMed", e)}
+              value={props.formFields.IdRespMed}
+            >
+              {medioRecepcion.map((element, index) => {
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    text={element.recMedDesc}
+                    value={element.idRecMed}
+                  />
+                );
+              })}
+            </SelectBox>
           </Col>
         </Grid>
         <Grid numCols={1} numColsSm={2} numColsLg={1} className="gap-2 mt-3">

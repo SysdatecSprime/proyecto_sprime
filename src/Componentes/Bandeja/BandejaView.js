@@ -1,6 +1,6 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Form from "react-bootstrap/Form";
 import {
   Card,
@@ -26,7 +26,7 @@ import {
   MultiSelectBoxItem,
   Badge,
   Divider,
-  DateRangePicker,
+  DateRangePicker
 } from "@tremor/react";
 import {
   FolderOpenIcon,
@@ -39,14 +39,23 @@ import {
   DocumentIcon,
   ShareIcon,
   CalculatorIcon,
-  DownloadIcon,
+  DownloadIcon
 } from "@heroicons/react/outline";
 import MainCorrespondencia from "./MainCorrespondencia";
 import Modal from "./Correspondencia/Modal";
 import DragAndDrop from "./Correspondencia/DragAndDrop";
 import "../Styles/StyleCopia.css";
 import axios from "axios";
-import { useTable } from "react-table";
+import {useTable} from "react-table";
+import asociarTRDIcon from "./icons/binder.png";
+import clipIcon from "./icons/attach.png";
+import asociarExpedienteIcon from "./icons/folderDownload.png";
+import pencilIcon from "./icons/pencil.png";
+import workflowIcon from "./icons/workflow.png";
+import commentsIcon from "./icons/comments.png";
+import orderHistoryIcon from "./icons/orderHistory.png";
+import searchInMailIcon from "./icons/searchInMail.png";
+import newCopyIcon from "./icons/newCopy.png";
 
 const data = [
   {
@@ -54,24 +63,24 @@ const data = [
     Role: "Federal Councillor",
     departement:
       "The Federal Department of Defence, Civil Protection and Sport (DDPS)",
-    status: "active",
+    status: "active"
   },
   {
     name: "30/05/2023",
     Role: "Federal Councillor",
     departement:
       "The Federal Department of the Environment, Transport, Energy and Communications (DETEC)",
-    status: "active",
+    status: "active"
   },
   {
     name: "30/05/2023",
     Role: "Federal Councillor",
     departement: "The Federal Department of Home Affairs (FDHA)",
-    status: "active",
-  },
+    status: "active"
+  }
 ];
 
-function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
+function Bandeja({radicados, tipoCorrespondencia, crearNuevo}) {
   const [validated, setValidated] = useState(false);
   const [estadoModal, setEstadoModal] = useState(false);
   const [digitalizarModal, setDigitalizarModal] = useState(false);
@@ -90,8 +99,8 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
   const [UpdateData, setUpdateData] = useState([]);
 
   const handleCheckboxChange = (event) => {
-    const { checked } = event.target;
-    const updatedCheckboxes = { ...checkboxes };
+    const {checked} = event.target;
+    const updatedCheckboxes = {...checkboxes};
 
     Object.keys(updatedCheckboxes).forEach((key) => {
       updatedCheckboxes[key] = checked;
@@ -116,7 +125,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
         const newFilesData = response.data.map((file) => ({
           fileName: file.fileName,
           extension: file.extension,
-          base64File: file.base64File,
+          base64File: file.base64File
         }));
 
         console.log(newFilesData);
@@ -135,14 +144,14 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     axios
       .post("https://sadecv.sysdatec.com/MailBox/PostUpdates", {
         TipoCorreo: 1,
-        CodeReceivMail: item.CodeReceivMail,
+        CodeReceivMail: item.CodeReceivMail
       })
       .then((response) => {
         // Obtener los datos de la respuesta
         const UpdateData = response.data.map((update) => ({
           Asignado: update.Asignado,
           Responsable: update.Responsable,
-          DiasGestion: update.Dias,
+          DiasGestion: update.Dias
         }));
 
         console.log(UpdateData);
@@ -264,7 +273,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     // Realiza las acciones necesarias con el valor seleccionado
   };
 
-  function Medalla({ status }) {
+  function Medalla({status}) {
     let badgeColorClass = "";
 
     // console.log(status);
@@ -281,7 +290,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     return <Badge color={badgeColorClass}>{status}</Badge>;
   }
 
-  function MedallaPrioridad({ priority }) {
+  function MedallaPrioridad({priority}) {
     let badgeColorClass = "";
 
     // console.log(priority);
@@ -298,7 +307,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
     return <Badge color={badgeColorClass}>{priority}</Badge>;
   }
 
-  function MedallaFecha({ ExpDate }) {
+  function MedallaFecha({ExpDate}) {
     let badgeColorClass = "";
 
     const currentDate = new Date(); // Fecha actual
@@ -367,55 +376,54 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
             className="gap-2"
           >
             <Col numColSpan={1} numColSpanLg={1}>
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Carpeta"
-                icon={FolderOpenIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
-
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Global"
-                icon={GlobeIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Correo"
-                icon={MailIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Descarga"
-                icon={DownloadIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Adjuntar"
-                icon={PaperClipIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
-              <Icon
-                className="bandejaIcons"
-                size="sm"
-                variant="solid"
-                tooltip="Editar"
-                icon={PencilIcon}
-                onClick={() => setEstadoModal(!estadoModal)}
-              />
+              <div style={{display: "flex", flexWrap: "wrap"}}>
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={asociarTRDIcon}
+                  className="bandejaIcons"
+                  onClick={() => setEstadoModal(!estadoModal)}
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={clipIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={asociarExpedienteIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={pencilIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={searchInMailIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={newCopyIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={workflowIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={commentsIcon}
+                  className="bandejaIcons"
+                />
+                <img
+                  style={{height: 30, width: 30, marginRight: 15}}
+                  src={orderHistoryIcon}
+                  className="bandejaIcons"
+                />
+              </div>
             </Col>
             <Col numColSpan={1} numColSpanLg={1}>
               <SelectBox
@@ -484,7 +492,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                         type="checkbox"
                         checked={checkboxes[item.IdMailReceived]}
                         onChange={() => {
-                          const updatedCheckboxes = { ...checkboxes };
+                          const updatedCheckboxes = {...checkboxes};
                           updatedCheckboxes[item.IdMailReceived] =
                             !updatedCheckboxes[item.IdMailReceived];
                           setCheckboxes(updatedCheckboxes);
@@ -524,7 +532,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                 cambiarEstado={setGestionModal}
                 // titulo={"Asunto: " + (Asunto && Asunto + " ")}
                 titulo={
-                  <span style={{ fontSize: 20 }}>
+                  <span style={{fontSize: 20}}>
                     {"Asunto: " + (Asunto && Asunto + " ")}
                   </span>
                 }
@@ -608,7 +616,42 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                           </Card>
                           <Card>
                             <Flex justifyContent="between">
-                              <Icon
+                              <img
+                                src={asociarTRDIcon}
+                                style={{width: 40, height: 40}}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
+                              />
+                              <img
+                                src={clipIcon}
+                                style={{width: 40, height: 40}}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
+                              />
+                              <img
+                                src={asociarExpedienteIcon}
+                                style={{width: 40, height: 40}}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
+                              />
+                              <img
+                                src={pencilIcon}
+                                style={{width: 40, height: 40}}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
+                              />
+                              <img
+                                src={searchInMailIcon}
+                                style={{width: 40, height: 40}}
+                                onClick={() =>
+                                  setDigitalizarModal(!digitalizarModal)
+                                }
+                              />
+                              {/* <Icon
                                 className="bandejaIcons"
                                 size="lg"
                                 variant="solid"
@@ -652,7 +695,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                                 tooltip="Correo"
                                 icon={MailIcon}
                                 onClick={() => setEstadoModal(!estadoModal)}
-                              />
+                              /> */}
                             </Flex>
                           </Card>
                         </div>
@@ -848,7 +891,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                         type="checkbox"
                         checked={checkboxes[item.IdMailSent]}
                         onChange={() => {
-                          const updatedCheckboxes = { ...checkboxes };
+                          const updatedCheckboxes = {...checkboxes};
                           updatedCheckboxes[item.IdMailSent] =
                             !updatedCheckboxes[item.IdMailSent];
                           setCheckboxes(updatedCheckboxes);
@@ -900,7 +943,7 @@ function Bandeja({ radicados, tipoCorrespondencia, crearNuevo }) {
                         type="checkbox"
                         checked={checkboxes[item.IdMailInternal]}
                         onChange={() => {
-                          const updatedCheckboxes = { ...checkboxes };
+                          const updatedCheckboxes = {...checkboxes};
                           updatedCheckboxes[item.IdMailInternal] =
                             !updatedCheckboxes[item.IdMailInternal];
                           setCheckboxes(updatedCheckboxes);

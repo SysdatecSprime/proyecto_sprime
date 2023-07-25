@@ -6,26 +6,29 @@ import {
   Grid,
   Col,
   Metric,
-  Flex
+  Flex,
 } from "@tremor/react";
 import Sade from "../images/LogoSprime.png";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
-import {Modal} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
-import {BrowserRouter} from "react-router-dom";
-import {setInStorage} from "../../../Utils/storage/storage";
+import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { setInStorage } from "../../../Utils/storage/storage";
 import {
   userLogin,
   setUser,
   setToken,
   setIdUser,
   setUserDesc,
-  setIdUserName
+  setIdUserName,
 } from "../../../Redux/modules/auth";
-import {connect} from "react-redux";
-import {downloadLabel, downloadWithLabel} from "../../../Utils/download/rotulo";
+import { connect } from "react-redux";
+import {
+  downloadLabel,
+  downloadWithLabel,
+} from "../../../Utils/download/rotulo";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -34,17 +37,17 @@ function mapDispatchToProps(dispatch) {
     setIdUser: (idUser) => dispatch(setIdUser(idUser)),
     setIdUserName: (userName) => dispatch(setIdUserName(userName)),
     setUserDesc: (userDesc) => dispatch(setUserDesc(userDesc)),
-    setToken: (token) => dispatch(setToken(token))
+    setToken: (token) => dispatch(setToken(token)),
   };
 }
 
 const select = (state) => {
   return {
-    user: state.auth.user
+    user: state.auth.user,
   };
 };
 
-const SelectBox = ({url, valueKey, labelKey, onChange}) => {
+const SelectBox = ({ url, valueKey, labelKey, onChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
 
@@ -57,7 +60,7 @@ const SelectBox = ({url, valueKey, labelKey, onChange}) => {
 
         const mappedOptions = data.map((item) => ({
           value: item[valueKey],
-          label: item[labelKey]
+          label: item[labelKey],
         }));
 
         setOptions(mappedOptions);
@@ -138,34 +141,34 @@ function Login(props) {
   // };
 
   const handleLogin = () => {
-    if (selectedOption) {
-      // Realizar el inicio de sesión
-      axios
-        .post("https://sadecv.sysdatec.com/Security/Users/Login", {
-          Username,
-          Password
-        })
-        .then((response) => {
-          /* setModalMessage("Inicio de sesión exitoso");
+    //if (selectedOption) {
+    // Realizar el inicio de sesión
+    axios
+      .post("https://sadecv.sysdatec.com/Security/Users/Login", {
+        Username,
+        Password,
+      })
+      .then((response) => {
+        /* setModalMessage("Inicio de sesión exitoso");
           setIsLoginSuccessful(true);
           setShowModal(true); */
-          setInStorage("sprime_app", {user: response.data});
-          props.setUser(response.data);
-          props.userLogin();
-          console.log(response.data);
-          navigate("/dashboard");
-        })
-        .catch((error) => {
-          setModalMessage("Error en el inicio de sesión");
-          setIsLoginSuccessful(false);
-          setShowModal(true);
-        });
-    } else {
+        setInStorage("sprime_app", { user: response.data });
+        props.setUser(response.data);
+        props.userLogin();
+        console.log(response.data);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setModalMessage("Error en el inicio de sesión");
+        setIsLoginSuccessful(false);
+        setShowModal(true);
+      });
+    /* } else {
       // Mostrar mensaje de error o realizar alguna acción
       setModalMessage("Por favor, seleccione una opción de empresa");
       setIsLoginSuccessful(false);
       setShowModal(true);
-    }
+    } */
   };
 
   const handleCloseModal = () => {

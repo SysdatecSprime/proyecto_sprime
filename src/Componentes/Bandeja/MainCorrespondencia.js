@@ -1,6 +1,6 @@
-import {Tab, TabList} from "@tremor/react";
-import React, {useEffect, useState} from "react";
-import {MailIcon} from "@heroicons/react/outline";
+import { Tab, TabList } from "@tremor/react";
+import React, { useEffect, useState } from "react";
+import { MailIcon } from "@heroicons/react/outline";
 import RecibidaUno from "../Bandeja/Correspondencia/RecibidaUno";
 import RecibidaDos from "../Bandeja/Correspondencia/RecibidaDos";
 import RecibidaTres from "../Bandeja/Correspondencia/RecibidaTres";
@@ -10,7 +10,8 @@ import EnviadaTres from "../Bandeja/Correspondencia/EnviadaTres";
 import InternaUno from "../Bandeja/Correspondencia/InternaUno";
 import InternaDos from "../Bandeja/Correspondencia/InternaDos";
 import InternaTres from "../Bandeja/Correspondencia/InternaTres";
-import {dataBandeja} from "./UrlBase";
+import { dataBandeja } from "./UrlBase";
+import { getFromStorage } from "../../Utils/storage/storage";
 
 function MainCorrespondencia() {
   const [selecTabView, setSelecTabView] = useState(1);
@@ -22,7 +23,7 @@ function MainCorrespondencia() {
   const handleChange = (event) => {
     setFormFields({
       ...formFields,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -31,18 +32,24 @@ function MainCorrespondencia() {
       setFormFields({
         ...formFields,
         IdUser: value.id,
-        SenderName: value.name
+        SenderName: value.name,
+        IdDependence: value.dependenceId,
+        DependenceName: value.dependenceName,
       });
     } else if (name === "IdMailClass") {
+      let days = parseInt(value.responseTime);
+      let date = new Date(Date.now());
+      date.setDate(date.getDate() + days);
       setFormFields({
         ...formFields,
         IdMailClass: value.id,
-        MailClassName: value.name
+        MailClassName: value.name,
+        DueDate: new Date(date).toDateString(),
       });
     } else {
       setFormFields({
         ...formFields,
-        [name]: value
+        [name]: value,
       });
       if (name === "IdTipology" && value === "Anonimo") {
         setFormFields({
@@ -50,7 +57,7 @@ function MainCorrespondencia() {
           IdContact: "Anonimo",
           LegalName: "Anonimo",
           Phone: "Anonimo",
-          [name]: value
+          [name]: value,
         });
       }
       if (
@@ -63,7 +70,7 @@ function MainCorrespondencia() {
           IdContact: "1",
           LegalName: "",
           Phone: "",
-          [name]: value
+          [name]: value,
         });
       }
     }
@@ -74,13 +81,13 @@ function MainCorrespondencia() {
   };
   const [formFields, setFormFields] = useState({
     CodeReceivMail: "20230002250",
-    ResponDesc: "MANUEL.CASTILLO",
+    ResponDesc: "",
     ConsecAnual: "0",
     IdUser: 0,
     NotifyIdUser: 0,
     IdMailClass: "1",
     MailClassName: "",
-    IdDependence: "1",
+    IdDependence: 0,
     IdTypification: "1",
     IdTipology: "1",
     IdSerie: "1",
@@ -107,7 +114,7 @@ function MainCorrespondencia() {
     Subject: "",
     Attachment: "-",
     Observations: "",
-    SenderName: "Edberg",
+    SenderName: "",
     Active: "1",
     Read: "0",
     NoFlow: "0",
@@ -118,67 +125,87 @@ function MainCorrespondencia() {
     AddressSends: "",
     NroComunication: "0",
     Phone: "",
-    EmailSender: "MANUEL@SYSDATEC.COM",
+    EmailSender: "",
+    EmailCompany: "",
     EmailSend: "0",
     DateIn: "20230511",
     ShippingDate: "20230511",
+    RemissionDate: new Date(Date.now()).toDateString(),
     DueDate: new Date(Date.now()).toDateString(),
     CreatedBy: "1",
     CreationDate: "20230511",
     UpdatedBy: "1",
     UpdateDate: "20230511",
-    IsTemporal: false,
-    Files: []
+    IsTemporal: true,
+    Files: [],
+    DependenceName: "",
   });
 
   async function CrearRecibida(TipoCorreo) {
+    const appObject = await getFromStorage("sprime_app");
+    const userId = appObject.user.IdUser;
     const body = {
-      CodeReceivMail: "20230002250",
-      ResponDesc: "MANUEL.CASTILLO",
-      ConsecAnual: "0",
-      IdUserName: "1",
-      IdMailClass: "1",
-      IdDependence: formFields.IdDependence,
-      IdTypification: "1",
-      IdTipology: "1",
-      IdSerie: "1",
-      IdMailStatus: "1",
-      IdFile: "0",
-      IdCountry: "1",
-      IdCity: "1",
-      IdCompany: "1",
-      IdBusiness: "1",
-      IdRespMed: "1",
-      IdDeliveryType: "1",
-      IdCopyDocSent: "1",
-      IdPriority: formFields.IdPriority,
-      IdIdentificType: "1",
-      DocNumber: "123",
-      IdOriginExter: "1",
-      IdFlow: "1",
-      IdMailUpdate: "1",
-      Subject: formFields.Subject,
-      Attachment: "-",
-      Observations: formFields.Observations,
-      SenderName: "Edberg",
-      Active: "1",
-      Read: "0",
-      NoFlow: "0",
-      ReqAnswer: "0",
-      NroFolios: "0",
-      NroCopiesRot: "1",
-      ContactSends: "CIUDADANO",
-      AddressSends: "BOGOTA DC",
-      NroComunication: "0",
-      Phone: "3118918011",
-      EmailSender: "MANUEL@SYSDATEC.COM",
-      EmailSend: "0",
-      DateIn: "20230511",
-      ShippingDate: "20230511",
-      CreatedBy: "1",
-      CreationDate: "20230511",
-      UpdatedBy: "1",
-      UpdateDate: "20230511"
+      idMailReceived: 0, //auto
+      codeReceivMail: "string", //auto
+      consecAnual: "string", //auto
+      idUserRespon: formFields.IdUser, //Para
+      responDesc: formFields.SenderName, //Nombre para
+      emailSender: formFields.EmailSender, //Correo remitente
+      userReceiv: 0, //auto
+      contactSends: formFields.IdContact, //contacto id
+      idDepend: formFields.IdDependence, //Dependencia
+      dependReceiv: 0, //veremos
+      idSubDep: 0, //veremos
+      subDepReceiv: 0, //veremos
+      idCity: formFields.IdCity, //Ciudad
+      cityReceiv: 0, //veremos
+      addressSends: formFields.AddressSends, //Direccion
+      idMailClass: formFields.IdMailClass, //Clase correspondencia
+      idTypification: formFields.IdTypification, //Tipificacion
+      idTRD: 0, //auto
+      idSerie: 0, //auto
+      idSubSerie: 0, //auto
+      idTipology: 0, //auto
+      idMailStatus: 1, //auto
+      idFile: 0, //auto
+      idDocType: 0, //auto
+      idRequesterType: formFields.IdTipology, //tipo de remitente
+      idNest: 0, //auto
+      expSendOriginal: 0, //auto
+      expSendCopy: 0, //auto
+      idCopyDocSent: 0, //auto
+      idCountry: formFields.IdCountry, //Pais
+      idCompany: formFields.IdCompany, //Empresa
+      idBusiness: formFields.IdBusiness, //Negocio
+      idRecMed: formFields.IdRecMed, //Medio recepcion
+      idPriority: formFields.IdPriority, //prioridad
+      idIdentType: formFields.IdIdentificType, //tipo de identificacion
+      docNumber: formFields.DocNumber, //Nro de documento
+      nroDocSender: formFields.DocNumber, //Nro de documento
+      idOriginExter: 0, //auto
+      idMailFlow: formFields.IdFlow, //flujo
+      idMailUpdate: 0, //dejar en 0
+      idRespStepFlow: formFields.IdUser, //Para
+      subject: formFields.Subject, //Asunto
+      observations: formFields.Observations, //caracteristicas
+      senderName: formFields.SenderName, //remitente
+      emailClient: formFields.EmailCompany, //correo empresarial
+      active: true, //auto
+      read: true, //auto
+      noFlow: false, //auto
+      reqAnswer: true, //auto
+      emailSend: true, //auto
+      nroCopies: "1", //auto
+      nroFolios: formFields.NroFolios, //Folios
+      nroComunication: formFields.NroComunication, //Nro comunicacion
+      phone: formFields.Phone, //telefono
+      dateIn: new Date(Date.now()).toDateString(), //fecha actual
+      globalDueDate: formFields.DueDate, //fecha vencimiento
+      shippingDate: formFields.RemissionDate, //fecha de remision
+      createdBy: userId, //Id usuario login
+      creationDate: new Date(Date.now()).toDateString(), //fecha actual
+      updatedBy: userId, //Id usuario login
+      updateDate: new Date(Date.now()).toDateString(), //fecha actual
     };
     console.log(body);
     /* const recibidoProm = await fetch(

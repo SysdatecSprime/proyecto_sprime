@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 
@@ -14,34 +14,35 @@ import {
   SelectBox,
   SelectBoxItem,
   DateRangePicker,
-  DateRangePickerValue
+  DateRangePickerValue,
 } from "@tremor/react";
-import {es} from "date-fns/locale";
-import {dataBandeja, adminUrl} from "../UrlBase";
+import { es } from "date-fns/locale";
+import { dataBandeja, adminUrl } from "../UrlBase";
 import axios from "axios";
+import { getFromStorage } from "../../../Utils/storage/storage";
 
 const tiposSolicitante = [
-  {label: "Persona Natural", value: "Persona Natural"},
-  {label: "Persona Jurídica", value: "Persona Juridica"},
-  {label: "Niño/Niña", value: "Niño/Niña"},
-  {label: "Adolescente", value: "Adolescente"},
-  {label: "Apoderado", value: "Apoderado"},
-  {label: "Anónimo", value: "Anonimo"}
+  { label: "Persona Natural", value: "Persona Natural" },
+  { label: "Persona Jurídica", value: "Persona Juridica" },
+  { label: "Niño/Niña", value: "Niño/Niña" },
+  { label: "Adolescente", value: "Adolescente" },
+  { label: "Apoderado", value: "Apoderado" },
+  { label: "Anónimo", value: "Anonimo" },
 ];
 
 const tiposDocumento = [
-  {label: "Cédula Ciudadanía", value: "CC"},
-  {label: "Cédula Extranjería", value: "CE"},
-  {label: "Registro Civil", value: "RC"},
-  {label: "Tarjeta de Identidad", value: "TI"},
-  {label: "NIT", value: "NIT"},
-  {label: "PPT", value: "PPT"}
+  { label: "Cédula Ciudadanía", value: "CC" },
+  { label: "Cédula Extranjería", value: "CE" },
+  { label: "Registro Civil", value: "RC" },
+  { label: "Tarjeta de Identidad", value: "TI" },
+  { label: "NIT", value: "NIT" },
+  { label: "PPT", value: "PPT" },
 ];
 
 const mediosRespuesta = [
-  {label: "Correo Electrónico", value: "2"},
-  {label: "Correo Certificado", value: "1"},
-  {label: "Otros", value: "1"}
+  { label: "Correo Electrónico", value: "2" },
+  { label: "Correo Certificado", value: "1" },
+  { label: "Otros", value: "1" },
 ];
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -75,7 +76,7 @@ function RecibidaUno(props) {
     obtenerPrioridad();
     obtenerUsuarioDp();
     obtenerEmpresa();
-    obtenerTipificacion();
+    //obtenerTipificacion();
     obtenerClassCorrespondencia();
     obtenerNegocio();
     obtenerGrupo();
@@ -88,8 +89,8 @@ function RecibidaUno(props) {
     const countriesProm = await fetch(`${adminUrl}/Conf_Country`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
     const respCountries = await countriesProm.json();
     if (countriesProm.ok) {
@@ -103,8 +104,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     const respDepartments = await departmentsProm.json();
@@ -119,8 +120,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     const respCities = await citiesProm.json();
@@ -135,8 +136,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     const respCities = await citiesProm.json();
@@ -151,7 +152,7 @@ function RecibidaUno(props) {
       const prioridadProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respPrioridad = await prioridadProm.json();
@@ -169,7 +170,7 @@ function RecibidaUno(props) {
       const usuarioDpProm = await fetch(
         `${dataBandeja}/Configs/UserDep/GetUserDeps`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respUsuarioDp = await usuarioDpProm.json();
@@ -183,11 +184,11 @@ function RecibidaUno(props) {
 
   //llamado a Empresas
   const obtenerEmpresa = async () => {
-    try {
+    /* try {
       const empresaProm = await fetch(
         `${dataBandeja}/Configs/Bussiness/GetBussiness`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respEmpresa = await empresaProm.json();
@@ -197,7 +198,10 @@ function RecibidaUno(props) {
       }
     } catch (error) {
       console.error(error);
-    }
+    } */
+    const usuario = await getFromStorage("sprime_app");
+    console.log(usuario);
+    setEmpresa(usuario.user.Empresas);
   };
 
   //llamado a Tipificacion
@@ -206,7 +210,7 @@ function RecibidaUno(props) {
       const tipificacionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respTipificacion = await tipificacionProm.json();
@@ -224,7 +228,7 @@ function RecibidaUno(props) {
       const classCorrespondenciaProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respClassCorrespondencia = await classCorrespondenciaProm.json();
@@ -242,7 +246,7 @@ function RecibidaUno(props) {
       const negocioProm = await fetch(
         `${dataBandeja}/Configs/Company/GetCompany`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respNegocio = await negocioProm.json();
@@ -260,7 +264,7 @@ function RecibidaUno(props) {
       const grupoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailGroup`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respGrupo = await grupoProm.json();
@@ -277,7 +281,7 @@ function RecibidaUno(props) {
       const contactoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respContacto = await contactoProm.json();
@@ -295,7 +299,7 @@ function RecibidaUno(props) {
       const medioRecepcionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
         {
-          method: "GET"
+          method: "GET",
         }
       );
       const respMedioRecepcion = await medioRecepcionProm.json();
@@ -345,10 +349,25 @@ function RecibidaUno(props) {
               className="max-w-md mx-auto"
               value={[
                 new Date(props.formFields.DueDate),
-                new Date(props.formFields.DueDate)
+                new Date(props.formFields.DueDate),
               ]}
               onValueChange={(e) => {
                 props.handleDirectChange("DueDate", e[0]);
+              }}
+              enableDropdown={false}
+              enableClear={false}
+            />
+          </Flex>
+          <Flex className="gap-2">
+            <Title>Fecha de remisión:</Title>
+            <DateRangePicker
+              className="max-w-md mx-auto"
+              value={[
+                new Date(props.formFields.RemissionDate),
+                new Date(props.formFields.RemissionDate),
+              ]}
+              onValueChange={(e) => {
+                props.handleDirectChange("RemissionDate", e[0]);
               }}
               enableDropdown={false}
               enableClear={false}
@@ -400,13 +419,18 @@ function RecibidaUno(props) {
                 props.handleDirectChange("IdUser", {
                   id: e,
                   name: usuarioDp.find((element) => element.IdUser === e)
-                    .UserDesc
+                    .UserDesc,
+                  dependenceId: usuarioDp.find(
+                    (element) => element.IdUser === e
+                  ).IdDepend,
+                  dependenceName: usuarioDp.find(
+                    (element) => element.IdUser === e
+                  ).Depencenia,
                 });
               }}
               value={props.formFields.IdUser}
             >
               {usuarioDp.map((element, index) => {
-                console.log(element);
                 return (
                   <SelectBoxItem
                     key={index}
@@ -421,9 +445,8 @@ function RecibidaUno(props) {
             <Subtitle>Dependencia:</Subtitle>
             <TextInput
               className="my-1"
-              /*  name="IdDependence"
-              onChange={e => props.handleChange(e)}
-              value={props.formFields.IdDependence} */
+              value={props.formFields.DependenceName}
+              disabled={true}
               placeholder=""
             />
           </Col>
@@ -438,7 +461,6 @@ function RecibidaUno(props) {
               value={props.formFields.NotifyIdUser}
             >
               {usuarioDp.map((element, index) => {
-                console.log(element);
                 return (
                   <SelectBoxItem
                     key={index}
@@ -458,23 +480,23 @@ function RecibidaUno(props) {
             <Subtitle>Empresa:</Subtitle>
             <SelectBox
               className="my-1"
-              name="IdBusiness"
-              onValueChange={(e) => props.handleDirectChange("IdBusiness", e)}
-              value={props.formFields.IdBusiness}
+              name="IdCompany"
+              onValueChange={(e) => props.handleDirectChange("IdCompany", e)}
+              value={props.formFields.IdCompany}
             >
               {empresa.map((element, index) => {
                 return (
                   <SelectBoxItem
                     key={index}
-                    value={element.IdBusiness}
-                    text={element.BusinessDesc}
+                    value={element.IdEmpresa}
+                    text={element.NombreEmpresa}
                   />
                 );
               })}
             </SelectBox>
           </Col>
 
-          <Col numColSpan={1} numColSpanLg={1}>
+          {/* <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Tipificacion:</Subtitle>
             <SelectBox
               className="my-1"
@@ -494,53 +516,7 @@ function RecibidaUno(props) {
                 );
               })}
             </SelectBox>
-          </Col>
-
-          <Col numColSpan={1} numColSpanLg={1}>
-            <Subtitle>Clase de correspondencia:</Subtitle>
-            <SelectBox
-              className="my-1"
-              name="IdMailClass"
-              onValueChange={(e) =>
-                props.handleDirectChange("IdMailClass", {
-                  id: e,
-                  name: classCorrespondencia.find(
-                    (element) => element.idMailClass === e
-                  ).mailDesc
-                })
-              }
-              value={props.formFields.IdMailClass}
-            >
-              {classCorrespondencia.map((element, index) => {
-                return (
-                  <SelectBoxItem
-                    key={index}
-                    value={element.idMailClass}
-                    text={element.mailDesc}
-                  />
-                );
-              })}
-            </SelectBox>
-          </Col>
-          <Col numColSpan={1} numColSpanLg={1}>
-            <Subtitle>Negocio:</Subtitle>
-            <SelectBox
-              className="my-1"
-              name="IdCompany"
-              onValueChange={(e) => props.handleDirectChange("IdCompany", e)}
-              value={props.formFields.IdCompany}
-            >
-              {negocio.map((element, index) => {
-                return (
-                  <SelectBoxItem
-                    key={index}
-                    text={element.CompanyDesc}
-                    value={element.IdCompany}
-                  />
-                );
-              })}
-            </SelectBox>
-          </Col>
+          </Col> */}
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Grupo:</Subtitle>
             <SelectBox
@@ -560,6 +536,55 @@ function RecibidaUno(props) {
               })}
             </SelectBox>
           </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Clase de correspondencia:</Subtitle>
+            <SelectBox
+              className="my-1"
+              name="IdMailClass"
+              onValueChange={(e) =>
+                props.handleDirectChange("IdMailClass", {
+                  id: e,
+                  name: classCorrespondencia.find(
+                    (element) => element.idMailClass === e
+                  ).mailDesc,
+                  responseTime: classCorrespondencia.find(
+                    (element) => element.idMailClass === e
+                  ).responseTime,
+                })
+              }
+              value={props.formFields.IdMailClass}
+            >
+              {classCorrespondencia.map((element, index) => {
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    value={element.idMailClass}
+                    text={element.mailDesc}
+                  />
+                );
+              })}
+            </SelectBox>
+          </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Negocio:</Subtitle>
+            <SelectBox
+              className="my-1"
+              name="IdBusiness"
+              onValueChange={(e) => props.handleDirectChange("IdBusiness", e)}
+              value={props.formFields.IdBusiness}
+            >
+              {negocio.map((element, index) => {
+                return (
+                  <SelectBoxItem
+                    key={index}
+                    text={element.CompanyDesc}
+                    value={element.IdCompany}
+                  />
+                );
+              })}
+            </SelectBox>
+          </Col>
+
           <Col numColSpan={1} numColSpanLg={1}>
             <Subtitle>Medio de recepción:</Subtitle>
             <SelectBox
@@ -704,10 +729,36 @@ function RecibidaUno(props) {
               className="my-1"
               placeholder=""
               name="Phone"
+              type="number"
               value={props.formFields.Phone}
               onChange={(e) => props.handleChange(e)}
             />
           </Col>
+          <Col numColSpan={1} numColSpanLg={1}>
+            <Subtitle>Correo electrónico de contacto:</Subtitle>
+            <TextInput
+              className="my-1"
+              placeholder=""
+              name="EmailSender"
+              type="email"
+              value={props.formFields.EmailSender}
+              onChange={(e) => props.handleChange(e)}
+            />
+          </Col>
+
+          {props.formFields.IdTipology === "Persona Juridica" && (
+            <Col numColSpan={1} numColSpanLg={1}>
+              <Subtitle>Correo electrónico empresarial:</Subtitle>
+              <TextInput
+                className="my-1"
+                placeholder=""
+                name="EmailCompany"
+                type="email"
+                value={props.formFields.EmailCompany}
+                onChange={(e) => props.handleChange(e)}
+              />
+            </Col>
+          )}
           {countries && (
             <Col numColSpan={1} numColSpanLg={1}>
               <Subtitle>País:</Subtitle>

@@ -1,0 +1,69 @@
+{
+    "idMailReceived": 0, //auto
+    "codeReceivMail": "string", //auto
+    "consecAnual": "string", //auto
+    "idUserRespon": 0, //Para
+    "responDesc": "string", //Nombre para
+    "emailSender": "string", //Correo remitente
+    "userReceiv": 0, //auto
+    "contactSends": "string", //contacto id
+    "idDepend": 0, //Dependencia
+    "dependReceiv": 0, //veremos
+    "idSubDep": 0, //veremos
+    "subDepReceiv": 0, //veremos
+    "idCity": 0, //Ciudad
+    "cityReceiv": 0, //veremos
+    "addressSends": "string", //Direccion
+    "idMailClass": 0, //Clase correspondencia
+    "idTypification": 0, //Tipificacion
+    "idTRD": 0, //auto
+    "idSerie": 0, //auto
+    "idSubSerie": 0, //auto
+    "idTipology": 0, //auto
+    "idMailStatus": 1, //auto
+    "idFile": 0, //auto
+    "idDocType": 0, //auto
+    "idRequesterType": 0, //tipo de remitente
+    "idNest": 0, //auto
+    "expSendOriginal": 0,//auto
+    "expSendCopy": 0,//auto
+    "idCopyDocSent": 0,//auto
+    "idCountry": 0, //Pais
+    "idCompany": 0, //Empresa
+    "idBusiness": 0, //Negocio
+    "idRecMed": 0, //Medio recepcion
+    "idPriority": 0, //prioridad
+    "idIdentType": 0, //tipo de identificacion
+    "docNumber": "string", //Nro de documento
+    "nroDocSender": "string", //Nro de documento
+    "idOriginExter": 0, //auto
+    "idMailFlow": 0, //flujo
+    "idMailUpdate": 0, //dejar en 0
+    "idRespStepFlow": 0, //Para
+    "subject": "string", //Asunto
+    "observations": "string", //caracteristicas
+    "senderName": "string", //remitente
+    "emailClient": "string", //correo empresarial
+    "active": true, //auto
+    "read": true, //auto
+    "noFlow": false, //auto
+    "reqAnswer": true, //auto
+    "emailSend": true, //auto
+    "nroCopies": "1", //auto
+    "nroFolios": "string", //Folios
+    "nroComunication": "string", //Nro comunicacion
+    "phone": "string", //telefono
+    "dateIn": "2023-07-20T17:53:39.247Z", //fecha actual
+    "globalDueDate": "2023-07-20T17:53:39.247Z", //fecha vencimiento
+    "shippingDate": "2023-07-20T17:53:39.247Z", //fecha de remision
+    "createdBy": 0, //Id usuario login
+    "creationDate": "2023-07-20T17:53:39.247Z", //fecha actual
+    "updatedBy": 0, //Id usuario login
+    "updateDate": "2023-07-20T17:53:39.247Z" //fecha actual
+  }
+
+  Faltan:
+  
+  Usuario a notificar
+  departamento
+  medio respuesta

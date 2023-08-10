@@ -7,3 +7,4 @@ export const pqrsBaseUrl =
   "https://sadecv.sysdatec.com/SPRIMESERVICES/SADESIATC";
 export const cargaRadicadosUrl =
   "https://sadecv.sysdatec.com/SPRIMESERVICES/WsCargaRadicados";
+export const bandejaUrl = "https://sadecv.sysdatec.com/SPRIMESERVICES/WsWf";

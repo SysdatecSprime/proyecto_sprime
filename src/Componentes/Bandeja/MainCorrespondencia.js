@@ -1,6 +1,6 @@
-import { Tab, TabList } from "@tremor/react";
-import React, { useEffect, useState } from "react";
-import { MailIcon } from "@heroicons/react/outline";
+import {Tab, TabList} from "@tremor/react";
+import React, {useEffect, useState} from "react";
+import {MailIcon} from "@heroicons/react/outline";
 import RecibidaUno from "../Bandeja/Correspondencia/RecibidaUno";
 import RecibidaDos from "../Bandeja/Correspondencia/RecibidaDos";
 import RecibidaTres from "../Bandeja/Correspondencia/RecibidaTres";
@@ -10,8 +10,8 @@ import EnviadaTres from "../Bandeja/Correspondencia/EnviadaTres";
 import InternaUno from "../Bandeja/Correspondencia/InternaUno";
 import InternaDos from "../Bandeja/Correspondencia/InternaDos";
 import InternaTres from "../Bandeja/Correspondencia/InternaTres";
-import { dataBandeja } from "./UrlBase";
-import { getFromStorage } from "../../Utils/storage/storage";
+import {bandejaUrl, dataBandeja} from "./UrlBase";
+import {getFromStorage} from "../../Utils/storage/storage";
 
 function MainCorrespondencia() {
   const [selecTabView, setSelecTabView] = useState(1);
@@ -23,7 +23,7 @@ function MainCorrespondencia() {
   const handleChange = (event) => {
     setFormFields({
       ...formFields,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
 
@@ -34,7 +34,7 @@ function MainCorrespondencia() {
         IdUser: value.id,
         SenderName: value.name,
         IdDependence: value.dependenceId,
-        DependenceName: value.dependenceName,
+        DependenceName: value.dependenceName
       });
     } else if (name === "IdMailClass") {
       let days = parseInt(value.responseTime);
@@ -44,12 +44,12 @@ function MainCorrespondencia() {
         ...formFields,
         IdMailClass: value.id,
         MailClassName: value.name,
-        DueDate: new Date(date).toDateString(),
+        DueDate: new Date(date).toDateString()
       });
     } else {
       setFormFields({
         ...formFields,
-        [name]: value,
+        [name]: value
       });
       if (name === "IdTipology" && value === "Anonimo") {
         setFormFields({
@@ -57,7 +57,7 @@ function MainCorrespondencia() {
           IdContact: "Anonimo",
           LegalName: "Anonimo",
           Phone: "Anonimo",
-          [name]: value,
+          [name]: value
         });
       }
       if (
@@ -70,7 +70,7 @@ function MainCorrespondencia() {
           IdContact: "1",
           LegalName: "",
           Phone: "",
-          [name]: value,
+          [name]: value
         });
       }
     }
@@ -138,7 +138,7 @@ function MainCorrespondencia() {
     UpdateDate: "20230511",
     IsTemporal: true,
     Files: [],
-    DependenceName: "",
+    DependenceName: ""
   });
 
   async function CrearRecibida(TipoCorreo) {
@@ -199,31 +199,28 @@ function MainCorrespondencia() {
       nroFolios: formFields.NroFolios, //Folios
       nroComunication: formFields.NroComunication, //Nro comunicacion
       phone: formFields.Phone, //telefono
-      dateIn: new Date(Date.now()).toDateString(), //fecha actual
-      globalDueDate: formFields.DueDate, //fecha vencimiento
-      shippingDate: formFields.RemissionDate, //fecha de remision
+      dateIn: new Date(Date.now()).toISOString(), //fecha actual
+      globalDueDate: new Date(formFields.DueDate).toISOString(), //fecha vencimiento
+      shippingDate: new Date(formFields.RemissionDate).toISOString(), //fecha de remision
       createdBy: userId, //Id usuario login
-      creationDate: new Date(Date.now()).toDateString(), //fecha actual
+      creationDate: new Date(Date.now()).toISOString(), //fecha actual
       updatedBy: userId, //Id usuario login
-      updateDate: new Date(Date.now()).toDateString(), //fecha actual
+      updateDate: new Date(Date.now()).toISOString() //fecha actual
     };
     console.log(body);
-    /* const recibidoProm = await fetch(
-      `${dataBandeja}/Radicados/rec/InsertReceivedMail`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body
-      }
-    );
+    const recibidoProm = await fetch(`${bandejaUrl}/api/WF_MailReceived`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body
+    });
 
     const respRecibido = await recibidoProm.json();
 
     if (recibidoProm.ok) {
       setRecibido(respRecibido.Recibido);
-    } */
+    }
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Position from "./Position";
 import {
   Grid,
@@ -10,14 +10,14 @@ import {
   Text,
   Button,
   Icon,
-  Card,
+  Card
 } from "@tremor/react";
-import { FolderDownloadIcon } from "@heroicons/react/outline";
+import {FolderDownloadIcon} from "@heroicons/react/outline";
 
 function EnviadaTres(props) {
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -31,7 +31,10 @@ function EnviadaTres(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setEnviadaPasoUno(paso)}
+            />
           </div>
         </Col>
         <Col numColSpan={1} numColSpanLg={1} className="mt-2">
@@ -112,7 +115,8 @@ function EnviadaTres(props) {
             variant="secondary"
             onClick={() => {
               props.setEnviadaPasoUno(2);
-            }}>
+            }}
+          >
             Atrás
           </Button>
 
@@ -124,7 +128,8 @@ function EnviadaTres(props) {
               console.log("acaba de entrar aqui..");
 
               props.CrearRecibida(1);
-            }}>
+            }}
+          >
             Guardar
           </Button>
         </Flex>

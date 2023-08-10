@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Position from "./Position";
-import { Grid, Col, TextInput, Flex, Title, Button } from "@tremor/react";
+import {Grid, Col, TextInput, Flex, Title, Button} from "@tremor/react";
 
 function InternaDos(props) {
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -19,12 +19,15 @@ function InternaDos(props) {
   return (
     <>
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
-        <Col numColSpan={1} numColSpanLg={3} className="mt-5">
+        <Col numColSpan={1} numColSpanLg={2} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setInternaPasoUno(paso)}
+            />
           </div>
         </Col>
-        <Col numColSpan={1} numColSpanLg={1} className="mt-2">
+        <Col numColSpan={1} numColSpanLg={2} className="mt-2">
           <Flex className="gap-2">
             <Title>Fecha:</Title>
             <TextInput className="my-1 ms-5" />
@@ -41,7 +44,11 @@ function InternaDos(props) {
       </Grid>
 
       <Row>
-        <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <Row className="mb-3">
             <Form.Label className="fs-4 fw-bolder">Caracteristicas</Form.Label>
 
@@ -74,7 +81,8 @@ function InternaDos(props) {
             <Form.Group
               as={Col}
               md="4"
-              controlId="validationCustom03"></Form.Group>
+              controlId="validationCustom03"
+            ></Form.Group>
           </Row>
 
           <Row className="mb-3"></Row>
@@ -114,7 +122,8 @@ function InternaDos(props) {
                 variant="secondary"
                 onClick={() => {
                   props.setInternaPasoUno(1);
-                }}>
+                }}
+              >
                 Atrás
               </Button>
 
@@ -124,7 +133,8 @@ function InternaDos(props) {
                 to="/Corresp"
                 onClick={() => {
                   props.setInternaPasoUno(3);
-                }}>
+                }}
+              >
                 Siguiente
               </Button>
             </Flex>

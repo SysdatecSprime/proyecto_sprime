@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Position from "./Position";
@@ -11,9 +11,9 @@ import {
   Subtitle,
   Button,
   SelectBox,
-  SelectBoxItem,
+  SelectBoxItem
 } from "@tremor/react";
-import { dataBandeja } from "../UrlBase";
+import {dataBandeja} from "../UrlBase";
 
 function EnviadaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -59,7 +59,7 @@ function EnviadaUno(props) {
     const prioridadProm = await fetch(
       `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respPrioridad = await prioridadProm.json();
@@ -73,7 +73,7 @@ function EnviadaUno(props) {
     const usuarioDpProm = await fetch(
       `${dataBandeja}/Configs/UserDep/GetUserDeps`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respUsuarioDp = await usuarioDpProm.json();
@@ -88,7 +88,7 @@ function EnviadaUno(props) {
     const empresaProm = await fetch(
       `${dataBandeja}/Configs/Bussiness/GetBussiness`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respEmpresa = await empresaProm.json();
@@ -103,7 +103,7 @@ function EnviadaUno(props) {
     const tipificacionProm = await fetch(
       `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respTipificacion = await tipificacionProm.json();
@@ -117,7 +117,7 @@ function EnviadaUno(props) {
     const classCorrespondenciaProm = await fetch(
       `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respClassCorrespondencia = await classCorrespondenciaProm.json();
@@ -131,7 +131,7 @@ function EnviadaUno(props) {
     const negocioProm = await fetch(
       `${dataBandeja}/Configs/Company/GetCompany`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respNegocio = await negocioProm.json();
@@ -143,7 +143,7 @@ function EnviadaUno(props) {
   //llamado a Grupos
   const obtenerGrupo = async () => {
     const grupoProm = await fetch(`${dataBandeja}/Configs/Group/GetGroups`, {
-      method: "GET",
+      method: "GET"
     });
     const respGrupo = await grupoProm.json();
     console.log(respGrupo);
@@ -156,7 +156,7 @@ function EnviadaUno(props) {
     const contactoProm = await fetch(
       `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respContacto = await contactoProm.json();
@@ -170,7 +170,7 @@ function EnviadaUno(props) {
     const medioRecepcionProm = await fetch(
       `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
     const respMedioRecepcion = await medioRecepcionProm.json();
@@ -179,7 +179,7 @@ function EnviadaUno(props) {
       setMedioRecepcion(respMedioRecepcion);
     }
   };
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -194,7 +194,10 @@ function EnviadaUno(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setEnviadaPasoUno(paso)}
+            />
           </div>
         </Col>
         <Col numColSpan={1} numColSpanLg={1} className="mt-2">
@@ -211,7 +214,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1 ms-3"
               name="idPriority"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {prioridad.map((element, index) => {
@@ -225,7 +228,7 @@ function EnviadaUno(props) {
           </Flex>
         </Col>
       </Grid>
-      <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+      <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
         <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
           <Col numColSpan={1} numColSpanLg={4}>
             <Title>Destinatario</Title>
@@ -235,7 +238,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="IdUser"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {usuarioDp.map((element, index) => {
@@ -275,7 +278,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="IdBusiness"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {empresa.map((element, index) => {
@@ -293,7 +296,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="idTypification"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {tipificacion.map((element, index) => {
@@ -311,7 +314,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="idMailClass"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {classCorrespondencia.map((element, index) => {
@@ -328,7 +331,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="IdCompany"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {negocio.map((element, index) => {
@@ -345,7 +348,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="IdGroups"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {grupo.map((element, index) => {
@@ -362,7 +365,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="idRecMed"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {medioRecepcion.map((element, index) => {
@@ -379,7 +382,7 @@ function EnviadaUno(props) {
             <TextInput
               className="my-1"
               name="Subject"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.Subject} */
               placeholder=""
             />
@@ -406,7 +409,7 @@ function EnviadaUno(props) {
             <SelectBox
               className="my-1"
               name="idContact"
-              onChange={e => props.handleChange(e)}
+              onChange={(e) => props.handleChange(e)}
               /* value={props.formFields.IdPriority} */
             >
               {contacto.map((element, index) => {
@@ -460,7 +463,8 @@ function EnviadaUno(props) {
             <Button
               size="lg"
               variant="secondary"
-              onClick={() => console.log("clicked")}>
+              onClick={() => console.log("clicked")}
+            >
               Cerrar
             </Button>
 
@@ -470,7 +474,8 @@ function EnviadaUno(props) {
               to="/Corresp"
               onClick={() => {
                 props.setEnviadaPasoUno(2);
-              }}>
+              }}
+            >
               Siguiente
             </Button>
           </Flex>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 
@@ -14,35 +14,35 @@ import {
   SelectBox,
   SelectBoxItem,
   DateRangePicker,
-  DateRangePickerValue,
+  DateRangePickerValue
 } from "@tremor/react";
-import { es } from "date-fns/locale";
-import { dataBandeja, adminUrl } from "../UrlBase";
+import {es} from "date-fns/locale";
+import {dataBandeja, adminUrl} from "../UrlBase";
 import axios from "axios";
-import { getFromStorage } from "../../../Utils/storage/storage";
+import {getFromStorage} from "../../../Utils/storage/storage";
 
 const tiposSolicitante = [
-  { label: "Persona Natural", value: "Persona Natural" },
-  { label: "Persona Jurídica", value: "Persona Juridica" },
-  { label: "Niño/Niña", value: "Niño/Niña" },
-  { label: "Adolescente", value: "Adolescente" },
-  { label: "Apoderado", value: "Apoderado" },
-  { label: "Anónimo", value: "Anonimo" },
+  {label: "Persona Natural", value: "Persona Natural"},
+  {label: "Persona Jurídica", value: "Persona Juridica"},
+  {label: "Niño/Niña", value: "Niño/Niña"},
+  {label: "Adolescente", value: "Adolescente"},
+  {label: "Apoderado", value: "Apoderado"},
+  {label: "Anónimo", value: "Anonimo"}
 ];
 
 const tiposDocumento = [
-  { label: "Cédula Ciudadanía", value: "CC" },
-  { label: "Cédula Extranjería", value: "CE" },
-  { label: "Registro Civil", value: "RC" },
-  { label: "Tarjeta de Identidad", value: "TI" },
-  { label: "NIT", value: "NIT" },
-  { label: "PPT", value: "PPT" },
+  {label: "Cédula Ciudadanía", value: "CC"},
+  {label: "Cédula Extranjería", value: "CE"},
+  {label: "Registro Civil", value: "RC"},
+  {label: "Tarjeta de Identidad", value: "TI"},
+  {label: "NIT", value: "NIT"},
+  {label: "PPT", value: "PPT"}
 ];
 
 const mediosRespuesta = [
-  { label: "Correo Electrónico", value: "2" },
-  { label: "Correo Certificado", value: "1" },
-  { label: "Otros", value: "1" },
+  {label: "Correo Electrónico", value: "2"},
+  {label: "Correo Certificado", value: "1"},
+  {label: "Otros", value: "1"}
 ];
 function RecibidaUno(props) {
   const [prioridad, setPrioridad] = useState([]);
@@ -89,8 +89,8 @@ function RecibidaUno(props) {
     const countriesProm = await fetch(`${adminUrl}/Conf_Country`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
     const respCountries = await countriesProm.json();
     if (countriesProm.ok) {
@@ -104,8 +104,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respDepartments = await departmentsProm.json();
@@ -120,8 +120,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respCities = await citiesProm.json();
@@ -136,8 +136,8 @@ function RecibidaUno(props) {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const respCities = await citiesProm.json();
@@ -152,7 +152,7 @@ function RecibidaUno(props) {
       const prioridadProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Priority`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respPrioridad = await prioridadProm.json();
@@ -170,7 +170,7 @@ function RecibidaUno(props) {
       const usuarioDpProm = await fetch(
         `${dataBandeja}/Configs/UserDep/GetUserDeps`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respUsuarioDp = await usuarioDpProm.json();
@@ -210,7 +210,7 @@ function RecibidaUno(props) {
       const tipificacionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Typification`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respTipificacion = await tipificacionProm.json();
@@ -228,7 +228,7 @@ function RecibidaUno(props) {
       const classCorrespondenciaProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailClass`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respClassCorrespondencia = await classCorrespondenciaProm.json();
@@ -246,7 +246,7 @@ function RecibidaUno(props) {
       const negocioProm = await fetch(
         `${dataBandeja}/Configs/Company/GetCompany`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respNegocio = await negocioProm.json();
@@ -264,7 +264,7 @@ function RecibidaUno(props) {
       const grupoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_MailGroup`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respGrupo = await grupoProm.json();
@@ -281,7 +281,7 @@ function RecibidaUno(props) {
       const contactoProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_Contact`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respContacto = await contactoProm.json();
@@ -299,7 +299,7 @@ function RecibidaUno(props) {
       const medioRecepcionProm = await fetch(
         `${dataBandeja}/SPRIMESERVICES/WsWf/api/WF_ReceptionMedium`,
         {
-          method: "GET",
+          method: "GET"
         }
       );
       const respMedioRecepcion = await medioRecepcionProm.json();
@@ -349,7 +349,7 @@ function RecibidaUno(props) {
               className="max-w-md mx-auto"
               value={[
                 new Date(props.formFields.DueDate),
-                new Date(props.formFields.DueDate),
+                new Date(props.formFields.DueDate)
               ]}
               onValueChange={(e) => {
                 props.handleDirectChange("DueDate", e[0]);
@@ -364,7 +364,7 @@ function RecibidaUno(props) {
               className="max-w-md mx-auto"
               value={[
                 new Date(props.formFields.RemissionDate),
-                new Date(props.formFields.RemissionDate),
+                new Date(props.formFields.RemissionDate)
               ]}
               onValueChange={(e) => {
                 props.handleDirectChange("RemissionDate", e[0]);
@@ -425,7 +425,7 @@ function RecibidaUno(props) {
                   ).IdDepend,
                   dependenceName: usuarioDp.find(
                     (element) => element.IdUser === e
-                  ).Depencenia,
+                  ).Dependencia
                 });
               }}
               value={props.formFields.IdUser}
@@ -549,7 +549,7 @@ function RecibidaUno(props) {
                   ).mailDesc,
                   responseTime: classCorrespondencia.find(
                     (element) => element.idMailClass === e
-                  ).responseTime,
+                  ).responseTime
                 })
               }
               value={props.formFields.IdMailClass}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import DragAndDrop from "./DragAndDrop";
 import Position from "./Position";
@@ -10,15 +10,15 @@ import {
   Title,
   Subtitle,
   Button,
-  Icon,
+  Icon
 } from "@tremor/react";
-import { MailIcon, GlobeIcon, InboxInIcon } from "@heroicons/react/outline";
+import {MailIcon, GlobeIcon, InboxInIcon} from "@heroicons/react/outline";
 
 function EnviadaDos(props) {
   const [validated, setValidated] = useState(false);
   const [modalCrearDocumento, setModalCrearDocumento] = useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -32,7 +32,10 @@ function EnviadaDos(props) {
       <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-2">
         <Col numColSpan={1} numColSpanLg={3} className="mt-5">
           <div>
-            <Position paso={props.paso} />
+            <Position
+              paso={props.paso}
+              setPaso={(paso) => props.setEnviadaPasoUno(paso)}
+            />
           </div>
         </Col>
         <Col numColSpan={1} numColSpanLg={1} className="mt-2">
@@ -50,7 +53,7 @@ function EnviadaDos(props) {
           </Flex>
         </Col>
       </Grid>
-      <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+      <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
         <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
           <Col numColSpan={1} numColSpanLg={3}>
             <Title>Caracteristicas</Title>
@@ -128,7 +131,8 @@ function EnviadaDos(props) {
               variant="secondary"
               onClick={() => {
                 props.setEnviadaPasoUno(1);
-              }}>
+              }}
+            >
               Atrás
             </Button>
 
@@ -138,7 +142,8 @@ function EnviadaDos(props) {
               to="/Corresp"
               onClick={() => {
                 props.setEnviadaPasoUno(3);
-              }}>
+              }}
+            >
               Siguiente
             </Button>
           </Flex>
